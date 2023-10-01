@@ -1,0 +1,37 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>registrar</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <!-- Login -->
+  <div>
+    <div style="border-bottom: solid 1px lightgray; margin-bottom: 20px;">
+      <ion-button (click)="createOpenDatabase()" size="small">Create/Open Database</ion-button>
+      <ion-button (click)="createTable()" size="small">Create table</ion-button>
+    </div>
+    <div style="max-width: 200px; margin:auto;">
+      <ion-item>
+        <ion-input placeholder="Ingrese su Run" [(ngModel)]="run"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-input placeholder="Ingrese su Contraseña" [(ngModel)]="password"></ion-input>
+      </ion-item>
+      <ion-button size="small" (click)="insertData()" style="margin-bottom: 20px;">Registrar</ion-button>
+    </div>
+    <div style="border-top: solid 1px lightgray;">
+      <ion-button (click)="selectData()" style="margin-bottom: 20px;margin-top: 20px;">select Data</ion-button>
+      <div *ngFor="let b of usuarioData; let i = index">
+        <div>Usuario: {{b.run}}</div>
+        <div>Contraseña: {{b.password}}</div>
+      </div>
+    </div>
+  </div>
+</ion-content>
+
+<ion-footer class="ion-no-border">
+  <ion-toolbar color="primary">
+    <ion-title>Centro Medico Cesfam</ion-title>
+  </ion-toolbar>
+</ion-footer>
