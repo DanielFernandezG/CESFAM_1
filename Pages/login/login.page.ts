@@ -40,7 +40,7 @@ export class LoginPage implements OnInit {
       Run VARCHAR(12) NOT NULL,
       Nombre VARCHAR(50) NOT NULL,
       Apellido VARCHAR(50) NOT NULL,
-      FechaNacimiento DATE NOT NULL,
+      FechaNacimiento DATE,
       Direccion VARCHAR(100),
       Telefono VARCHAR(20),
       Correo VARCHAR(100) NOT NULL,
@@ -209,8 +209,6 @@ export class LoginPage implements OnInit {
   registrar(){
     this.router.navigate(['registrar']);
   }
-
-
 
   createOpenDatabase()
   {

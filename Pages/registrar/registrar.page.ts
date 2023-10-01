@@ -11,6 +11,14 @@ export class RegistrarPage implements OnInit {
   db:SQLiteObject;
   run:string;
   password:string;
+  nombre:string;
+  apellidos:string;
+  edad:number;
+  fecha:string;
+  direccion:string;
+  telefono:number;
+  correo:string;
+  genero:string;
   usuarioData: usuario[];
 
   constructor(
@@ -41,11 +49,21 @@ export class RegistrarPage implements OnInit {
 
   insertData()
   {
-    let query:string='insert into usuario(run,password,active) values("'+this.run+'","'+this.password+'",0)';
+    try{
+      let usu:string='insert into usuario(run,password,active) values("'+this.run+'","'+this.password+'",0)';
+      this.db.executeSql(usu,[])
+      .then(() => console.log('usuario creado'))
+      .catch(e => alert(JSON.stringify(e)));
 
-    this.db.executeSql(query,[])
-    .then(() => alert('Record inserted'))
-    .catch(e => alert(JSON.stringify(e)));
+      let pac:string='insert into paciente (run,nombre,apellido,Direccion,Telefono,Correo,Genero) values("'+this.run+'","'+this.nombre+'","'+this.apellidos+'", "'+this.direccion+'", "'+this.telefono+'", "'+this.correo+'", "'+this.genero+'")';
+      this.db.executeSql(pac,[])
+      .then(() => console.log('paciente creado'))
+      .catch(e => alert(JSON.stringify(e)));
+
+      alert("Usuario creado exitosamente")
+    } catch {
+      alert ("Error al crear usuarios")
+    }
   }
 
   selectData()

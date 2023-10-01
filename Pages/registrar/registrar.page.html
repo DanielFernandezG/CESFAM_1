@@ -10,7 +10,7 @@
     <div style="border-bottom: solid 1px lightgray; margin-bottom: 20px;">
       <ion-button (click)="createOpenDatabase()" size="small">Create/Open Database</ion-button>
     </div>
-    <div style="max-width: 200px; margin:auto;">
+    <div style="margin: 20px;">
       <ion-item>
         <ion-input placeholder="Ingrese su Run" [(ngModel)]="run"></ion-input>
       </ion-item>
@@ -18,10 +18,25 @@
         <ion-input placeholder="Ingrese su Contraseña" [(ngModel)]="password"></ion-input>
       </ion-item>
       <ion-item>
-        <ion-input placeholder="Ingrese su Run" [(ngModel)]="run"></ion-input>
+        <ion-input placeholder="Ingrese su Nombre" [(ngModel)]="nombre"></ion-input>
       </ion-item>
       <ion-item>
-        <ion-input placeholder="Ingrese su Contraseña" [(ngModel)]="password"></ion-input>
+        <ion-input placeholder="Ingrese sus Apellidos" [(ngModel)]="apellidos"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-input placeholder="Ingrese su Fecha de Nacimiento" [(ngModel)]="fecha"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-input placeholder="Ingrese su Direccion" [(ngModel)]="direccion"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-input placeholder="Ingrese su Telefono (9 9999 9999)" [(ngModel)]="telefono"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-input placeholder="Ingrese su Correo" [(ngModel)]="correo"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-input placeholder="Ingrese su Genero" [(ngModel)]="genero"></ion-input>
       </ion-item>
       <ion-button size="small" (click)="insertData()" style="margin-bottom: 20px;">Registrar</ion-button>
     </div>
