@@ -55,7 +55,7 @@ export class RegistrarPage implements OnInit {
       .then(() => console.log('usuario creado'))
       .catch(e => alert(JSON.stringify(e)));
 
-      let pac:string='insert into paciente (run,nombre,apellido,Direccion,Telefono,Correo,Genero) values("'+this.run+'","'+this.nombre+'","'+this.apellidos+'", "'+this.direccion+'", "'+this.telefono+'", "'+this.correo+'", "'+this.genero+'")';
+      let pac:string='insert into paciente (run,nombre,apellido,edad,fechaNacimiento,Direccion,Telefono,Correo,Genero) values("'+this.run+'","'+this.nombre+'","'+this.apellidos+'",'+this.edad+',\''+this.fecha+'\', "'+this.direccion+'", "'+this.telefono+'", "'+this.correo+'", "'+this.genero+'")';
       this.db.executeSql(pac,[])
       .then(() => console.log('paciente creado'))
       .catch(e => alert(JSON.stringify(e)));

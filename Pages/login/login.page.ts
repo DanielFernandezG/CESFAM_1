@@ -40,6 +40,7 @@ export class LoginPage implements OnInit {
       Run VARCHAR(12) NOT NULL,
       Nombre VARCHAR(50) NOT NULL,
       Apellido VARCHAR(50) NOT NULL,
+      Edad INTEGER NOT NULL,
       FechaNacimiento DATE,
       Direccion VARCHAR(100),
       Telefono VARCHAR(20),
@@ -199,6 +200,9 @@ export class LoginPage implements OnInit {
 
     .then((result) => {
       if (result.rows.item(0).password == this.password){
+        this.db.executeSql('UPDATE Usuario SET active=1 where run=?',[this.run])
+        .then((result) => console.log('Sesion Cambiada'))
+        .catch(e => console.log(JSON.stringify(e)));
         this.router.navigate(['home']);
       } else {
         alert('Contraseña Incorrecta')
