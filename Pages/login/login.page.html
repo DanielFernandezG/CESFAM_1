@@ -7,6 +7,11 @@
 <ion-content>
   <!-- Login -->
   <div class="ion-padding-vertical">
+    <div style="border-bottom: solid 1px lightgray; margin-bottom: 20px;">
+      <ion-button (click)="createOpenDatabase()" size="small">Create/Open Database</ion-button>
+      <ion-button (click)="createTable()" size="small">Create table</ion-button>
+      <ion-button (click)="dropTable()" size="small">Drop table</ion-button>
+    </div>
     <ion-card class="ion-text-center ion-padding-vertical">
       <ion-card-title class="ion-text-center">
         <ion-label>
@@ -15,18 +20,18 @@
         </ion-label>
       </ion-card-title>
       <ion-card-content>
-        <ion-item>
-          <ion-label class="usuario" position="floating">Run</ion-label>
-          <ion-input type="text"></ion-input>
-        </ion-item>
-        <ion-item>
-          <ion-label class="contraseña" position="floating">Contraseña</ion-label>
-          <ion-input type="password"></ion-input>
-        </ion-item>
+        <div style="max-width: 200px; margin:auto;">
+          <ion-item>
+            <ion-input placeholder="Ingrese su Run" [(ngModel)]="run"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-input placeholder="Ingrese su Contraseña" [(ngModel)]="password"></ion-input>
+          </ion-item>
+        </div>
         <ion-row>
           <ion-col size="12">
             <br>
-            <ion-button color="secondary" shape="block">Iniciar Sesión</ion-button>
+            <ion-button size="small" (click)="iniciarSesion()" style="margin-bottom: 20px;">Iniciar Sesion</ion-button>
           </ion-col>
           <ion-col size="12">
             <br>

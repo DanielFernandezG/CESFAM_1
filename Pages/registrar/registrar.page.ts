@@ -39,16 +39,9 @@ export class RegistrarPage implements OnInit {
     }
   }
 
-  createTable()
-  {
-    this.db.executeSql('create table IF NOT EXISTS usuario(run VARCHAR(10), password VARCHAR(20))',[])
-    .then((result) => alert('table created'))
-    .catch(e => alert(JSON.stringify(e)));
-  }
-
   insertData()
   {
-    let query:string='insert into usuario(run,password) values("'+this.run+'","'+this.password+'")';
+    let query:string='insert into usuario(run,password,active) values("'+this.run+'","'+this.password+'",0)';
 
     this.db.executeSql(query,[])
     .then(() => alert('Record inserted'))
