@@ -10,36 +10,41 @@
     <div style="border-bottom: solid 1px lightgray; margin-bottom: 20px;">
       <ion-button (click)="createOpenDatabase()" size="small">Create/Open Database</ion-button>
     </div>
+    <ion-title>Por favor, rellene sus datos</ion-title>
     <div style="margin: 20px;">
       <ion-item>
-        <ion-input placeholder="Ingrese su Run" [(ngModel)]="run"></ion-input>
+        <ion-input type="text" placeholder="Run" [(ngModel)]="run"></ion-input>
       </ion-item>
       <ion-item>
-        <ion-input placeholder="Ingrese su Contraseña" [(ngModel)]="password"></ion-input>
+        <ion-input placeholder="Contraseña" [(ngModel)]="password"></ion-input>
       </ion-item>
       <ion-item>
-        <ion-input placeholder="Ingrese su Nombre" [(ngModel)]="nombre"></ion-input>
+        <ion-input placeholder="Nombre" [(ngModel)]="nombre"></ion-input>
       </ion-item>
       <ion-item>
-        <ion-input placeholder="Ingrese sus Apellidos" [(ngModel)]="apellidos"></ion-input>
+        <ion-input placeholder="Apellidos" [(ngModel)]="apellidos"></ion-input>
       </ion-item>
       <ion-item>
-        <ion-input placeholder="Ingrese su Fecha de Nacimiento" [(ngModel)]="edad"></ion-input>
+        <ion-input placeholder="Edad" [(ngModel)]="edad"></ion-input>
       </ion-item>
       <ion-item>
-        <ion-input placeholder="Ingrese su Fecha de Nacimiento" [(ngModel)]="fecha"></ion-input>
+        <ion-input placeholder="Fecha de Nacimiento" [(ngModel)]="fecha"></ion-input>
       </ion-item>
       <ion-item>
-        <ion-input placeholder="Ingrese su Direccion" [(ngModel)]="direccion"></ion-input>
+        <ion-input placeholder="Direccion" [(ngModel)]="direccion"></ion-input>
       </ion-item>
       <ion-item>
-        <ion-input placeholder="Ingrese su Telefono (9 9999 9999)" [(ngModel)]="telefono"></ion-input>
+        <ion-input placeholder="Telefono (9 9999 9999)" [(ngModel)]="telefono"></ion-input>
       </ion-item>
       <ion-item>
-        <ion-input placeholder="Ingrese su Correo" [(ngModel)]="correo"></ion-input>
+        <ion-input placeholder="Correo" [(ngModel)]="correo"></ion-input>
       </ion-item>
       <ion-item>
-        <ion-input placeholder="Ingrese su Genero" [(ngModel)]="genero"></ion-input>
+        <ion-select placeholder="Genero" [(ngModel)]="genero">
+          <ion-select-option value="masculino">Masculino</ion-select-option>
+          <ion-select-option value="femenino">Femenino</ion-select-option>
+          <ion-select-option value="prefiero no decirlo">Prefiero no Decirlo</ion-select-option>
+        </ion-select>
       </ion-item>
       <ion-button size="small" (click)="insertData()" style="margin-bottom: 20px;">Registrar</ion-button>
     </div>
