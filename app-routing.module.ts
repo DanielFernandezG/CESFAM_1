@@ -19,6 +19,12 @@ const routes: Routes = [
     path: 'registrar',
     loadChildren: () => import('./Pages/registrar/registrar.module').then( m => m.RegistrarPageModule)
   },
+
+  {
+    path: 'fecha-hora',
+    loadChildren: () => import('./Pages/fecha-hora/fecha-hora.module').then( m => m.FechaHoraPageModule)
+  },
+
 ];
 
 @NgModule({

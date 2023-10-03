@@ -1,0 +1,23 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      Ingresa el día y hora a atender
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-img src="assets/imagenes/Cesfam.jpg" class="ion-img ion-margin-top ion-margin-bottom"></ion-img>
+
+  <!-- Resto del contenido de la página aquí -->
+  <ion-item>
+    <ion-datetime displayFormat="MM/DD/YYYY" [(ngModel)]="selectedDate"></ion-datetime>
+  </ion-item>
+  <ion-content class="ion-text-center ion-align-items-center ion-justify-content-center">
+    <ion-button color="primary">Ingresar</ion-button>
+  </ion-content>
+
+
+
+  <!-- Otros elementos de contenido aquí -->
+</ion-content>

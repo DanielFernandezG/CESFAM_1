@@ -1,0 +1,25 @@
+ion-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* Asegura que el contenido se ajuste verticalmente en la pantalla completa */
+
+  ion-item {
+    max-width: 80%; /* Limita el ancho del ion-item */
+  }
+}
+
+/* Asegúrate de que el contenido de la página se alinee en la esquina superior derecha */
+ion-content {
+  position: relative;
+}
+
+/* Estilos para la imagen */
+ion-img {
+  position: absolute;
+  top: 0; /* Coloca la imagen en la parte superior */
+  right: 0; /* Coloca la imagen en la esquina derecha */
+  width: 100px; /* Ajusta el ancho de la imagen según tus necesidades */
+  height: 100px; /* Ajusta la altura de la imagen según tus necesidades */
+}
