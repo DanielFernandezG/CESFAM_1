@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import * as moment from 'moment-timezone';
+// import * as moment from 'moment-timezone';
 
 @Component({
   selector: 'app-fecha-hora',
@@ -11,7 +11,7 @@ export class FechaHoraPage {
 
   constructor() {
     // Obtén la fecha y hora actual en el huso horario de Chile
-    this.selectedDate = moment.tz('Chile/Continental').format();
+    // this.selectedDate = moment.tz('Chile/Continental').format();
   }
 }
 

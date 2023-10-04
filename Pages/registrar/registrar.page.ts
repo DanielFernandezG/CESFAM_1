@@ -29,6 +29,7 @@ export class RegistrarPage implements OnInit {
     ) { }
 
   ngOnInit() {
+    this.createOpenDatabase();
   }
 
   createOpenDatabase()
@@ -40,29 +41,41 @@ export class RegistrarPage implements OnInit {
       })
       .then((db: SQLiteObject) => {
         this.db=db;
-        alert('database create/opened')
+        console.log("Conectado")
+        // alert('database create/opened')
       })
       .catch(e => alert(JSON.stringify(e)))
     }
     catch(err:any)
     {
-      alert(err);
+      console.log(err);
+      // alert(err);
     }
   }
 
-  insertData()
-  {
-    if (validateRut(this.run)){
+  limpiarRut(rut: string): string {
+    // Eliminar puntos
+    const rutSinPuntos = rut.replace(/\./g, '');
+  
+    // Eliminar guiones
+    const rutSinGuion = rutSinPuntos.replace(/-/g, '');
+    console.log(rutSinGuion)
+    return rutSinGuion;
+  }
+
+  insertData() {
+    const run_limpio = this.limpiarRut(this.run)
+    if (validateRut(run_limpio)){
       if (this.password.length>=8) {
         if (this.telefono <= 999999999 && this.telefono >= 900000000) {
           if (this.correo.includes("@") && this.correo.includes(".")) {
             try{
-              let usu:string='insert into usuario(run,password,active) values("'+this.run+'","'+this.password+'",0)';
+              let usu:string='insert into usuario(run,password,active) values("'+run_limpio+'","'+this.password+'",0)';
               this.db.executeSql(usu,[])
               .then(() => console.log('usuario creado'))
               .catch(e => alert(JSON.stringify(e)));
 
-              let pac:string='insert into paciente (run,nombre,apellido,edad,fechaNacimiento,Direccion,Telefono,Correo,Genero) values("'+this.run+'","'+this.nombre+'","'+this.apellidos+'",'+this.edad+',\''+this.fecha+'\', "'+this.direccion+'", "'+this.telefono+'", "'+this.correo+'", "'+this.genero+'")';
+              let pac:string='insert into paciente (run,nombre,apellido,edad,fechaNacimiento,Direccion,Telefono,Correo,Genero) values("'+run_limpio+'","'+this.nombre+'","'+this.apellidos+'",'+this.edad+',\''+this.fecha+'\', "'+this.direccion+'", "'+this.telefono+'", "'+this.correo+'", "'+this.genero+'")';
               this.db.executeSql(pac,[])
               .then(() => console.log('paciente creado'))
               .catch(e => alert(JSON.stringify(e)));
