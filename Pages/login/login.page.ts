@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { SQLite, SQLiteObject } from "@awesome-cordova-plugins/sqlite/ngx";
-import { validateRut } from '@fdograph/rut-utilities';
+import { validateRut } from "@fdograph/rut-utilities";
 
 @Component({
   selector: "app-login",
@@ -18,6 +18,7 @@ export class LoginPage implements OnInit {
 
   ngOnInit() {
     this.createOpenDatabase();
+    // this.sesionData();
   }
 
   createTable() {
@@ -240,7 +241,7 @@ export class LoginPage implements OnInit {
           }
         });
     } else {
-      alert("Run Inexistente")
+      alert("Run Inexistente");
     }
   }
   registrar() {
@@ -258,6 +259,13 @@ export class LoginPage implements OnInit {
           this.db = db;
           // alert('database create/opened')
           console.log("Conectado");
+          this.db
+            .executeSql("select * from usuario where active=1", [])
+            .then((result) => {
+              if (result.rows.item(0).active == 1) {
+                this.router.navigate(["home"]);
+              }
+            })
         })
         .catch((e) => alert(JSON.stringify(e)));
     } catch (err: any) {
@@ -265,6 +273,20 @@ export class LoginPage implements OnInit {
       console.log(err);
     }
   }
+
+  // sesionData() {
+  //   console.log("ccccccccccccccccccccccccccccccccccccccccccccccccc");
+  //   this.db
+  //     .executeSql("select * from usuario where active=1", [])
+  //     .then((result) => {
+  //       console.log("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb");
+  //       if (result.rows.item(0).active == 1) {
+  //         console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+  //         this.router.navigate(["home"]);
+  //       }
+  //     })
+  //     .catch((e) => alert("aaaa" + JSON.stringify(e)));
+  // }
 }
 
 class usuario {
