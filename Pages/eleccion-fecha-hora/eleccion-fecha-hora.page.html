@@ -1,0 +1,25 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <!-- Botón de retroceso u otros botones a la izquierda -->
+    </ion-buttons>
+    <ion-title class="title-left">
+      Ingrese fecha y Hora
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button>
+        <ion-img src="assets/imagenes/Cesfam.jpg" class="logo-image"></ion-img>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content class="ion-padding">
+  <ion-item>
+    <ion-label>Fecha y Hora:</ion-label>
+    <ion-datetime display-format="D MMM YYYY HH:mm" [(ngModel)]="fechaHoraSeleccionada"></ion-datetime>
+  </ion-item>
+
+  <ion-button expand="full" (click)="ingresar()">Ingresar</ion-button>
+</ion-content>

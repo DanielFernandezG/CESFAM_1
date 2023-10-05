@@ -39,5 +39,13 @@ export class HomePage {
       .then((result) => console.log("Sesion Cambiada"))
       .catch((e) => console.log(JSON.stringify(e)));
     this.router.navigate(["login"]);
+
   }
+
+
+  eleccionCita() {
+    this.router.navigateByUrl('/eleccion-cita');
+  }
+
+
 }

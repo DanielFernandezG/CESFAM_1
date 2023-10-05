@@ -1,0 +1,41 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <!-- Botón de retroceso u otros botones a la izquierda -->
+    </ion-buttons>
+    <ion-title class="title-left">
+      Ingrese Especialidad
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button>
+        <ion-img src="assets/imagenes/Cesfam.jpg" class="logo-image"></ion-img>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-item>
+    <ion-label>Especialidad:</ion-label>
+    <ion-text>{{ especialidad }}</ion-text>
+  </ion-item>
+
+  <ion-item>
+    <ion-label>Fecha y Hora:</ion-label>
+    <ion-text>{{ fechaHora }}</ion-text>
+  </ion-item>
+
+  <ion-item *ngIf="medico">
+    <ion-label>Médico:</ion-label>
+    <ion-text>{{ medico }}</ion-text>
+  </ion-item>
+
+  <ion-row class="ion-padding-top">
+    <ion-col>
+      <ion-button expand="full" color="primary" (click)="confirmarCita()">Confirmar Cita</ion-button>
+    </ion-col>
+    <ion-col>
+      <ion-button expand="full" color="danger" (click)="cancelarCita()">Cancelar Cita</ion-button>
+    </ion-col>
+  </ion-row>
+</ion-content>

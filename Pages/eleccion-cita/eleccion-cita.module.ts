@@ -4,17 +4,17 @@ import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { FechaHoraPageRoutingModule } from './fecha-hora-routing.module';
+import { EleccionCitaPageRoutingModule } from './eleccion-cita-routing.module';
 
-import { FechaHoraPage } from './fecha-hora.page';
+import { EleccionCitaPage } from './eleccion-cita.page';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    FechaHoraPageRoutingModule
+    EleccionCitaPageRoutingModule
   ],
-  declarations: [FechaHoraPage]
+  declarations: [EleccionCitaPage]
 })
-export class FechaHoraPageModule {}
+export class EleccionCitaPageModule {}

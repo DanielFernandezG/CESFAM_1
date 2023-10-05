@@ -1,0 +1,10 @@
+.title-left {
+  text-align: left;
+  width: 100%; /* Asegura que el título ocupe todo el ancho disponible */
+}
+
+.logo-image {
+  max-width: 50px; /* Establece el ancho máximo de la imagen */
+  max-height: 50px; /* Establece la altura máxima de la imagen */
+  margin-left: 10px; /* Establece un margen izquierdo para separar la imagen del título */
+}
