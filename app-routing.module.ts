@@ -20,6 +20,15 @@ const routes: Routes = [
     loadChildren: () => import('./Pages/registrar/registrar.module').then( m => m.RegistrarPageModule)
   },
 
+  {
+    path: 'fecha-hora',
+    loadChildren: () => import('./Pages/fecha-hora/fecha-hora.module').then( m => m.FechaHoraPageModule)
+  },  {
+    path: 'actualizar-datos',
+    loadChildren: () => import('./Pages/actualizar-datos/actualizar-datos.module').then( m => m.ActualizarDatosPageModule)
+  },
+
+<<<<<<< Updated upstream
 
   {
     path: 'eleccion-cita',
@@ -51,3 +60,15 @@ const routes: Routes = [
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
+=======
+
+];
+
+@NgModule({
+  imports: [
+    RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })
+  ],
+  exports: [RouterModule]
+})
+export class AppRoutingModule { }
+>>>>>>> Stashed changes

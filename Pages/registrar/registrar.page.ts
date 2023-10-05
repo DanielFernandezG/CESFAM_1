@@ -67,29 +67,33 @@ export class RegistrarPage implements OnInit {
     const run_limpio = this.limpiarRut(this.run)
     if (validateRut(run_limpio)){
       if (this.password.length>=8) {
-        if (this.telefono <= 999999999 && this.telefono >= 900000000) {
-          if (this.correo.includes("@") && this.correo.includes(".")) {
-            try{
-              let usu:string='insert into usuario(run,password,active) values("'+run_limpio+'","'+this.password+'",0)';
-              this.db.executeSql(usu,[])
-              .then(() => console.log('usuario creado'))
-              .catch(e => alert(JSON.stringify(e)));
+        if (this.fecha.includes("/")) {
+          if (this.telefono <= 999999999 && this.telefono >= 900000000) {
+            if (this.correo.includes("@") && this.correo.includes(".")) {
+              try{
+                let usu:string='insert into usuario(run,password,active) values("'+run_limpio+'","'+this.password+'",0)';
+                this.db.executeSql(usu,[])
+                .then(() => console.log('usuario creado'))
+                .catch(e => alert(JSON.stringify(e)));
 
-              let pac:string='insert into paciente (run,nombre,apellido,edad,fechaNacimiento,Direccion,Telefono,Correo,Genero) values("'+run_limpio+'","'+this.nombre+'","'+this.apellidos+'",'+this.edad+',\''+this.fecha+'\', "'+this.direccion+'", "'+this.telefono+'", "'+this.correo+'", "'+this.genero+'")';
-              this.db.executeSql(pac,[])
-              .then(() => console.log('paciente creado'))
-              .catch(e => alert(JSON.stringify(e)));
+                let pac:string='insert into paciente (run,nombre,apellido,edad,fechaNacimiento,Direccion,Telefono,Correo,Genero) values("'+run_limpio+'","'+this.nombre+'","'+this.apellidos+'",'+this.edad+',\''+this.fecha+'\', "'+this.direccion+'", "'+this.telefono+'", "'+this.correo+'", "'+this.genero+'")';
+                this.db.executeSql(pac,[])
+                .then(() => console.log('paciente creado'))
+                .catch(e => alert(JSON.stringify(e)));
 
-              alert("Usuario creado exitosamente")
-              this.router.navigate(['login']);
-            } catch {
-              alert ("Error al crear usuarios")
+                alert("Usuario creado exitosamente")
+                this.router.navigate(['login']);
+              } catch {
+                alert ("Error al crear usuarios")
+              }
+            } else {
+              alert ("Formato de Correo Incorrecto")
             }
           } else {
-            alert ("Formato de correo incorrecto")
+            alert ("Formato de Telefono Incorrecto")
           }
         } else {
-          alert ("Formato de telefono incorrecto")
+          alert("Formato de Fecha Incorrecto")
         }
       } else {
         alert ("La contraseña debe tener al menos 8 caracteres")

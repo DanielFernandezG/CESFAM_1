@@ -18,7 +18,6 @@ export class LoginPage implements OnInit {
 
   ngOnInit() {
     this.createOpenDatabase();
-    // this.sesionData();
   }
 
   createTable() {
@@ -257,7 +256,6 @@ export class LoginPage implements OnInit {
         })
         .then((db: SQLiteObject) => {
           this.db = db;
-          // alert('database create/opened')
           console.log("Conectado");
           this.db
             .executeSql("select * from usuario where active=1", [])
@@ -273,20 +271,6 @@ export class LoginPage implements OnInit {
       console.log(err);
     }
   }
-
-  // sesionData() {
-  //   console.log("ccccccccccccccccccccccccccccccccccccccccccccccccc");
-  //   this.db
-  //     .executeSql("select * from usuario where active=1", [])
-  //     .then((result) => {
-  //       console.log("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb");
-  //       if (result.rows.item(0).active == 1) {
-  //         console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
-  //         this.router.navigate(["home"]);
-  //       }
-  //     })
-  //     .catch((e) => alert("aaaa" + JSON.stringify(e)));
-  // }
 }
 
 class usuario {

@@ -24,12 +24,10 @@ export class HomePage {
         .then((db: SQLiteObject) => {
           this.db = db;
           console.log("Conectado");
-          // alert('database create/opened')
         })
         .catch((e) => alert(JSON.stringify(e)));
     } catch (err: any) {
       console.log(err);
-      // alert(err);
     }
   }
 
