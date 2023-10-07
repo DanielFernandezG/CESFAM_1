@@ -49,6 +49,10 @@ const routes: Routes = [
     path: 'home-secretaria',
     loadChildren: () => import('./Pages/home-secretaria/home-secretaria.module').then( m => m.HomeSecretariaPageModule)
   },
+  {
+    path: 'datos-prueba',
+    loadChildren: () => import('./Pages/datos-prueba/datos-prueba.module').then( m => m.DatosPruebaPageModule)
+  },
 
 ];
 
