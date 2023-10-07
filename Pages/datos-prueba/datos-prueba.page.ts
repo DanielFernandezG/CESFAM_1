@@ -261,7 +261,7 @@ export class DatosPruebaPage implements OnInit {
       this.db.executeSql(doc);
 
       // Ingreso Secretaria
-      let sec = `INSERT INTO Secretaria (ID_Secretaria, Run, Nombre, Apellido, FechaNacimiento, Correo, Genero) VALUES (1, '123456789', 'Ana', 'García', '1990-05-20', 'ana@gmail.com', 'Femenino'),(2, '987654321', 'Carlos', 'Martínez', '1988-12-15', 'carlos@gmail.com', 'Masculino'),(3, '234567890', 'Elena', 'López', '1995-07-10', 'elena@gmail.com', 'Femenino'),(4, '345678901', 'David', 'Rodríguez', '1992-03-25', 'david@gmail.com', 'Masculino');`;
+      let sec = `INSERT INTO Secretaria (ID_Secretaria, Run, Nombre, Apellido, FechaNacimiento, Correo, Genero) VALUES (1, '217532302', 'Ana', 'García', '1990-05-20', 'ana@gmail.com', 'Femenino'),(2, '148366284', 'Carlos', 'Martínez', '1988-12-15', 'carlos@gmail.com', 'Masculino'),(3, '146529704', 'Elena', 'López', '1995-07-10', 'elena@gmail.com', 'Femenino'),(4, '203307349', 'David', 'Rodríguez', '1992-03-25', 'david@gmail.com', 'Masculino');`;
       this.db.executeSql(sec);
 
       // Ingreso Cita Medica
