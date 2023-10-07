@@ -287,4 +287,8 @@ export class DatosPruebaPage implements OnInit {
       alert("Error al crear tablas");
     }
   }
+
+  cerrarSesion(){
+    this.router.navigate(['login'])
+  }
 }

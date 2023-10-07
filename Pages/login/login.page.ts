@@ -33,10 +33,7 @@ export class LoginPage implements OnInit {
   iniciarSesion() {
     if (this.run == "Admin") {
       if (this.password == "Admin@123") {
-        this.db
-          .executeSql("UPDATE Usuario SET active=1 where run=?", [this.run])
-          .then((result) => this.router.navigate(["datos-prueba"]))
-          .catch((e) => console.log(JSON.stringify(e)));
+        this.router.navigate(["datos-prueba"])
       } else {
         alert("Contraseña Incorrecta");
       }
