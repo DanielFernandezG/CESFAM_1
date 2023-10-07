@@ -1,19 +1,45 @@
-import { Component } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { SQLite, SQLiteObject } from "@awesome-cordova-plugins/sqlite/ngx";
-import { Router } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
+import { CitasService } from 'src/app/Services/citas.service';
 
 @Component({
   selector: "app-home",
   templateUrl: "home.page.html",
   styleUrls: ["home.page.scss"],
 })
-export class HomePage {
+export class HomePage implements OnInit {
   db: SQLiteObject;
-  constructor(private sqlite: SQLite, private router: Router) {}
+  especialidad: string;
+  fechaHora: string;
+  medico: string;
+  especialidades: string[] = [];
+  fechasHoras: string[] = [];
+  medicos: string[] = [];
+
+  constructor(
+    private sqlite: SQLite,
+    private router: Router,
+    private route: ActivatedRoute,
+    private citasService: CitasService
+  ) {}
 
   ngOnInit() {
+    // Obtén las especialidades, fechas y horas del servicio
+    this.especialidades = this.citasService.obtenerEspecialidades();
+    this.fechasHoras = this.citasService.obtenerFechasHoras();
+
     this.createOpenDatabase();
+    // Lee los datos de los parámetros de la ruta cuando la página se carga
+    this.route.queryParams.subscribe(params => {
+      if (params && params['especialidad'] && params['fechaHora'] && params['medico']) {
+        this.especialidad = params['especialidad'];
+        this.fechaHora = params['fechaHora'];
+        this.medico = params['medico'];
+      }
+    });
   }
+
   createOpenDatabase() {
     try {
       this.sqlite
@@ -39,7 +65,6 @@ export class HomePage {
     this.router.navigate(["login"]);
   }
 
-
   eleccionCita() {
     this.router.navigateByUrl('/eleccion-cita');
   }
@@ -47,4 +72,8 @@ export class HomePage {
   updateData() {
     this.router.navigateByUrl('/actualizar-datos');
   }
+
+
 }
+
+

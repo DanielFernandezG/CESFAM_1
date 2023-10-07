@@ -20,8 +20,14 @@ export class ConfirmacionCitaPage {
 
   confirmarCita() {
     // Realizar operaciones para confirmar la cita (guardar en la base de datos, enviar notificaciones, etc.)
-    // Después de confirmar, puedes redirigir a una página de confirmación final o agradecimiento
-    this.router.navigateByUrl('/home');
+    // Después de confirmar, puedes redirigir a la página de inicio y pasar los datos como parámetros de ruta
+    this.router.navigate(['/home'], {
+      queryParams: {
+        especialidad: this.especialidad,
+        fechaHora: this.fechaHora,
+        medico: this.medico
+      }
+    });
   }
 
   cancelarCita() {
@@ -30,4 +36,6 @@ export class ConfirmacionCitaPage {
     this.router.navigateByUrl('/home');
   }
 }
+
+
 

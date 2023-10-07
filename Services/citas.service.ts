@@ -31,6 +31,18 @@ export class CitasService {
     this.medico = medico;
   }
 
+  obtenerEspecialidades(): string[] {
+    return this.especialidades;
+  }
+
+  obtenerFechasHoras(): string[] {
+    return this.fechasHoras;
+  }
+
+  obtenerMedicosPorEspecialidad(especialidad: string): string[] {
+    return this.medicosPorEspecialidad[especialidad] || [];
+  }
+
   obtenerEspecialidad(): string {
     return this.especialidad;
   }
@@ -42,9 +54,4 @@ export class CitasService {
   obtenerMedico(): string {
     return this.medico;
   }
-
-
-
-
-
 }
