@@ -235,7 +235,13 @@ export class LoginPage implements OnInit {
               ])
               .then((result) => console.log("Sesion Cambiada"))
               .catch((e) => console.log(JSON.stringify(e)));
-            this.router.navigate(["home"]);
+            if (result.rows.item(0).tipo == "paciente") {
+              this.router.navigate(["home"]);
+            } else if (result.rows.item(0).tipo == "doctor"){
+              this.router.navigate(["home-doctor"]);
+            } else {
+              this.router.navigate(["home-secretaria"]);
+            }
           } else {
             alert("Contraseña Incorrecta");
           }
@@ -264,7 +270,7 @@ export class LoginPage implements OnInit {
               if (result.rows.item(0).active == 1) {
                 this.router.navigate(["home"]);
               }
-            })
+            });
         })
         .catch((e) => alert(JSON.stringify(e)));
     } catch (err: any) {

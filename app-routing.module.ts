@@ -41,6 +41,14 @@ const routes: Routes = [
     path: 'confirmacion-cita',
     loadChildren: () => import('./Pages/confirmacion-cita/confirmacion-cita.module').then( m => m.ConfirmacionCitaPageModule)
   },
+  {
+    path: 'home-doctor',
+    loadChildren: () => import('./Pages/home-doctor/home-doctor.module').then( m => m.HomeDoctorPageModule)
+  },
+  {
+    path: 'home-secretaria',
+    loadChildren: () => import('./Pages/home-secretaria/home-secretaria.module').then( m => m.HomeSecretariaPageModule)
+  },
 
 ];
 
