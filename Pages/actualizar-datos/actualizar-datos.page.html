@@ -5,27 +5,13 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <div>
-    <div style="border-bottom: solid 1px lightgray; margin-bottom: 20px;">
-    </div>
-    <ion-title>Por favor, Cambie los datos que desea actualizar</ion-title>
+    <div style="border-bottom: solid 1px lightgray; margin-bottom: 20px;"></div>
+      <ion-input placeholder="Nombre" [(ngModel)]="nombre" [value]="nombre">Nombres</ion-input>
+      <ion-input placeholder="Apellido" [(ngModel)]="apellido" [value]="apellido">Apellidos</ion-input>
+      <ion-input placeholder="Direccion" [(ngModel)]="direccion" [value]="direccion">Direccion</ion-input>
+      <ion-input placeholder="Correo" [(ngModel)]="correo" [value]="correo">Correo</ion-input>
+      <ion-input placeholder="Telefono" [(ngModel)]="telefono" [value]="telefono">Telefono</ion-input>
     <div style="margin: 20px;">
-      <ion-item>
-        <ion-input placeholder="Nombre" [(ngModel)]="nombre"></ion-input>
-      </ion-item>
-      <ion-item>
-        <ion-input placeholder="Apellidos" [(ngModel)]="apellido"></ion-input>
-      </ion-item>
-      <ion-item>
-        <ion-input placeholder="Direccion" [(ngModel)]="direccion"></ion-input>
-      </ion-item>
-      <ion-item>
-        <ion-input placeholder="Telefono (912345678)" [(ngModel)]="telefono"></ion-input>
-      </ion-item>
-      <ion-item>
-        <ion-input placeholder="Correo" [(ngModel)]="correo"></ion-input>
-      </ion-item>
       <ion-button size="small" (click)="updateData()" style="margin-bottom: 20px;">Actualizar Datos</ion-button>
     </div>
-  </div>
 </ion-content>

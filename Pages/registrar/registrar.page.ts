@@ -71,7 +71,7 @@ export class RegistrarPage implements OnInit {
           if (this.telefono <= 999999999 && this.telefono >= 900000000) {
             if (this.correo.includes("@") && this.correo.includes(".")) {
               try{
-                let usu:string='insert into usuario(run,password,active) values("'+run_limpio+'","'+this.password+'",0)';
+                let usu:string='insert into usuario(run,password,tipo,active) values("'+run_limpio+'","'+this.password+'","paciente",0)';
                 this.db.executeSql(usu,[])
                 .then(() => console.log('usuario creado'))
                 .catch(e => alert(JSON.stringify(e)));

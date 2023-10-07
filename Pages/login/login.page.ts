@@ -26,6 +26,7 @@ export class LoginPage implements OnInit {
     CREATE TABLE IF NOT EXISTS Usuario (
       run VARCHAR(10) PRIMARY KEY NOT NULL,
       password VARCHAR(12) NOT NULL,
+      tipo VARCHAR(15) NOT NULL,
       active INTEGER(1) NOT NULL
     );`;
       this.db
