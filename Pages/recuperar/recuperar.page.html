@@ -1,0 +1,24 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Recuperar Contraseña</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-card-content>
+    <div style="margin: 20px;">
+      <ion-item>
+        <ion-input placeholder="Ingrese su Nueva Contraseña" [(ngModel)]="password"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-input placeholder="Confirme su Contraseña" [(ngModel)]="confPassword"></ion-input>
+      </ion-item>
+    </div>
+    <ion-row>
+      <ion-col size="12">
+        <br>
+        <ion-button size="small" (click)="cambiarClave()" style="margin-bottom: 20px;">Cambiar Contraseña</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-card-content>
+</ion-content>

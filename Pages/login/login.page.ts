@@ -2,8 +2,8 @@ import { Component, OnInit, ViewChild } from "@angular/core";
 import { Router } from "@angular/router";
 import { SQLite, SQLiteObject } from "@awesome-cordova-plugins/sqlite/ngx";
 import { validateRut } from "@fdograph/rut-utilities";
-import { IonModal } from '@ionic/angular';
-import { OverlayEventDetail } from '@ionic/core/components';
+import { IonModal } from "@ionic/angular";
+import { OverlayEventDetail } from "@ionic/core/components";
 
 @Component({
   selector: "app-login",
@@ -12,7 +12,7 @@ import { OverlayEventDetail } from '@ionic/core/components';
 })
 export class LoginPage implements OnInit {
   @ViewChild(IonModal) modal: IonModal;
-  code: string;
+  rut: string;
   db: SQLiteObject;
   run: string;
   password: string;
@@ -30,14 +30,13 @@ export class LoginPage implements OnInit {
 
     // Eliminar guiones
     const rutSinGuion = rutSinPuntos.replace(/-/g, "");
-    console.log(rutSinGuion);
     return rutSinGuion;
   }
 
   iniciarSesion() {
     if (this.run == "Admin") {
       if (this.password == "Admin@123") {
-        this.router.navigate(["datos-prueba"])
+        this.router.navigate(["datos-prueba"]);
       } else {
         alert("Contraseña Incorrecta");
       }
@@ -89,7 +88,6 @@ export class LoginPage implements OnInit {
         })
         .catch((e) => alert(JSON.stringify(e)));
     } catch (err: any) {
-      // alert(err);
       console.log(err);
     }
   }
@@ -115,17 +113,33 @@ export class LoginPage implements OnInit {
   }
 
   cancel() {
-    this.modal.dismiss(null, 'cancel');
+    this.modal.dismiss(null, "cancel");
   }
 
   confirm() {
-    this.modal.dismiss(this.code, 'confirm');
+    const rut_limpio = this.limpiarRut(this.rut);
+    if (validateRut(rut_limpio)) {
+      this.db
+        .executeSql("select * from Usuario where run=?", [rut_limpio])
+        .then((result) => {
+          this.db
+            .executeSql("UPDATE Usuario SET active=1 where run=?", [rut_limpio])
+            .then((result) => {
+              this.modal.dismiss(null, "cancel");
+              this.router.navigate(["recuperar"]);
+            })
+            .catch((e) => alert(JSON.stringify(e)));
+        })
+        .catch((e) => alert("El run indicado no posee cuenta"));
+    } else {
+      alert("Run no Valido");
+    }
   }
 
   onWillDismiss(event: Event) {
     const ev = event as CustomEvent<OverlayEventDetail<string>>;
-    if (ev.detail.role === 'confirm') {
-      this.code = `Hello, ${ev.detail.data}!`;
+    if (ev.detail.role === "confirm") {
+      this.rut = `Hello, ${ev.detail.data}!`;
     }
   }
 }

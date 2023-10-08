@@ -53,6 +53,10 @@ const routes: Routes = [
     path: 'datos-prueba',
     loadChildren: () => import('./Pages/datos-prueba/datos-prueba.module').then( m => m.DatosPruebaPageModule)
   },
+  {
+    path: 'recuperar',
+    loadChildren: () => import('./Pages/recuperar/recuperar.module').then( m => m.RecuperarPageModule)
+  },
 
 ];
 
