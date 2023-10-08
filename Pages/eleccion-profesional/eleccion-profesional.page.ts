@@ -1,6 +1,7 @@
 import { Component,OnInit } from '@angular/core';
 import { SQLite, SQLiteObject } from '@awesome-cordova-plugins/sqlite/ngx';
 
+
 @Component({
   selector: 'eleccion-profesional',
   templateUrl: 'eleccion-profesional.page.html',
@@ -46,7 +47,8 @@ export class EleccionProfesionalPage implements OnInit {
     this.medicoData=[];
 
     this.db
-      .executeSql("select * from Especialidad where Nombre='Oftalmología'", [])
+      .executeSql("select * from Especialidad where Nombre='Cardiología'", [])
+
       .then((result) => {
         let med:string='select * from Doctor where ID_Especialidad='+result.rows.item(0).ID_Especialidad;
         this.db
@@ -59,14 +61,21 @@ export class EleccionProfesionalPage implements OnInit {
             console.log("------------------------------------------------"+result.rows.item(0).Nombre);
           })
           .catch(e => alert(JSON.stringify(e)));
-      });
+
+
+
+        });
+
+
+
+
   }
 
   seleccionarMedico(medico: { id: number, nombre: string }) {
     this.medicoSeleccionado = medico;
   }
-
-  ingresar() {
+ /*
+    ingresar() {
     if (this.especialidadSeleccionada && this.medicoSeleccionado) {
       // Aquí puedes usar this.especialidadSeleccionada y this.medicoSeleccionado para las operaciones necesarias.
       console.log('Especialidad seleccionada:', this.especialidadSeleccionada);
@@ -75,7 +84,11 @@ export class EleccionProfesionalPage implements OnInit {
     } else {
       alert('Por favor, seleccione una especialidad y un médico.');
     }
-  }
+  }*/
+
+
+
+
 }
 
 class medico{
