@@ -14,11 +14,10 @@
   </ion-toolbar>
 </ion-header>
 
-
 <ion-content class="ion-padding">
   <ion-list *ngIf="medicos && medicos.length > 0">
     <ion-item *ngFor="let medico of medicos" (click)="seleccionarMedico(medico)">
-      {{ medico }}
+      {{ medico.nombre }}
     </ion-item>
   </ion-list>
 
