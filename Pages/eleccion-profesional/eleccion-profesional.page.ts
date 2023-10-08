@@ -30,6 +30,7 @@ export class EleccionProfesionalPage implements OnInit {
         .then((db: SQLiteObject) => {
           this.db = db;
           console.log("Conectado");
+          this.cargarEspecialidades();
         })
         .catch((e) => alert(JSON.stringify(e)));
     } catch (err: any) {
@@ -42,6 +43,8 @@ export class EleccionProfesionalPage implements OnInit {
   }
 
   cargarEspecialidades() {
+    this.medicoData=[];
+
     this.db
       .executeSql("select * from Especialidad where Nombre='Oftalmología'", [])
       .then((result) => {
