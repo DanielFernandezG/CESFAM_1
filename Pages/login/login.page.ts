@@ -1,7 +1,9 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ViewChild } from "@angular/core";
 import { Router } from "@angular/router";
 import { SQLite, SQLiteObject } from "@awesome-cordova-plugins/sqlite/ngx";
 import { validateRut } from "@fdograph/rut-utilities";
+import { IonModal } from '@ionic/angular';
+import { OverlayEventDetail } from '@ionic/core/components';
 
 @Component({
   selector: "app-login",
@@ -9,6 +11,8 @@ import { validateRut } from "@fdograph/rut-utilities";
   styleUrls: ["./login.page.scss"],
 })
 export class LoginPage implements OnInit {
+  @ViewChild(IonModal) modal: IonModal;
+  code: string;
   db: SQLiteObject;
   run: string;
   password: string;
@@ -108,6 +112,21 @@ export class LoginPage implements OnInit {
           }
         }
       });
+  }
+
+  cancel() {
+    this.modal.dismiss(null, 'cancel');
+  }
+
+  confirm() {
+    this.modal.dismiss(this.code, 'confirm');
+  }
+
+  onWillDismiss(event: Event) {
+    const ev = event as CustomEvent<OverlayEventDetail<string>>;
+    if (ev.detail.role === 'confirm') {
+      this.code = `Hello, ${ev.detail.data}!`;
+    }
   }
 }
 

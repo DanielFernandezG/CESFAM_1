@@ -29,15 +29,32 @@
             <ion-button size="small" (click)="iniciarSesion()" style="margin-bottom: 20px;">Iniciar Sesion</ion-button>
           </ion-col>
           <ion-col size="12">
+            <a id="open-modal" expand="block">Recuperar Contraseña</a>
+            <br>
             <br>
             <ion-button color="secondary" shape="block" (click)="registrar()">Registrarse</ion-button>
           </ion-col>
         </ion-row>
+        <ion-modal trigger="open-modal" (willDismiss)="onWillDismiss($event)">
+          <ng-template>
+            <ion-header>
+              <ion-toolbar>
+                <ion-buttons slot="start">
+                  <ion-button (click)="cancel()">Cancelar</ion-button>
+                </ion-buttons>
+                <ion-title>Recuperar Contraseña</ion-title>
+                <ion-buttons slot="end">
+                  <ion-button (click)="confirm()" [strong]="true">Confirm</ion-button>
+                </ion-buttons>
+              </ion-toolbar>
+            </ion-header>
+            <ion-content class="ion-padding">
+                <ion-label position="stacked">Ingrese el codigo enviado por correo</ion-label>
+                <ion-input type="text" placeholder="Codigo" [(ngModel)]="code"></ion-input>
+            </ion-content>
+          </ng-template>
+        </ion-modal>
       </ion-card-content>
-      <ion-label>
-        <br>
-        <a [routerLink]="['../recuperar']">Recuperar Contraseña</a>
-      </ion-label>
     </ion-card>
   </div>
 </ion-content>

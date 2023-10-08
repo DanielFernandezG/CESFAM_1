@@ -15,11 +15,13 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-  <ion-list *ngIf="medicos && medicos.length > 0">
-    <ion-item *ngFor="let medico of medicos" (click)="seleccionarMedico(medico)">
-      {{ medico.nombre }}
-    </ion-item>
-  </ion-list>
+  <div style="border-top: solid 1px lightgray;">
+    <ion-button (click)="cargarEspecialidades()" style="margin-bottom: 20px;margin-top: 20px;">select Data</ion-button>
+    <div *ngFor="let b of medicoData; let i = index">
+      <div>Contraseña: {{b.nombre}}</div>
+      <div>Contraseña: {{b.apellido}}</div>
+    </div>
+  </div>
 
-  <ion-button expand="full" (click)="ingresar()">Ingresar</ion-button>
+  <!-- <ion-button expand="full" (click)="ingresar()">Ingresar</ion-button> -->
 </ion-content>

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component,OnInit } from '@angular/core';
 import { SQLite, SQLiteObject } from '@awesome-cordova-plugins/sqlite/ngx';
 
 @Component({
@@ -6,64 +6,57 @@ import { SQLite, SQLiteObject } from '@awesome-cordova-plugins/sqlite/ngx';
   templateUrl: 'eleccion-profesional.page.html',
   styleUrls: ['eleccion-profesional.page.scss']
 })
-export class EleccionProfesionalPage {
-  especialidades: { id: number, nombre: string }[];
-  medicos: { id: number, nombre: string }[];
+export class EleccionProfesionalPage implements OnInit {
+  db: SQLiteObject;
+  // especialidades: { id: number, nombre: string }[];
+  // medicos: { id: number, nombre: string }[];
   especialidadSeleccionada: number;
   medicoSeleccionado: { id: number, nombre: string };
+  medicoData: medico[];
 
   constructor(private sqlite: SQLite) {}
+
+  ngOnInit() {
+    this.createOpenDatabase();
+  }
+
+  createOpenDatabase() {
+    try {
+      this.sqlite
+        .create({
+          name: "data.db",
+          location: "default",
+        })
+        .then((db: SQLiteObject) => {
+          this.db = db;
+          console.log("Conectado");
+        })
+        .catch((e) => alert(JSON.stringify(e)));
+    } catch (err: any) {
+      console.log(err);
+    }
+  }
 
   ionViewWillEnter() {
     this.cargarEspecialidades();
   }
 
   cargarEspecialidades() {
-    this.sqlite.create({
-      name: 'data.db',
-      location: 'default'
-    }).then((db: SQLiteObject) => {
-      db.executeSql('SELECT ID_Especialidad, Nombre FROM Especialidad', []).then((data) => {
-        this.especialidades = [];
-        if (data.rows.length > 0) {
-          for (let i = 0; i < data.rows.length; i++) {
-            this.especialidades.push({
-              id: data.rows.item(i).ID_Especialidad,
-              nombre: data.rows.item(i).Nombre
-            });
-          }
-        }
-      }).catch((error) => {
-        console.error('Error al cargar especialidades desde la base de datos: ' + JSON.stringify(error));
-      });
-    }).catch((error) => {
-      console.error('Error al abrir la base de datos: ' + JSON.stringify(error));
-    });
-  }
-
-  cargarMedicos(idEspecialidad: number) {
-    this.sqlite.create({
-      name: 'data.db',
-      location: 'default'
-    }).then((db: SQLiteObject) => {
-      db.executeSql('SELECT ID_Doctor, Nombre FROM Doctor WHERE idEspecialidad = ?', [idEspecialidad])
-        .then((data) => {
-          this.medicos = [];
-          if (data.rows.length > 0) {
-            for (let i = 0; i < data.rows.length; i++) {
-              this.medicos.push({
-                id: data.rows.item(i).ID_Doctor,
-                nombre: data.rows.item(i).Nombre
-              });
+    this.db
+      .executeSql("select * from Especialidad where Nombre='Oftalmología'", [])
+      .then((result) => {
+        let med:string='select * from Doctor where ID_Especialidad='+result.rows.item(0).ID_Especialidad;
+        this.db
+          .executeSql(med,[])
+          .then((result) => {
+            for(let i=0;i<result.rows.length;i++) {
+              this.medicoData.push({nombre:result.rows.item(i).Nombre,
+                "apellido":result.rows.item(i).Apellido});
             }
-          }
-        })
-        .catch((error) => {
-          console.error('Error al cargar médicos desde la base de datos: ' + JSON.stringify(error));
-        });
-    }).catch((error) => {
-      console.error('Error al abrir la base de datos: ' + JSON.stringify(error));
-    });
+            console.log("------------------------------------------------"+result.rows.item(0).Nombre);
+          })
+          .catch(e => alert(JSON.stringify(e)));
+      });
   }
 
   seleccionarMedico(medico: { id: number, nombre: string }) {
@@ -82,4 +75,7 @@ export class EleccionProfesionalPage {
   }
 }
 
-
+class medico{
+  public nombre:string;
+  public apellido:string;
+}
