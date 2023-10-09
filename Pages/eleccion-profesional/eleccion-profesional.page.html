@@ -14,25 +14,13 @@
   </ion-toolbar>
 </ion-header>
 
+
 <ion-content class="ion-padding">
-<!--
-  <div style="border-top: solid 1px lightgray;">
-    <div *ngFor="let b of medicoData; let i = index">
-      <div>Nombre Medico: {{b.nombre}} {{b.apellido}}</div>
+  <ion-list *ngIf="medicos && medicos.length > 0">
+    <ion-item *ngFor="let medico of medicos" (click)="seleccionarMedico(medico)">
+      {{ medico }}
+    </ion-item>
+  </ion-list>
 
-    </div>
-
-  </div>
-  -->
-  <ion-item>
-    <ion-label>Médico:</ion-label>
-    <ion-select [(ngModel)]="medicoSeleccionado">
-      <ion-select-option *ngFor="let b of medicoData; let i = index">
-        <div> {{b.nombre}} {{b.apellido}}</div>
-      </ion-select-option>
-    </ion-select>
-  </ion-item>
-
-   <ion-button expand="full" (click)="ingresar()">Ingresar</ion-button>
-
+  <ion-button expand="full" (click)="ingresar()">Ingresar</ion-button>
 </ion-content>

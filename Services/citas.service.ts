@@ -11,10 +11,10 @@ export class CitasService {
   especialidades: string[] = ['Cardiología', 'Dermatología', 'Oftalmología', 'Ortopedia'];
   fechasHoras: string[] = ['2023-10-15 09:00 AM', '2023-10-16 02:30 PM', '2023-10-17 11:15 AM'];
   medicosPorEspecialidad: { [especialidad: string]: string[] } = {
-    'Cardiología': ['Dr. Smith', 'Dr. Johnson'],
-    'Dermatología': ['Dr. Davis'],
-    'Oftalmología': ['Dr. Martinez', 'Dr. Taylor'],
-    'Ortopedia': ['Dr. Anderson']
+    'Cardiología': ['Dr. Carlos González'],
+    'Dermatología': ['Dra Laura Martínez'],
+    'Oftalmología': ['Dr. Alejandro Sánchez'],
+    'Ortopedia': ['Dra. María López']
   };
 
   constructor() {}

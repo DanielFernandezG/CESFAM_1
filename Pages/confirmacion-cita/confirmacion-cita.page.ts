@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { SQLite, SQLiteObject } from '@awesome-cordova-plugins/sqlite/ngx';
 import { CitasService } from 'src/app/Services/citas.service';
 
 @Component({
@@ -12,7 +13,11 @@ export class ConfirmacionCitaPage {
   fechaHora: string;
   medico: string;
 
-  constructor(private citasService: CitasService, private router: Router) {
+  constructor(
+    private citasService: CitasService,
+    private router: Router,
+    private sqlite: SQLite
+  ) {
     this.especialidad = this.citasService.obtenerEspecialidad();
     this.fechaHora = this.citasService.obtenerFechaHora();
     this.medico = this.citasService.obtenerMedico();
@@ -20,7 +25,32 @@ export class ConfirmacionCitaPage {
 
   confirmarCita() {
     // Realizar operaciones para confirmar la cita (guardar en la base de datos, enviar notificaciones, etc.)
-    // Después de confirmar, puedes redirigir a la página de inicio y pasar los datos como parámetros de ruta
+
+    // Abrir la base de datos SQLite y guardar la cita
+    this.sqlite.create({
+      name: 'data.db',
+      location: 'default'
+    }).then((db: SQLiteObject) => {
+      db.executeSql('CREATE TABLE IF NOT EXISTS citas (id INTEGER PRIMARY KEY AUTOINCREMENT, especialidad TEXT, fechaHora TEXT, medico TEXT)', [])
+        .then(() => {
+          // Insertar datos en la tabla citas
+          db.executeSql('INSERT INTO citas (especialidad, fechaHora, medico) VALUES (?, ?, ?)',
+            [this.especialidad, this.fechaHora, this.medico])
+            .then(() => {
+              console.log('Cita almacenada en la base de datos SQLite.');
+            })
+            .catch(error => {
+              console.error('Error al guardar la cita en la base de datos SQLite:', error);
+            });
+        })
+        .catch(error => {
+          console.error('Error al crear la tabla en la base de datos SQLite:', error);
+        });
+    }).catch(error => {
+      console.error('Error al abrir la base de datos SQLite:', error);
+    });
+
+    // Después de confirmar, redirigir a la página de inicio y pasar los datos como parámetros de ruta
     this.router.navigate(['/home'], {
       queryParams: {
         especialidad: this.especialidad,
@@ -36,6 +66,3 @@ export class ConfirmacionCitaPage {
     this.router.navigateByUrl('/home');
   }
 }
-
-
-
