@@ -1,0 +1,19 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      Editar Cita Médica
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-item>
+    <ion-label position="stacked">Fecha de Cita</ion-label>
+    <ion-input [(ngModel)]="cita.FechaCita" type="date"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label position="stacked">Hora de Cita</ion-label>
+    <ion-input [(ngModel)]="cita.HoraCita" type="time"></ion-input>
+  </ion-item>
+  <ion-button (click)="guardarCambios()">Guardar Cambios</ion-button>
+</ion-content>

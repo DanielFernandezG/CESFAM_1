@@ -56,7 +56,12 @@ const routes: Routes = [
   {
     path: 'recuperar',
     loadChildren: () => import('./Pages/recuperar/recuperar.module').then( m => m.RecuperarPageModule)
+  },  {
+    path: 'update-hora-medico',
+    loadChildren: () => import('./Pages/update-hora-medico/update-hora-medico.module').then( m => m.UpdateHoraMedicoPageModule)
   },
+
+
 
 ];
 
