@@ -122,13 +122,19 @@ export class LoginPage implements OnInit {
       this.db
         .executeSql("select * from Usuario where run=?", [rut_limpio])
         .then((result) => {
-          this.db
-            .executeSql("UPDATE Usuario SET active=1 where run=?", [rut_limpio])
-            .then((result) => {
-              this.modal.dismiss(null, "cancel");
-              this.router.navigate(["recuperar"]);
-            })
-            .catch((e) => alert(JSON.stringify(e)));
+          if (result.rows.item(0).run == rut_limpio) {
+            this.db
+              .executeSql("UPDATE Usuario SET active=1 where run=?", [
+                rut_limpio,
+              ])
+              .then((result) => {
+                this.modal.dismiss(null, "cancel");
+                this.router.navigate(["recuperar"]);
+              })
+              .catch((e) => alert(JSON.stringify(e)));
+          } else {
+            alert("El run indicado no posee cuenta");
+          }
         })
         .catch((e) => alert("El run indicado no posee cuenta"));
     } else {

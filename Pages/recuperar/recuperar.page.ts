@@ -18,7 +18,6 @@ export class RecuperarPage implements OnInit {
     this.createOpenDatabase();
   }
 
-  // this.db.executeSql("UPDATE Usuario SET active=1 where run=?", [this.password])
   cambiarClave() {
     if (this.password.length >= 8) {
       if (this.password == this.confPassword) {
