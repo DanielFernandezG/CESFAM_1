@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { SQLite, SQLiteObject } from '@awesome-cordova-plugins/sqlite/ngx';
 
@@ -8,10 +8,10 @@ import { SQLite, SQLiteObject } from '@awesome-cordova-plugins/sqlite/ngx';
   styleUrls: ['./update-hora-medico.page.scss'],
 })
 export class UpdateHoraMedicoPage {
-  citaId: number;
+  citaId: string; // Cambiado a string
   cita: any = {
-    FechaCita: '',
-    HoraCita: '',
+    FechaCita: '', // La fecha se mantiene como una cadena en formato 'YYYY-MM-DD'
+    HoraCita: '', // La hora se mantiene como una cadena en formato 'HH:mm'
   };
   db: SQLiteObject;
 
@@ -19,42 +19,36 @@ export class UpdateHoraMedicoPage {
     private route: ActivatedRoute,
     private sqlite: SQLite
   ) {
-    // Obtenemos el valor de 'citaId' de la URL de manera segura
     const paramMap = this.route.snapshot.paramMap;
     if (paramMap) {
-      const citaIdString = paramMap.get('citaId');
-      if (citaIdString !== null) {
-        this.citaId = +citaIdString;
+      const citaIdValue = paramMap.get('citaId');
+      if (citaIdValue !== null) {
+        this.citaId = citaIdValue;
+      } else {
+        // Manejar el caso en el que 'citaId' sea null, por ejemplo, mostrar un mensaje de error o redirigir.
       }
     }
 
-    this.createOpenDatabase();
+    this.createDatabase();
     this.loadCita();
   }
 
-  ngOnInit() {
-    this.createOpenDatabase();
+  async createDatabase() {
+    try {
+      this.sqlite
+        .create({
+          name: 'data.db',
+          location: 'default',
+        })
+        .then((db: SQLiteObject) => {
+          this.db = db;
+          console.log("Conectado a la base de datos 'data.db'");
+        })
+        .catch((e) => console.error(JSON.stringify(e)));
+    } catch (error) {
+      console.error(error);
+    }
   }
-createOpenDatabase()
-{
-  try{
-    this.sqlite.create({
-      name: 'data.db',
-      location: 'default'
-    })
-    .then((db: SQLiteObject) => {
-      this.db=db;
-      console.log("Conectado")
-      // alert('database create/opened')
-    })
-    .catch(e => alert(JSON.stringify(e)))
-  }
-  catch(err:any)
-  {
-    console.log(err);
-    // alert(err);
-  }
-}
 
   async loadCita() {
     try {

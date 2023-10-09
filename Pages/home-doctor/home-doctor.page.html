@@ -20,39 +20,59 @@
       <ion-input [(ngModel)]="FechaCita" type="date"></ion-input>
       <ion-input [(ngModel)]="HoraCita" type="time"></ion-input>
     </ion-item>
-    <!-- <ion-item>
-      <ion-datetime presentation="time" display-format="HH:MM:SS"[(ngModel)]="HoraCita"></ion-datetime>
-    </ion-item> -->
+
     <ion-button size="small" (click)="insertData()" style="margin: bottom 20px;">Create</ion-button>
   </div>
 
-  <!-- <div style="border-top:solid 1px lightgray;">
-
-    <ion-button (click)="selectData()" style="margin: bottom 20px;">Ver</ion-button>
-
-    <div *ngFor="let d of doctorData; let i = index">
-
-      <ion-item>ID_Cita : {{d.ID_Cita}} FechaCita : {{d.FechaCita}} HoraCita : {{d.HoraCita}} 
-      <ion-button size="small" (click)="deleteRecord()" style="margin: bottom 20px;">Delete</ion-button>  
-    </ion-item>
-
-
-
-    </div>
-
-  </div> -->
 
 </div>
 </ion-content>
 
-<!-- Lista de citas médicas existentes -->
-<ion-button (click)="selectData()" style="margin: bottom 20px;">Ver</ion-button>
+<!-- <ion-button (click)="selectData()" style="margin: bottom 20px;">Ver</ion-button>
 <ion-list>
   <ion-item *ngFor="let d of doctorData">
-    Fecha: {{ d.FechaCita }} - Hora: {{ d.HoraCita }}
+    ID Cita: {{d.ID_Cita}} - Fecha: {{ d.FechaCita }} - Hora: {{ d.HoraCita }}
     <ion-buttons slot="end">
       <ion-button (click)="updateData(cita)">Editar</ion-button>
       <ion-button (click)="deleteRecord(d.ID_Cita)">Eliminar</ion-button>
     </ion-buttons>
   </ion-item>
-</ion-list>
+</ion-list> -->
+
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      Lista de Citas Médicas
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-button (click)="selectData()" style="margin-bottom: 20px;">Ver Citas</ion-button>
+
+  <!-- Lista de citas médicas -->
+  <ion-list>
+    <ion-item *ngFor="let cita of doctorData">
+      ID Cita: {{ cita.ID_Cita }} - Fecha: {{ cita.FechaCita }} - Hora: {{ cita.HoraCita }}
+      <ion-buttons slot="end">
+        <!-- Botón para abrir el formulario de edición -->
+        <ion-button (click)="editarCita(cita)">Editar</ion-button>
+        <ion-button (click)="deleteRecord(cita.ID_Cita)">Eliminar</ion-button>
+      </ion-buttons>
+    </ion-item>
+  </ion-list>
+
+  <!-- Formulario de edición (inicialmente oculto) -->
+  <div *ngIf="mostrarFormularioDeEdicion">
+    <ion-item>
+      <ion-label position="stacked">Nueva Fecha de Cita</ion-label>
+      <ion-input [(ngModel)]="citaEditada.FechaCita" type="date"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="stacked">Nueva Hora de Cita</ion-label>
+      <ion-input [(ngModel)]="citaEditada.HoraCita" type="time"></ion-input>
+    </ion-item>
+    <ion-button (click)="guardarCambios()">Guardar Cambios</ion-button>
+  </div>
+</ion-content>
+

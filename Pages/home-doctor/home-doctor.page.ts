@@ -15,7 +15,13 @@ export class HomeDoctorPage implements OnInit {
   ID_Cita:string;
   idDoctor:string;
   doctorData:doctor[];
+  mostrarFormularioDeEdicion: boolean = false;
   cita:any;
+  citas: any[] = [];
+  citaEditada: any = {
+    ID_Cita: 0,
+    FechaCita: '',
+    HoraCita: '',};
 
   constructor(private router: Router,
     private sqlite:SQLite) {
@@ -69,13 +75,44 @@ export class HomeDoctorPage implements OnInit {
 
   }
 
-
-
-
-
-  async updateData(cita: any) {
-    this.router.navigate(['/update-hora-medico', { idCita: cita.ID_Cita }]);
+  async editarCita(cita: any) {
+    // Mostrar el formulario de edición y cargar los datos de la cita
+    this.citaEditada.ID_Cita = cita.ID_Cita;
+    this.citaEditada.FechaCita = cita.FechaCita;
+    this.citaEditada.HoraCita = cita.HoraCita;
+  
+    // Configurar mostrarFormularioDeEdicion en true
+    this.mostrarFormularioDeEdicion = true;
   }
+  
+  async guardarCambios() {
+    try {
+      await this.db.executeSql(
+        'UPDATE CitaMedica SET FechaCita = ?, HoraCita = ? WHERE ID_Cita = ?',
+        [this.citaEditada.FechaCita, this.citaEditada.HoraCita, this.citaEditada.ID_Cita]
+      );
+  
+      // Limpiar el objeto de edición y ocultar el formulario
+      this.citaEditada = {
+        ID_Cita: 0,
+        FechaCita: '',
+        HoraCita: '',
+      };
+      this.mostrarFormularioDeEdicion = false;
+  
+      // Recargar la lista de citas
+      this.selectData();
+    } catch (error) {
+      console.error('Error al guardar los cambios en la cita', error);
+    }
+  }
+  
+
+
+
+  // async updateData(cita: any) {
+  //   this.router.navigate(['/update-hora-medico', { idCita: cita.ID_Cita }]);
+  // }
   
 
   // deleteRecord()
