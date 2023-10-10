@@ -4,31 +4,39 @@
       <ion-back-button></ion-back-button> <!-- Botón de retroceso -->
     </ion-buttons>
     <ion-title class="title-left">
-      Ingrese Especialidad
+      Horas Disponibles
     </ion-title>
-    <ion-buttons slot="end">
+    <!-- <ion-buttons slot="end">
       <ion-button>
         <ion-img src="assets/imagenes/Cesfam.jpg" class="logo-image"></ion-img>
       </ion-button>
-    </ion-buttons>
+    </ion-buttons> -->
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
-  <ion-item>
-    <ion-label>Especialidad:</ion-label>
-    <ion-select [(ngModel)]="especialidadSeleccionada">
-      <ion-select-option *ngFor="let especialidad of especialidades" [value]="especialidad">
-        {{ especialidad }}
-      </ion-select-option>
-    </ion-select>
-  </ion-item>
-
-  <!-- Botón "Siguiente" que solo se muestra cuando especialidadSeleccionada tiene un valor -->
-  <ion-button *ngIf="especialidadSeleccionada" expand="full" (click)="irAEleccionFechaHora()">Siguiente</ion-button>
+  <table>
+    <thead>
+      <tr>
+        <th>ID Cita</th>
+        <th>Especialidad</th>
+        <th>Fecha</th>
+        <th>Hora</th>
+        <th>Doctor</th>
+        <th>Tomar Cita</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let c of citaData">
+        <td>{{ c.id_cita }}</td>
+        <td>{{ c.esp }}</td>
+        <td>{{ c.FechaCita }}</td>
+        <td>{{ c.HoraCita }}</td>
+        <td>{{ c.nombre }} {{ c.apellido }}</td>
+        <td>
+          <ion-button (click)="tomarHora(c.id_cita)"></ion-button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 </ion-content>
-
-
-
-
-

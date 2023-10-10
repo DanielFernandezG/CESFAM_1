@@ -73,17 +73,13 @@ export class HomeDoctorPage implements OnInit {
             ])
             .then((result) => {
               try {
-                let cita: string =
-                  'insert into CitaMedica(ID_Doctor,FechaCita,HoraCita,EstadoCita) values(' +
-                  result.rows.item(0).ID_Doctor +
-                  ',"' +
-                  this.FechaCita +
-                  '","' +
-                  this.HoraCita +
-                  '","Disponible");';
+                let cita: string ='insert into CitaMedica(ID_Doctor,FechaCita,HoraCita,EstadoCita) values(' + result.rows.item(0).ID_Doctor + ',"' + this.FechaCita + '","' + this.HoraCita + '","Disponible");';
                 this.db
                   .executeSql(cita, [])
-                  .then(() => alert('Datos insertados'))
+                  .then(() => {
+                    this.selectData();
+                    alert('Datos insertados')
+                  })
                   .catch((e) => alert(JSON.stringify(e)));
               } catch {
                 alert('No insertados');

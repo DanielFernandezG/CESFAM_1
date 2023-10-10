@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { SQLite, SQLiteObject } from "@awesome-cordova-plugins/sqlite/ngx";
-import { ActivatedRoute, Router } from "@angular/router";
-import { CitasService } from "src/app/Services/citas.service";
+import { Router } from "@angular/router";
+
 
 @Component({
   selector: "app-home",
@@ -12,32 +12,14 @@ export class HomePage implements OnInit {
   db: SQLiteObject;
   citaData: cita[];
   especialidad: string;
-  fechaHora: string;
-  medico: string;
-  especialidades: string[] = [];
-  fechasHoras: string[] = [];
-  medicos: string[] = [];
 
   constructor(
     private sqlite: SQLite,
     private router: Router,
-    private route: ActivatedRoute,
-    private citasService: CitasService
   ) {}
 
   ngOnInit() {
-    // // Obtén las especialidades, fechas y horas del servicio
-    // this.especialidades = this.citasService.obtenerEspecialidades();
-    // this.fechasHoras = this.citasService.obtenerFechasHoras();
     this.createOpenDatabase();
-    // // Lee los datos de los parámetros de la ruta cuando la página se carga
-    // this.route.queryParams.subscribe(params => {
-    //   if (params && params['especialidad'] && params['fechaHora'] && params['medico']) {
-    //     this.especialidad = params['especialidad'];
-    //     this.fechaHora = params['fechaHora'];
-    //     this.medico = params['medico'];
-    //   }
-    // });
   }
 
   createOpenDatabase() {
@@ -98,7 +80,6 @@ export class HomePage implements OnInit {
                     )
                       .then((especialidad: string) => {
                         this.especialidad = especialidad;
-                        console.log("---------------" + especialidad);
                         this.citaData.push({
                           id_cita: result.rows.item(i).ID_Cita,
                           nombre: result.rows.item(i).Nombre,
@@ -111,15 +92,6 @@ export class HomePage implements OnInit {
                       .catch((error) => {
                         console.error("Error al obtener especialidad:", error);
                       });
-                    console.log("---------------this." + this.especialidad);
-                    // this.citaData.push({
-                    //   id_cita: result.rows.item(i).ID_Cita,
-                    //   nombre: result.rows.item(i).Nombre,
-                    //   apellido: result.rows.item(i).Apellido,
-                    //   FechaCita: result.rows.item(i).FechaCita,
-                    //   HoraCita: result.rows.item(i).HoraCita,
-                    //   especialidad: this.especialidad,
-                    // });
                   }
                 })
                 .catch((e) => alert(JSON.stringify(e)));
