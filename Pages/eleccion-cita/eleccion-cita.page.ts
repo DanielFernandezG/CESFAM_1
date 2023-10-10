@@ -10,8 +10,12 @@ import { Router } from "@angular/router";
 export class EleccionCitaPage implements OnInit {
   db: SQLiteObject;
   citaData: cita[];
+  especialidades: especialidad[];
+  doctores: doctor[];
   especialidad: string;
-
+  genero: string;
+  esp: string;
+  doc: string;
   // especialidades: any[] = [];
   // especialidadSeleccionada: any;
   // mostrarBotonSiguiente: boolean = false;
@@ -32,6 +36,8 @@ export class EleccionCitaPage implements OnInit {
         this.db = db;
         console.log("Conectado a la base de datos");
         this.mostrarCita();
+        this.mostrarEspecialidades();
+        this.mostrarDoctores();
       })
       .catch((e) => console.log("Error al conectar a la base de datos: ", e));
   }
@@ -66,6 +72,67 @@ export class EleccionCitaPage implements OnInit {
       .catch((e) => alert(JSON.stringify(e)));
   }
 
+  filtrar() {
+    this.citaData = [];
+
+    this.db
+      .executeSql(
+        "select * from citaMedica join Doctor on citaMedica.ID_Doctor=Doctor.ID_Doctor where EstadoCita='Disponible' and Doctor.Nombre||' '||Doctor.Apellido=?",
+        [this.doc]
+      )
+      .then((result) => {
+        for (let i = 0; i < result.rows.length; i++) {
+          this.obtenerEspecialidad(result.rows.item(i).ID_Especialidad)
+            .then((especialidad: string) => {
+              this.especialidad = especialidad;
+              this.citaData.push({
+                id_cita: result.rows.item(i).ID_Cita,
+                nombre: result.rows.item(i).Nombre,
+                apellido: result.rows.item(i).Apellido,
+                FechaCita: result.rows.item(i).FechaCita,
+                HoraCita: result.rows.item(i).HoraCita,
+                esp: this.especialidad,
+              });
+            })
+            .catch((error) => {
+              console.error("Error al obtener especialidad:", error);
+            });
+        }
+      })
+      .catch((e) => alert(JSON.stringify(e)));
+  }
+
+  mostrarDoctores() {
+    this.doctores = [];
+
+    this.db
+      .executeSql("select * from Doctor",[])
+      .then((result) => {
+        for (let i = 0; i < result.rows.length; i++) {
+          this.doctores.push({
+            id: result.rows.item(i).ID_Doctor,
+            nombre: result.rows.item(i).Nombre,
+            apellido: result.rows.item(i).Apellido
+          });
+        }
+      });
+  }
+
+  mostrarEspecialidades() {
+    this.especialidades = [];
+
+    this.db
+      .executeSql("select * from especialidad",[])
+      .then((result) => {
+        for (let i = 0; i < result.rows.length; i++) {
+          this.especialidades.push({
+            id: result.rows.item(i).ID_Especialidad,
+            descripcion: result.rows.item(i).Nombre
+          });
+        }
+      });
+  }
+
   async obtenerEspecialidad(idEsp: string): Promise<string> {
     return new Promise<string>((resolve, reject) => {
       this.db
@@ -93,18 +160,22 @@ export class EleccionCitaPage implements OnInit {
         if (result.rows.item(0).run != "") {
           this.db
             .executeSql("select * from paciente where run=?", [
-              (result.rows.item(0).run)
+              result.rows.item(0).run,
             ])
             .then((result) => {
-              this.db.executeSql("update citaMedica set ID_Paciente=?,EstadoCita='Ocupada' where ID_Cita=?",[result.rows.item(0).ID_Paciente,idCita])
-              .then((result) => {
-                this.mostrarCita();
-                alert("Hora Tomada");
-                this.router.navigate(["home"]).then(() => {
-                  // Recarga la página actual
-                  window.location.reload();
-                });;
-              })
+              this.db
+                .executeSql(
+                  "update citaMedica set ID_Paciente=?,EstadoCita='Ocupada' where ID_Cita=?",
+                  [result.rows.item(0).ID_Paciente, idCita]
+                )
+                .then((result) => {
+                  this.mostrarCita();
+                  alert("Hora Tomada");
+                  this.router.navigate(["home"]).then(() => {
+                    // Recarga la página actual
+                    window.location.reload();
+                  });
+                });
             });
         } else {
           this.router.navigate(["login"]);
@@ -124,6 +195,16 @@ export class EleccionCitaPage implements OnInit {
   //     })
   //     .catch(e => console.log('Error al ejecutar la consulta: ', e));
   // }
+}
+class especialidad {
+  public id: string;
+  public descripcion: string;
+}
+
+class doctor {
+  public id: string;
+  public nombre: string;
+  public apellido: string;
 }
 
 class cita {

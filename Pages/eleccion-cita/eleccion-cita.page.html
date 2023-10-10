@@ -15,6 +15,15 @@
 </ion-header>
 
 <ion-content class="ion-padding">
+  <ion-item>
+    <ion-select placeholder="Especialidad" [(ngModel)]="esp">
+      <ion-select-option *ngFor="let e of especialidades">{{ e.descripcion }}</ion-select-option>
+    </ion-select>
+    <ion-select placeholder="Doctor" [(ngModel)]="doc">
+      <ion-select-option *ngFor="let d of doctores">{{ d.nombre }} {{ d.apellido }}</ion-select-option>
+    </ion-select>
+    <ion-button (click)="filtrar()">Filtrar</ion-button>
+  </ion-item>
   <table>
     <thead>
       <tr>
