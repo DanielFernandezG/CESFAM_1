@@ -1,16 +1,15 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>Centro Médico Cesfam</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="cerrarSesion()" size="small">Cerrar Sesión</ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
   <div id="container">
-    <div style="border-bottom: solid 1px lightgray; margin-bottom: 20px;">
-      <ion-button (click)="cerrarSesion()" size="small">Cerrar Sesión</ion-button>
-    </div>
-
-    <div>
+    <div style="text-align: center;">
       <ion-item>
         <ion-label position="stacked">Ingresar Fecha de Cita</ion-label>
         <ion-input [(ngModel)]="FechaCita" type="date"></ion-input>
@@ -19,12 +18,16 @@
         <ion-label position="stacked">Ingresar Hora de Cita</ion-label>
         <ion-input [(ngModel)]="HoraCita" type="time"></ion-input>
       </ion-item>
-      <ion-button (click)="insertData()">Ingresar Hora</ion-button>
+      <ion-button (click)="insertData()" class="ion-margin">Ingresar Hora</ion-button>
     </div>
   </div>
 
   <ion-content>
-    <ion-button (click)="selectData()" >Ver Citas</ion-button>
+    <div style="text-align: center;">
+      <ion-button (click)="selectData()" class="ion-margin">Ver Todas Las Citas</ion-button>
+      <ion-button (click)="selectDataOcupadas()" class="ion-margin">Ver Citas Ocupadas</ion-button>
+      <ion-button (click)="selectDataDisponibles()" class="ion-margin">Ver Citas Disponibles</ion-button>
+    </div>
   
     <!-- Lista de citas médicas -->
     <ion-list>
@@ -36,21 +39,5 @@
         </ion-buttons>
       </ion-item>
     </ion-list>
-    
-  
-    <!-- Formulario de edición (inicialmente oculto) -->
-    <div *ngIf="mostrarFormularioDeEdicion">
-      <ion-item>
-        <ion-label position="stacked">Nueva Fecha de Cita</ion-label>
-        <ion-input [(ngModel)]="citaEditada.FechaCita" type="date"></ion-input>
-      </ion-item>
-      <ion-item>
-        <ion-label position="stacked">Nueva Hora de Cita</ion-label>
-        <ion-input [(ngModel)]="citaEditada.HoraCita" type="time"></ion-input>
-      </ion-item>
-      <ion-button (click)="guardarCambios()">Guardar Cambios</ion-button>
-    </div>
   </ion-content>
 </ion-content>
-
-

@@ -72,6 +72,66 @@ export class HomeSecretariaPage {
     }
   }
 
+  async filtrarCitasOcupadas() {
+    if (this.selectedDate !== '') {
+      try {
+        const result = await this.db.executeSql(
+          'SELECT c.ID_Cita, d.Nombre AS NombreDoctor, d.Apellido AS ApellidoDoctor, c.FechaCita, c.HoraCita ' +
+          'FROM CitaMedica c ' +
+          'INNER JOIN Doctor d ON c.ID_Doctor = d.ID_Doctor ' +
+          'WHERE c.FechaCita = ? AND c.EstadoCita = "Ocupada"',
+          [this.selectedDate]
+        );
+  
+        if (result.rows.length > 0) {
+          this.citasFiltradas = [];
+          for (let i = 0; i < result.rows.length; i++) {
+            this.citasFiltradas.push(result.rows.item(i));
+          }
+        } else {
+          this.citasFiltradas = [];
+          console.log('No se encontraron citas ocupadas para la fecha seleccionada.');
+        }
+      } catch (error) {
+        console.error('Error al filtrar las citas', error);
+      }
+    } else {
+      this.citasFiltradas = [];
+      console.log('No se ha seleccionado una fecha.');
+    }
+  }
+  
+  async filtrarCitasDisponibles() {
+    if (this.selectedDate !== '') {
+      try {
+        const result = await this.db.executeSql(
+          'SELECT c.ID_Cita, d.Nombre AS NombreDoctor, d.Apellido AS ApellidoDoctor, c.FechaCita, c.HoraCita ' +
+          'FROM CitaMedica c ' +
+          'INNER JOIN Doctor d ON c.ID_Doctor = d.ID_Doctor ' +
+          'WHERE c.FechaCita = ? AND c.EstadoCita = "Disponible"',
+          [this.selectedDate]
+        );
+  
+        if (result.rows.length > 0) {
+          this.citasFiltradas = [];
+          for (let i = 0; i < result.rows.length; i++) {
+            this.citasFiltradas.push(result.rows.item(i));
+          }
+        } else {
+          this.citasFiltradas = [];
+          console.log('No se encontraron citas disponibles para la fecha seleccionada.');
+        }
+      } catch (error) {
+        console.error('Error al filtrar las citas', error);
+      }
+    } else {
+      this.citasFiltradas = [];
+      console.log('No se ha seleccionado una fecha.');
+    }
+  }
+
+  
+
   editarCita(cita: any) {
     // Mostrar el formulario de edición y cargar los datos de la cita
     this.citaEditada = {
