@@ -1,49 +1,32 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>Centro Medico Cesfam</ion-title>
+    <ion-title>Centro Médico Cesfam</ion-title>
   </ion-toolbar>
 </ion-header>
 
-
 <ion-content [fullscreen]="true">
-<div id="container">
+  <div id="container">
+    <div style="border-bottom: solid 1px lightgray; margin-bottom: 20px;">
+      <ion-button (click)="cerrarSesion()" size="small">Cerrar Sesión</ion-button>
+    </div>
 
-  <div style="border-bottom: solid 1px lightgray; margin-bottom: 20px;"> 
-
-    <ion-button (click)="cerrarSesion()" size="small"> Cerrar Sesión</ion-button>
-
+    <div>
+      <ion-item>
+        <ion-label position="stacked">Ingresar Fecha de Cita</ion-label>
+        <ion-input [(ngModel)]="FechaCita" type="date"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="stacked">Ingresar Hora de Cita</ion-label>
+        <ion-input [(ngModel)]="HoraCita" type="time"></ion-input>
+      </ion-item>
+      <ion-button (click)="insertData()">Ingresar Hora</ion-button>
+    </div>
   </div>
-
-
-  <div style="max-width: auto; margin:auto;">
-    <ion-item>
-      <ion-input [(ngModel)]="FechaCita" type="date"></ion-input>
-      <ion-input [(ngModel)]="HoraCita" type="time"></ion-input>
-    </ion-item>
-
-    <ion-button size="small" (click)="insertData()" style="margin: bottom 20px;">Create</ion-button>
-  </div>
-
-
-</div>
 </ion-content>
-
-<!-- <ion-button (click)="selectData()" style="margin: bottom 20px;">Ver</ion-button>
-<ion-list>
-  <ion-item *ngFor="let d of doctorData">
-    ID Cita: {{d.ID_Cita}} - Fecha: {{ d.FechaCita }} - Hora: {{ d.HoraCita }}
-    <ion-buttons slot="end">
-      <ion-button (click)="updateData(cita)">Editar</ion-button>
-      <ion-button (click)="deleteRecord(d.ID_Cita)">Eliminar</ion-button>
-    </ion-buttons>
-  </ion-item>
-</ion-list> -->
 
 <ion-header>
   <ion-toolbar>
-    <ion-title>
-      Lista de Citas Médicas
-    </ion-title>
+    <ion-title>Lista de Citas Médicas</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -75,4 +58,3 @@
     <ion-button (click)="guardarCambios()">Guardar Cambios</ion-button>
   </div>
 </ion-content>
-

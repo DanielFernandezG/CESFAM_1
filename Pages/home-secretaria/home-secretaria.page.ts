@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { SQLite, SQLiteObject } from '@awesome-cordova-plugins/sqlite/ngx';
 
 @Component({
@@ -12,7 +13,7 @@ export class HomeSecretariaPage {
   selectedDate: string = ''; // Fecha seleccionada por el usuario
   citaEditada: any = null;
 
-  constructor(private sqlite: SQLite) {
+  constructor(private router: Router,private sqlite: SQLite) {
     // Inicializa la base de datos
     this.createOpenDatabase();
   }
@@ -98,4 +99,14 @@ export class HomeSecretariaPage {
       console.error('Error al eliminar la cita médica', error);
     }
   }
+
+  cerrarSesion() {
+    this.db
+      .executeSql("UPDATE Usuario SET active=0 where active=1", [])
+      .then((result) => console.log("Sesion Cambiada"))
+      .catch((e) => console.log(JSON.stringify(e)));
+    this.router.navigate(["login"]);
+  }
+
+
 }

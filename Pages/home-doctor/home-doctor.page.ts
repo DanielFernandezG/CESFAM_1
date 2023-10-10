@@ -26,7 +26,7 @@ export class HomeDoctorPage implements OnInit {
   constructor(private router: Router,
     private sqlite:SQLite) {
       this.cita = {};
-     }
+    }
 
     ngOnInit() {
       this.createOpenDatabase();
@@ -62,17 +62,29 @@ export class HomeDoctorPage implements OnInit {
     this.router.navigate(["login"]);
   }
 
-  insertData()  
-  {
-    try{
-    let cita:string='insert into CitaMedica(FechaCita,HoraCita) values("'+this.FechaCita+'","'+this.HoraCita+'")';
-    this.db.executeSql(cita,[])
-    .then(() => alert('datos incertados'))
-              .catch(e => alert(JSON.stringify(e)));
-    }catch {
-      alert ("no incertados")
-    }
-
+  insertData() {
+    this.db
+      .executeSql("select * from usuario where active = 1", [])
+      .then((result) => {
+        if (result.rows.item(0).run != "") {
+          this.db
+            .executeSql("select * from Doctor where Run=?", [result.rows.item(0).run])
+            .then((result) => {
+              try{
+              let cita:string='insert into CitaMedica(ID_Doctor,FechaCita,HoraCita,EstadoCita) values('+result.rows.item(0).ID_Doctor+',"'+this.FechaCita+'","'+this.HoraCita+'","Disponible");';
+              this.db
+                .executeSql(cita,[])
+                .then(() => alert('datos insertados'))
+                .catch(e => alert(JSON.stringify(e)));
+              }catch {
+                alert ("no insertados")
+              }
+            });
+        } else {
+          this.router.navigate(["login"]);
+        }
+      })
+      .catch((e) => alert(JSON.stringify(e)));
   }
 
   async editarCita(cita: any) {
