@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <!-- Botón de retroceso u otros botones a la izquierda -->
+      <ion-back-button></ion-back-button> <!-- Botón de retroceso -->
     </ion-buttons>
     <ion-title class="title-left">
       Ingrese Especialidad
@@ -24,9 +24,11 @@
     </ion-select>
   </ion-item>
 
-  <ion-button expand="full" (click)="ingresar()">Ingresar</ion-button>
-
-
-
+  <!-- Botón "Siguiente" que solo se muestra cuando especialidadSeleccionada tiene un valor -->
+  <ion-button *ngIf="especialidadSeleccionada" expand="full" (click)="irAEleccionFechaHora()">Siguiente</ion-button>
 </ion-content>
+
+
+
+
 

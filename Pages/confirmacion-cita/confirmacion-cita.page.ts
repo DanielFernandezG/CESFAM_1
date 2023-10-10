@@ -1,7 +1,7 @@
 import { Component,OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { SQLite, SQLiteObject } from '@awesome-cordova-plugins/sqlite/ngx';
-import { CitasService } from 'src/app/Services/citas.service';
+
 
 @Component({
   selector: 'app-confirmacion-cita',
@@ -15,13 +15,11 @@ export class ConfirmacionCitaPage  implements OnInit {
   medico: string;
 
   constructor(
-    private citasService: CitasService,
+
     private router: Router,
     private sqlite: SQLite
   ) {
-    this.especialidad = this.citasService.obtenerEspecialidad();
-    this.fechaHora = this.citasService.obtenerFechaHora();
-    this.medico = this.citasService.obtenerMedico();
+
   }
 
   ngOnInit() {
