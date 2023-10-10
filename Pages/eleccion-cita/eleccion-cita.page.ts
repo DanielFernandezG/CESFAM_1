@@ -13,6 +13,7 @@ export class EleccionCitaPage implements OnInit {
   especialidades: especialidad[];
   doctores: doctor[];
   especialidad: string;
+  idEsp: number;
   genero: string;
   esp: string;
   doc: string;
@@ -63,6 +64,8 @@ export class EleccionCitaPage implements OnInit {
                 HoraCita: result.rows.item(i).HoraCita,
                 esp: this.especialidad,
               });
+              this.esp = "";
+              this.doc = "";
             })
             .catch((error) => {
               console.error("Error al obtener especialidad:", error);
@@ -74,63 +77,89 @@ export class EleccionCitaPage implements OnInit {
 
   filtrar() {
     this.citaData = [];
-
-    this.db
-      .executeSql(
-        "select * from citaMedica join Doctor on citaMedica.ID_Doctor=Doctor.ID_Doctor where EstadoCita='Disponible' and Doctor.Nombre||' '||Doctor.Apellido=?",
-        [this.doc]
-      )
-      .then((result) => {
-        for (let i = 0; i < result.rows.length; i++) {
-          this.obtenerEspecialidad(result.rows.item(i).ID_Especialidad)
-            .then((especialidad: string) => {
-              this.especialidad = especialidad;
-              this.citaData.push({
-                id_cita: result.rows.item(i).ID_Cita,
-                nombre: result.rows.item(i).Nombre,
-                apellido: result.rows.item(i).Apellido,
-                FechaCita: result.rows.item(i).FechaCita,
-                HoraCita: result.rows.item(i).HoraCita,
-                esp: this.especialidad,
-              });
-            })
-            .catch((error) => {
-              console.error("Error al obtener especialidad:", error);
-            });
-        }
-      })
-      .catch((e) => alert(JSON.stringify(e)));
+    if (this.esp != "") {
+      this.obtenerIdEspecialidad(this.esp).then((idesp: number) => {
+        this.idEsp = idesp;
+        this.db
+          .executeSql(
+            "select * from citaMedica join Doctor on citaMedica.ID_Doctor=Doctor.ID_Doctor where EstadoCita='Disponible' and (Doctor.Nombre||' '||Doctor.Apellido=? or ID_Especialidad=?)",
+            [this.doc, this.idEsp]
+          )
+          .then((result) => {
+            for (let i = 0; i < result.rows.length; i++) {
+              this.obtenerEspecialidad(result.rows.item(i).ID_Especialidad)
+                .then((especialidad: string) => {
+                  this.especialidad = especialidad;
+                  this.citaData.push({
+                    id_cita: result.rows.item(i).ID_Cita,
+                    nombre: result.rows.item(i).Nombre,
+                    apellido: result.rows.item(i).Apellido,
+                    FechaCita: result.rows.item(i).FechaCita,
+                    HoraCita: result.rows.item(i).HoraCita,
+                    esp: this.especialidad,
+                  });
+                })
+                .catch((error) => {
+                  console.error("Error al obtener especialidad:", error);
+                });
+            }
+          })
+          .catch((e) => alert(JSON.stringify(e)));
+      });
+    } else {
+      this.db
+          .executeSql(
+            "select * from citaMedica join Doctor on citaMedica.ID_Doctor=Doctor.ID_Doctor where EstadoCita='Disponible' and (Doctor.Nombre||' '||Doctor.Apellido=? or ID_Especialidad=?)",
+            [this.doc, this.idEsp]
+          )
+          .then((result) => {
+            for (let i = 0; i < result.rows.length; i++) {
+              this.obtenerEspecialidad(result.rows.item(i).ID_Especialidad)
+                .then((especialidad: string) => {
+                  this.especialidad = especialidad;
+                  this.citaData.push({
+                    id_cita: result.rows.item(i).ID_Cita,
+                    nombre: result.rows.item(i).Nombre,
+                    apellido: result.rows.item(i).Apellido,
+                    FechaCita: result.rows.item(i).FechaCita,
+                    HoraCita: result.rows.item(i).HoraCita,
+                    esp: this.especialidad,
+                  });
+                })
+                .catch((error) => {
+                  console.error("Error al obtener especialidad:", error);
+                });
+            }
+          })
+          .catch((e) => alert(JSON.stringify(e)));
+    }
   }
 
   mostrarDoctores() {
     this.doctores = [];
 
-    this.db
-      .executeSql("select * from Doctor",[])
-      .then((result) => {
-        for (let i = 0; i < result.rows.length; i++) {
-          this.doctores.push({
-            id: result.rows.item(i).ID_Doctor,
-            nombre: result.rows.item(i).Nombre,
-            apellido: result.rows.item(i).Apellido
-          });
-        }
-      });
+    this.db.executeSql("select * from Doctor", []).then((result) => {
+      for (let i = 0; i < result.rows.length; i++) {
+        this.doctores.push({
+          id: result.rows.item(i).ID_Doctor,
+          nombre: result.rows.item(i).Nombre,
+          apellido: result.rows.item(i).Apellido,
+        });
+      }
+    });
   }
 
   mostrarEspecialidades() {
     this.especialidades = [];
 
-    this.db
-      .executeSql("select * from especialidad",[])
-      .then((result) => {
-        for (let i = 0; i < result.rows.length; i++) {
-          this.especialidades.push({
-            id: result.rows.item(i).ID_Especialidad,
-            descripcion: result.rows.item(i).Nombre
-          });
-        }
-      });
+    this.db.executeSql("select * from especialidad", []).then((result) => {
+      for (let i = 0; i < result.rows.length; i++) {
+        this.especialidades.push({
+          id: result.rows.item(i).ID_Especialidad,
+          descripcion: result.rows.item(i).Nombre,
+        });
+      }
+    });
   }
 
   async obtenerEspecialidad(idEsp: string): Promise<string> {
@@ -143,6 +172,26 @@ export class EleccionCitaPage implements OnInit {
           if (result.rows.length > 0) {
             const especialidad = result.rows.item(0).Nombre;
             resolve(especialidad);
+          } else {
+            reject(new Error("Especialidad no encontrada"));
+          }
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  }
+
+  async obtenerIdEspecialidad(nombreEspecialidad: string): Promise<number> {
+    return new Promise<number>((resolve, reject) => {
+      this.db
+        .executeSql("SELECT ID_Especialidad FROM especialidad WHERE Nombre=?", [
+          nombreEspecialidad,
+        ])
+        .then((result) => {
+          if (result.rows.length > 0) {
+            const idEspecialidad = result.rows.item(0).ID_Especialidad;
+            resolve(idEspecialidad);
           } else {
             reject(new Error("Especialidad no encontrada"));
           }
