@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { SQLite, SQLiteObject } from "@awesome-cordova-plugins/sqlite/ngx";
 import { ActivatedRoute, Router } from "@angular/router";
-import { CitasService } from 'src/app/Services/citas.service';
+import { CitasService } from "src/app/Services/citas.service";
 
 @Component({
   selector: "app-home",
@@ -10,6 +10,7 @@ import { CitasService } from 'src/app/Services/citas.service';
 })
 export class HomePage implements OnInit {
   db: SQLiteObject;
+  citaData: cita[];
   especialidad: string;
   fechaHora: string;
   medico: string;
@@ -25,19 +26,18 @@ export class HomePage implements OnInit {
   ) {}
 
   ngOnInit() {
-    // Obtén las especialidades, fechas y horas del servicio
-    this.especialidades = this.citasService.obtenerEspecialidades();
-    this.fechasHoras = this.citasService.obtenerFechasHoras();
-
+    // // Obtén las especialidades, fechas y horas del servicio
+    // this.especialidades = this.citasService.obtenerEspecialidades();
+    // this.fechasHoras = this.citasService.obtenerFechasHoras();
     this.createOpenDatabase();
-    // Lee los datos de los parámetros de la ruta cuando la página se carga
-    this.route.queryParams.subscribe(params => {
-      if (params && params['especialidad'] && params['fechaHora'] && params['medico']) {
-        this.especialidad = params['especialidad'];
-        this.fechaHora = params['fechaHora'];
-        this.medico = params['medico'];
-      }
-    });
+    // // Lee los datos de los parámetros de la ruta cuando la página se carga
+    // this.route.queryParams.subscribe(params => {
+    //   if (params && params['especialidad'] && params['fechaHora'] && params['medico']) {
+    //     this.especialidad = params['especialidad'];
+    //     this.fechaHora = params['fechaHora'];
+    //     this.medico = params['medico'];
+    //   }
+    // });
   }
 
   createOpenDatabase() {
@@ -50,6 +50,7 @@ export class HomePage implements OnInit {
         .then((db: SQLiteObject) => {
           this.db = db;
           console.log("Conectado");
+          this.mostrarCita();
         })
         .catch((e) => alert(JSON.stringify(e)));
     } catch (err: any) {
@@ -66,14 +67,108 @@ export class HomePage implements OnInit {
   }
 
   eleccionCita() {
-    this.router.navigateByUrl('/eleccion-cita');
+    this.router.navigateByUrl("/eleccion-cita");
   }
 
   updateData() {
-    this.router.navigateByUrl('/actualizar-datos');
+    this.router.navigateByUrl("/actualizar-datos");
   }
 
+  async mostrarCita() {
+    this.citaData = [];
 
+    this.db
+      .executeSql("select * from usuario where active = 1", [])
+      .then((result) => {
+        if (result.rows.item(0).run != "") {
+          this.db
+            .executeSql("select * from paciente where run=?", [
+              result.rows.item(0).run,
+            ])
+            .then((result) => {
+              this.db
+                .executeSql(
+                  "select * from CitaMedica join Doctor on CitaMedica.ID_Doctor=Doctor.ID_Doctor where ID_Paciente=?",
+                  [result.rows.item(0).ID_Paciente]
+                )
+                .then((result) => {
+                  for (let i = 0; i < result.rows.length; i++) {
+                    this.obtenerEspecialidad(
+                      result.rows.item(i).ID_Especialidad
+                    )
+                      .then((especialidad: string) => {
+                        this.especialidad = especialidad;
+                        console.log("---------------" + especialidad);
+                        this.citaData.push({
+                          id_cita: result.rows.item(i).ID_Cita,
+                          nombre: result.rows.item(i).Nombre,
+                          apellido: result.rows.item(i).Apellido,
+                          FechaCita: result.rows.item(i).FechaCita,
+                          HoraCita: result.rows.item(i).HoraCita,
+                          especialidad: this.especialidad,
+                        });
+                      })
+                      .catch((error) => {
+                        console.error("Error al obtener especialidad:", error);
+                      });
+                    console.log("---------------this." + this.especialidad);
+                    // this.citaData.push({
+                    //   id_cita: result.rows.item(i).ID_Cita,
+                    //   nombre: result.rows.item(i).Nombre,
+                    //   apellido: result.rows.item(i).Apellido,
+                    //   FechaCita: result.rows.item(i).FechaCita,
+                    //   HoraCita: result.rows.item(i).HoraCita,
+                    //   especialidad: this.especialidad,
+                    // });
+                  }
+                })
+                .catch((e) => alert(JSON.stringify(e)));
+            });
+        } else {
+          this.router.navigate(["login"]);
+        }
+      })
+      .catch((e) => alert(JSON.stringify(e)));
+  }
+
+  async obtenerEspecialidad(idEsp: string): Promise<string> {
+    return new Promise<string>((resolve, reject) => {
+      this.db
+        .executeSql("SELECT * FROM especialidad WHERE ID_Especialidad=?", [
+          idEsp,
+        ])
+        .then((result) => {
+          if (result.rows.length > 0) {
+            const especialidad = result.rows.item(0).Nombre;
+            resolve(especialidad);
+          } else {
+            reject(new Error("Especialidad no encontrada"));
+          }
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  }
+
+  cancelarCita(idCita: string) {
+    try {
+      this.db.executeSql(
+        "update CitaMedica set ID_Paciente=null, EstadoCita='Disponible' where ID_Cita=?",
+        [idCita]
+      );
+      this.mostrarCita();
+    } catch (error) {
+      console.error("Error al eliminar la cita médica", error);
+    }
+  }
 }
 
-
+class cita {
+  public id_cita: string;
+  public nombre: string;
+  public apellido: string;
+  public FechaCita: string;
+  public HoraCita: string;
+  public especialidad: string;
+}

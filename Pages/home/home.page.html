@@ -15,21 +15,30 @@
     </ion-col>
   </ion-row>
 
-  <!-- Mostrar datos de la cita -->
-  <ion-item *ngIf="especialidad">
-    <ion-label>Especialidad:</ion-label>
-    <ion-text>{{ especialidad }}</ion-text>
-  </ion-item>
-
-  <ion-item *ngIf="fechaHora">
-    <ion-label>Fecha y Hora:</ion-label>
-    <ion-text>{{ fechaHora }}</ion-text>
-  </ion-item>
-
-  <ion-item *ngIf="medico">
-    <ion-label>Médico:</ion-label>
-    <ion-text>{{ medico }}</ion-text>
-  </ion-item>
+  <table>
+    <thead>
+      <tr>
+        <th>ID Cita</th>
+        <th>Especialidad</th>
+        <th>Fecha</th>
+        <th>Hora</th>
+        <th>Doctor</th>
+        <th>Cancelar Cita</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let c of citaData">
+        <td>{{ c.id_cita }}</td>
+        <td>{{ c.especialidad }}</td>
+        <td>{{ c.FechaCita }}</td>
+        <td>{{ c.HoraCita }}</td>
+        <td>{{ c.nombre }} {{ c.apellido }}</td>
+        <td>
+          <ion-button color="danger" (click)="cancelarCita(c.id_cita)"></ion-button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 
   <ion-header collapse="condense">
     <ion-toolbar>
@@ -39,4 +48,3 @@
 
 
 </ion-content>
-
