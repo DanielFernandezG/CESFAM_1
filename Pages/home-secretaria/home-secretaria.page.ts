@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { SQLite, SQLiteObject } from '@awesome-cordova-plugins/sqlite/ngx';
+import { AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-home-secretaria',
@@ -10,16 +11,19 @@ import { SQLite, SQLiteObject } from '@awesome-cordova-plugins/sqlite/ngx';
 export class HomeSecretariaPage {
   db: SQLiteObject;
   citasFiltradas: any[] = [];
-  selectedDate: string = ''; // Fecha seleccionada por el usuario
+  selectedDate: string = ''; 
   citaEditada: any = null;
 
-  constructor(private router: Router,private sqlite: SQLite) {
-    // Inicializa la base de datos
+  constructor(
+    private router: Router,
+    private sqlite: SQLite,
+    private alertController: AlertController
+  ) {
     this.createOpenDatabase();
   }
 
   ngOnInit() {
-    // No se requiere cargar datos en la inicialización, ya que se hace al filtrar citas.
+    
   }
 
   async createOpenDatabase() {
@@ -32,6 +36,7 @@ export class HomeSecretariaPage {
         .then((db: SQLiteObject) => {
           this.db = db;
           console.log('Conectado');
+          this.mostrarCitasDelDiaActual(); // Llama a la función para mostrar citas del día actual
         })
         .catch((e) => alert(JSON.stringify(e)));
     } catch (err: any) {
@@ -92,12 +97,53 @@ export class HomeSecretariaPage {
   }
 
   async eliminarCita(idCita: number) {
-    try {
-      await this.db.executeSql('DELETE FROM CitaMedica WHERE ID_Cita = ?', [idCita]);
-      this.filtrarCitas(); // Actualizar la lista de citas después de eliminar
-    } catch (error) {
-      console.error('Error al eliminar la cita médica', error);
+    // Mostrar la confirmación antes de eliminar
+    const confirmacion = await this.mostrarConfirmacion();
+    
+    if (confirmacion) {
+      try {
+        await this.db.executeSql('DELETE FROM CitaMedica WHERE ID_Cita = ?', [idCita]);
+        this.filtrarCitas(); // Actualizar la lista de citas después de eliminar
+      } catch (error) {
+        console.error('Error al eliminar la cita médica', error);
+      }
     }
+  }
+
+  async mostrarConfirmacion(): Promise<boolean> {
+    return new Promise(async (resolve) => {
+      const alert = await this.alertController.create({
+        header: 'Confirmación',
+        message: '¿Seguro que deseas eliminar esta cita médica?',
+        buttons: [
+          {
+            text: 'Cancelar',
+            role: 'cancel',
+            cssClass: 'secondary',
+            handler: () => {
+              resolve(false); // El usuario canceló la eliminación
+            },
+          },
+          {
+            text: 'Eliminar',
+            handler: () => {
+              resolve(true); // El usuario confirmó la eliminación
+            },
+          },
+        ],
+      });
+
+      await alert.present();
+    });
+  }
+
+  mostrarCitasDelDiaActual() {
+    // Esta función se ejecuta automáticamente al cargar la página
+    const fechaActual = new Date();
+    const fechaFormatted = fechaActual.toISOString().slice(0, 10); // Formato YYYY-MM-DD
+
+    this.selectedDate = fechaFormatted; // Establecer la fecha actual
+    this.filtrarCitas(); // Mostrar citas para la fecha actual
   }
 
   cerrarSesion() {
@@ -107,6 +153,4 @@ export class HomeSecretariaPage {
       .catch((e) => console.log(JSON.stringify(e)));
     this.router.navigate(["login"]);
   }
-
-
 }

@@ -22,39 +22,35 @@
       <ion-button (click)="insertData()">Ingresar Hora</ion-button>
     </div>
   </div>
+
+  <ion-content>
+    <ion-button (click)="selectData()" >Ver Citas</ion-button>
+  
+    <!-- Lista de citas médicas -->
+    <ion-list>
+      <ion-item *ngFor="let cita of doctorData">
+        ID Cita: {{ cita.ID_Cita }} - Fecha: {{ cita.FechaCita }} - Hora: {{ cita.HoraCita }}
+        <ion-buttons slot="end">
+          <ion-button color="primary" (click)="editarCita(cita)">Editar</ion-button>
+          <ion-button color="danger" (click)="confirmacionDelete(cita.ID_Cita)">Eliminar</ion-button>
+        </ion-buttons>
+      </ion-item>
+    </ion-list>
+    
+  
+    <!-- Formulario de edición (inicialmente oculto) -->
+    <div *ngIf="mostrarFormularioDeEdicion">
+      <ion-item>
+        <ion-label position="stacked">Nueva Fecha de Cita</ion-label>
+        <ion-input [(ngModel)]="citaEditada.FechaCita" type="date"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="stacked">Nueva Hora de Cita</ion-label>
+        <ion-input [(ngModel)]="citaEditada.HoraCita" type="time"></ion-input>
+      </ion-item>
+      <ion-button (click)="guardarCambios()">Guardar Cambios</ion-button>
+    </div>
+  </ion-content>
 </ion-content>
 
-<ion-header>
-  <ion-toolbar>
-    <ion-title>Lista de Citas Médicas</ion-title>
-  </ion-toolbar>
-</ion-header>
 
-<ion-content>
-  <ion-button (click)="selectData()" style="margin-bottom: 20px;">Ver Citas</ion-button>
-
-  <!-- Lista de citas médicas -->
-  <ion-list>
-    <ion-item *ngFor="let cita of doctorData">
-      ID Cita: {{ cita.ID_Cita }} - Fecha: {{ cita.FechaCita }} - Hora: {{ cita.HoraCita }}
-      <ion-buttons slot="end">
-        <!-- Botón para abrir el formulario de edición -->
-        <ion-button (click)="editarCita(cita)">Editar</ion-button>
-        <ion-button (click)="deleteRecord(cita.ID_Cita)">Eliminar</ion-button>
-      </ion-buttons>
-    </ion-item>
-  </ion-list>
-
-  <!-- Formulario de edición (inicialmente oculto) -->
-  <div *ngIf="mostrarFormularioDeEdicion">
-    <ion-item>
-      <ion-label position="stacked">Nueva Fecha de Cita</ion-label>
-      <ion-input [(ngModel)]="citaEditada.FechaCita" type="date"></ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-label position="stacked">Nueva Hora de Cita</ion-label>
-      <ion-input [(ngModel)]="citaEditada.HoraCita" type="time"></ion-input>
-    </ion-item>
-    <ion-button (click)="guardarCambios()">Guardar Cambios</ion-button>
-  </div>
-</ion-content>
