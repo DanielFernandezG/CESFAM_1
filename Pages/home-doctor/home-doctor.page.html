@@ -39,5 +39,17 @@
         </ion-buttons>
       </ion-item>
     </ion-list>
+
+    <div *ngIf="mostrarFormularioDeEdicion">
+      <ion-item>
+        <ion-label position="stacked">Nueva Fecha de Cita</ion-label>
+        <ion-input [(ngModel)]="citaEditada.FechaCita" type="date"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="stacked">Nueva Hora de Cita</ion-label>
+        <ion-input [(ngModel)]="citaEditada.HoraCita" type="time"></ion-input>
+      </ion-item>
+      <ion-button (click)="guardarCambios()">Guardar Cambios</ion-button>
+    </div>
   </ion-content>
 </ion-content>
