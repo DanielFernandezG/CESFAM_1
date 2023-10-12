@@ -36,7 +36,7 @@ export class HomeSecretariaPage {
         .then((db: SQLiteObject) => {
           this.db = db;
           console.log('Conectado');
-          this.mostrarCitasDelDiaActual(); // Llama a la función para mostrar citas del día actual
+          this.mostrarCitasDelDiaActual(); 
         })
         .catch((e) => alert(JSON.stringify(e)));
     } catch (err: any) {
@@ -133,7 +133,6 @@ export class HomeSecretariaPage {
   
 
   editarCita(cita: any) {
-    // Mostrar el formulario de edición y cargar los datos de la cita
     this.citaEditada = {
       ID_Cita: cita.ID_Cita,
       FechaCita: cita.FechaCita,
@@ -143,27 +142,57 @@ export class HomeSecretariaPage {
 
   async guardarCambios() {
     if (this.citaEditada) {
+      if (!this.citaEditada.FechaCita || !this.citaEditada.HoraCita) {
+        
+        alert('Por favor, llene todos los campos.');
+        return;
+      }
+  
+      const fechaActual = new Date();
+      const fechaCita = new Date(this.citaEditada.FechaCita + 'T' + this.citaEditada.HoraCita);
+  
+      if (fechaCita <= fechaActual) {
+        
+        alert('La fecha y hora de la cita deben ser posteriores a la fecha y hora actual.');
+        return;
+      }
+  
+      
+      const result = await this.db.executeSql(
+        'SELECT * FROM CitaMedica WHERE FechaCita = ? AND HoraCita = ? AND ID_Cita != ?',
+        [this.citaEditada.FechaCita, this.citaEditada.HoraCita, this.citaEditada.ID_Cita]
+      );
+  
+      if (result.rows.length > 0) {
+        
+        alert('Ya existe una cita programada para la misma fecha y hora.');
+        return;
+      }
+  
+      
       try {
         await this.db.executeSql(
           'UPDATE CitaMedica SET FechaCita = ?, HoraCita = ? WHERE ID_Cita = ?',
           [this.citaEditada.FechaCita, this.citaEditada.HoraCita, this.citaEditada.ID_Cita]
         );
-        this.citaEditada = null; // Limpiar el objeto de edición
-        this.filtrarCitas(); // Actualizar la lista de citas después de editar
+        this.citaEditada = null; 
+        this.filtrarCitas(); 
       } catch (error) {
         console.error('Error al guardar los cambios en la cita', error);
       }
     }
   }
+  
+  
 
   async eliminarCita(idCita: number) {
-    // Mostrar la confirmación antes de eliminar
+    
     const confirmacion = await this.mostrarConfirmacion();
     
     if (confirmacion) {
       try {
         await this.db.executeSql('DELETE FROM CitaMedica WHERE ID_Cita = ?', [idCita]);
-        this.filtrarCitas(); // Actualizar la lista de citas después de eliminar
+        this.filtrarCitas(); 
       } catch (error) {
         console.error('Error al eliminar la cita médica', error);
       }
@@ -181,13 +210,13 @@ export class HomeSecretariaPage {
             role: 'cancel',
             cssClass: 'secondary',
             handler: () => {
-              resolve(false); // El usuario canceló la eliminación
+              resolve(false); 
             },
           },
           {
             text: 'Eliminar',
             handler: () => {
-              resolve(true); // El usuario confirmó la eliminación
+              resolve(true); 
             },
           },
         ],
@@ -198,12 +227,12 @@ export class HomeSecretariaPage {
   }
 
   mostrarCitasDelDiaActual() {
-    // Esta función se ejecuta automáticamente al cargar la página
+    
     const fechaActual = new Date();
-    const fechaFormatted = fechaActual.toISOString().slice(0, 10); // Formato YYYY-MM-DD
+    const fechaFormatted = fechaActual.toISOString().slice(0, 10); 
 
-    this.selectedDate = fechaFormatted; // Establecer la fecha actual
-    this.filtrarCitas(); // Mostrar citas para la fecha actual
+    this.selectedDate = fechaFormatted; 
+    this.filtrarCitas(); 
   }
 
   cerrarSesion() {

@@ -63,17 +63,17 @@ export class HomeDoctorPage implements OnInit {
   }
 
   insertData() {
-    // Verificar si los campos FechaCita y HoraCita no están vacíos
+    
     if (!this.FechaCita || !this.HoraCita) {
       alert("Por favor, ingrese una fecha y una hora válida.");
       return;
     }
 
-    // Obtener la fecha y hora actual
+    
     const fechaActual = new Date();
     const fechaCita = new Date(this.FechaCita + "T" + this.HoraCita);
 
-    // Verificar si la fecha de la cita es posterior a la fecha actual
+    
     if (fechaCita <= fechaActual) {
       alert(
         "La fecha y hora de la cita deben ser posteriores a la fecha y hora actual."
@@ -81,7 +81,7 @@ export class HomeDoctorPage implements OnInit {
       return;
     }
 
-    // Verificar si ya existe una cita en la misma fecha y hora
+    
     this.db
       .executeSql(
         "SELECT * FROM CitaMedica WHERE FechaCita = ? AND HoraCita = ?",
@@ -91,7 +91,7 @@ export class HomeDoctorPage implements OnInit {
         if (result.rows.length > 0) {
           alert("Ya existe una cita programada para la misma fecha y hora.");
         } else {
-          // Continuar con la inserción de la cita
+          
           this.db
             .executeSql("SELECT * FROM usuario WHERE active = 1", [])
             .then((result) => {
@@ -132,40 +132,63 @@ export class HomeDoctorPage implements OnInit {
   }
 
   async editarCita(cita: any) {
-    // Mostrar el formulario de edición y cargar los datos de la cita
+    
     this.citaEditada.ID_Cita = cita.ID_Cita;
     this.citaEditada.FechaCita = cita.FechaCita;
     this.citaEditada.HoraCita = cita.HoraCita;
 
-    // Configurar mostrarFormularioDeEdicion en true
+    
     this.mostrarFormularioDeEdicion = true;
   }
 
   async guardarCambios() {
+    if (!this.citaEditada.FechaCita || !this.citaEditada.HoraCita) {
+      alert("Por favor, complete tanto la fecha como la hora de la cita.");
+      return;
+    }
+  
+    const fechaActual = new Date();
+    const fechaCita = new Date(this.citaEditada.FechaCita + "T" + this.citaEditada.HoraCita);
+  
+    if (fechaCita <= fechaActual) {
+      alert("La fecha y hora de la cita deben ser posteriores a la fecha y hora actual.");
+      return;
+    }
+  
+    
+    const result = await this.db.executeSql(
+      "SELECT * FROM CitaMedica WHERE FechaCita = ? AND HoraCita = ? AND ID_Cita != ?",
+      [this.citaEditada.FechaCita, this.citaEditada.HoraCita, this.citaEditada.ID_Cita]
+    );
+  
+    if (result.rows.length > 0) {
+      alert("Ya existe una cita programada para la misma fecha y hora.");
+      return;
+    }
+  
+    
     try {
       await this.db.executeSql(
         "UPDATE CitaMedica SET FechaCita = ?, HoraCita = ? WHERE ID_Cita = ?",
-        [
-          this.citaEditada.FechaCita,
-          this.citaEditada.HoraCita,
-          this.citaEditada.ID_Cita,
-        ]
+        [this.citaEditada.FechaCita, this.citaEditada.HoraCita, this.citaEditada.ID_Cita]
       );
-
-      // Limpiar el objeto de edición y ocultar el formulario
+  
+      
       this.citaEditada = {
         ID_Cita: 0,
         FechaCita: "",
         HoraCita: "",
       };
       this.mostrarFormularioDeEdicion = false;
-
-      // Recargar la lista de citas
+  
+      
       this.selectData();
     } catch (error) {
-      console.error("Error al guardar los cambios en la cita", error);
+      alert("Error al guardar los cambios en la cita. Por favor, inténtalo de nuevo.");
+      console.error(error);
     }
   }
+  
 
   async confirmacionDelete(idCita: string) {
     const alert = await this.alertController.create({
