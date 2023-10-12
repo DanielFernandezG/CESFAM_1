@@ -257,7 +257,7 @@ export class DatosPruebaPage implements OnInit {
       this.db.executeSql(esp);
 
       // Ingreso Doctor
-      let doc = `INSERT INTO Doctor (ID_Doctor, Run, Nombre, Apellido, ID_Especialidad, CESFAM, Estudios, FechaNacimiento, Genero) VALUES (1, '154386750', 'Dr. Carlos', 'González', 1, 'CESFAM Central', 'Graduado en Medicina Interna en la Universidad Nacional', '1980-03-15', 'Masculino'),(2, '193067808', 'Dra. Laura', 'Martínez', 2, 'CESFAM Norte', 'Especialización en Dermatología en la Universidad Nacional', '1975-07-20', 'Femenino'),(3, '204836302', 'Dr. Alejandro', 'Sánchez', 3, 'CESFAM Sur', 'Doctorado en Oftalmología en la Universidad Nacional', '1978-11-10', 'Masculino'),(4, '249910392', 'Dra. María', 'López', 4, 'CESFAM Este', 'Máster en Cirugía Ortopédica en la Universidad Nacional', '1972-05-05', 'Femenino');`;
+      let doc = `INSERT INTO Doctor (ID_Doctor, Run, Nombre, Apellido, ID_Especialidad, CESFAM, Estudios, FechaNacimiento, Genero) VALUES (1, '154386750', 'Dr. Carlos', 'González', 1, 'CESFAM Central', 'Graduado en Medicina Interna en la Universidad Nacional', '1980-03-15', 'Masculino'),(2, '193067808', 'Dr. Laura', 'Martínez', 2, 'CESFAM Norte', 'Especialización en Dermatología en la Universidad Nacional', '1975-07-20', 'Femenino'),(3, '204836302', 'Dr. Alejandro', 'Sánchez', 3, 'CESFAM Sur', 'Doctorado en Oftalmología en la Universidad Nacional', '1978-11-10', 'Masculino'),(4, '249910392', 'Dra. María', 'López', 4, 'CESFAM Este', 'Máster en Cirugía Ortopédica en la Universidad Nacional', '1972-05-05', 'Femenino');`;
       this.db.executeSql(doc);
 
       // Ingreso Secretaria
@@ -265,11 +265,11 @@ export class DatosPruebaPage implements OnInit {
       this.db.executeSql(sec);
 
       // Ingreso Cita Medica
-      let cita = `INSERT INTO CitaMedica (ID_Cita, ID_Doctor, FechaCita, HoraCita, EstadoCita) VALUES (1, 1, '2023-10-10', '10:00', 'Disponible'),(2, 1, '2023-10-11', '15:30', 'Disponible'),(3, 1, '2023-10-12', '11:45', 'Disponible'),(4, 1, '2023-10-13', '14:15', 'Disponible'),(5, 1, '2023-10-14', '09:30', 'Disponible'),(6, 1, '2023-10-15', '16:00', 'Disponible'),(7, 2, '2023-10-15', '16:00', 'Disponible');`;
+      let cita = `INSERT INTO CitaMedica (ID_Cita, ID_Doctor, FechaCita, HoraCita, EstadoCita) VALUES (1, 1, '2023-10-12', '10:00', 'Disponible'),(2, 1, '2023-10-12', '15:30', 'Disponible'),(3, 1, '2023-10-12', '11:45', 'Disponible'),(4, 1, '2023-10-13', '14:15', 'Disponible'),(5, 1, '2023-10-14', '09:30', 'Disponible'),(6, 1, '2023-10-15', '16:00', 'Disponible'),(7, 2, '2023-10-15', '16:00', 'Disponible'),(8, 2, '2023-10-15', '17:00', 'Disponible'),(9, 2, '2023-10-15', '18:00', 'Disponible'),(10, 2, '2023-10-15', '19:00', 'Disponible');`;
       this.db.executeSql(cita);
 
       // Ingreso Cita Medica para Pacientes
-      let citapac = `INSERT INTO CitaMedica (ID_Cita, ID_Paciente, ID_Doctor, FechaCita, HoraCita, EstadoCita) VALUES (8, 4, 1, '2023-10-10', '10:00', 'Ocupada'),(9, 4, 2, '2023-10-10', '10:00', 'Ocupada'),(10, 4, 3, '2023-10-10', '10:00', 'Ocupada'),(11, 4, 4, '2023-10-10', '10:00', 'Ocupada');`;
+      let citapac = `INSERT INTO CitaMedica (ID_Cita, ID_Paciente, ID_Doctor, FechaCita, HoraCita, EstadoCita) VALUES (11, 4, 1, '2023-10-12', '14:00', 'Ocupada'),(12, 4, 2, '2023-10-12', '14:30', 'Ocupada'),(13, 4, 3, '2023-10-12', '10:00', 'Ocupada'),(14, 4, 4, '2023-10-12', '10:00', 'Ocupada');`;
       this.db.executeSql(citapac);
 
       // Ingreso Documento Medico
