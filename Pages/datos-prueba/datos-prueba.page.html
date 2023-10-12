@@ -1,6 +1,9 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>Datos de Prueba</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="cerrarSesion()" size="small">Cerrar Sesión</ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -11,7 +14,6 @@
       <ion-button (click)="createTables()" size="small">Crear Tablas</ion-button>
       <ion-button (click)="dropTables()" size="small">Borrar Tablas</ion-button>
       <ion-button (click)="ingresarDatos()" size="small">Ingresar Datos</ion-button>
-      <ion-button (click)="cerrarSesion()" size="small">Cerrrar Sesion</ion-button>
     </div>
   </div>
 </ion-content>

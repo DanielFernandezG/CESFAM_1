@@ -1,15 +1,15 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>
-      Bienvenido
-    </ion-title>
+    <ion-title>Centro Médico Cesfam</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="cerrarSesion()" size="small">Cerrar Sesión</ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
   <ion-row>
     <ion-col size="12">
-      <ion-button (click)="cerrarSesion()" size="small"> Cerrar Sesión</ion-button>
       <ion-button (click)="eleccionCita()" size="small"> Tomar Hora </ion-button>
       <ion-button (click)="updateData()" size="small"> Actualizar Datos </ion-button>
     </ion-col>
