@@ -22,23 +22,38 @@
     </div>
   </div>
 
-  <ion-content>
+  <ion-content [fullscreen]="true">
     <div style="text-align: center;">
       <ion-button (click)="selectData()" class="ion-margin">Ver Todas Las Citas</ion-button>
       <ion-button (click)="selectDataOcupadas()" class="ion-margin">Ver Citas Ocupadas</ion-button>
       <ion-button (click)="selectDataDisponibles()" class="ion-margin">Ver Citas Disponibles</ion-button>
     </div>
-  
-    <!-- Lista de citas médicas -->
-    <ion-list>
-      <ion-item *ngFor="let cita of doctorData">
-        ID Cita: {{ cita.ID_Cita }} - Fecha: {{ cita.FechaCita }} - Hora: {{ cita.HoraCita }}
-        <ion-buttons slot="end">
-          <ion-button color="primary" (click)="editarCita(cita)">Editar</ion-button>
-          <ion-button color="danger" (click)="confirmacionDelete(cita.ID_Cita)">Eliminar</ion-button>
-        </ion-buttons>
-      </ion-item>
-    </ion-list>
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>ID Cita</th>
+            <th>Fecha</th>
+            <th>Hora</th>
+            <th>Editar</th>
+            <th>Eliminar</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let cita of doctorData">
+            <td>{{ cita.ID_Cita }}</td>
+            <td>{{ cita.FechaCita }}</td>
+            <td>{{ cita.HoraCita }}</td>
+            <td>
+              <ion-button color="primary" (click)="editarCita(cita)"></ion-button>
+            </td>
+            <td>
+              <ion-button color="danger" (click)="confirmacionDelete(cita.ID_Cita)"></ion-button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
     <div *ngIf="mostrarFormularioDeEdicion">
       <ion-item>
