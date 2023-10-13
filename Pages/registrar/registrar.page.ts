@@ -13,6 +13,7 @@ export class RegistrarPage implements OnInit {
   db:SQLiteObject;
   run:string;
   password:string;
+  confPassword:string;
   nombre:string;
   apellidos:string;
   edad:number;
@@ -64,51 +65,59 @@ export class RegistrarPage implements OnInit {
   }
 
   async insertData() {
-    const run_limpio = this.limpiarRut(this.run)
-    const usuarioNoExiste = await this.verificarUsuario(run_limpio)
-    if(usuarioNoExiste){
-      if (validateRut(run_limpio)){
-        if (this.password.length>=8) {
-          if (this.fecha.includes("/")) {
-            if (this.telefono <= 999999999 && this.telefono >= 900000000) {
-              if (this.correo.includes("@") && this.correo.includes(".")) {
-                try{
-                  let usu:string='insert into usuario(run,password,tipo,active) values("'+run_limpio+'","'+this.password+'","paciente",0)';
-                  this.db.executeSql(usu,[])
-                  .then(() => {
-                    console.log('usuario creado')}
-                    )
-                  .catch(e => {
-                    console.error(JSON.stringify(e));
-                  });
+    if(this.run=="" || this.password=="" || this.nombre=="" || this.apellidos=="" || this.edad==null || this.fecha=="" || this.direccion=="" || this.telefono==null || this.correo=="" || this.genero==""){
+      alert("Debe Llenar Todos los Campos")
+    } else {
+      const run_limpio = this.limpiarRut(this.run)
+      const usuarioNoExiste = await this.verificarUsuario(run_limpio)
+      if(usuarioNoExiste){
+        if (validateRut(run_limpio)){
+          if (this.password.length>=8) {
+            if(this.password==this.confPassword){
+              if (this.fecha.includes("/")) {
+                if (this.telefono <= 999999999 && this.telefono >= 900000000) {
+                  if (this.correo.includes("@") && this.correo.includes(".")) {
+                    try{
+                      let usu:string='insert into usuario(run,password,tipo,active) values("'+run_limpio+'","'+this.password+'","paciente",0)';
+                      this.db.executeSql(usu,[])
+                      .then(() => {
+                        console.log('usuario creado')}
+                        )
+                      .catch(e => {
+                        console.error(JSON.stringify(e));
+                      });
 
-                  let pac:string='insert into paciente (run,nombre,apellido,edad,fechaNacimiento,Direccion,Telefono,Correo,Genero) values("'+run_limpio+'","'+this.nombre+'","'+this.apellidos+'",'+this.edad+',\''+this.fecha+'\', "'+this.direccion+'", "'+this.telefono+'", "'+this.correo+'", "'+this.genero+'")';
-                  this.db.executeSql(pac,[])
-                  .then(() => console.log('paciente creado'))
-                  .catch(e => alert(JSON.stringify(e)));
+                      let pac:string='insert into paciente (run,nombre,apellido,edad,fechaNacimiento,Direccion,Telefono,Correo,Genero) values("'+run_limpio+'","'+this.nombre+'","'+this.apellidos+'",'+this.edad+',\''+this.fecha+'\', "'+this.direccion+'", "'+this.telefono+'", "'+this.correo+'", "'+this.genero+'")';
+                      this.db.executeSql(pac,[])
+                      .then(() => console.log('paciente creado'))
+                      .catch(e => alert(JSON.stringify(e)));
 
-                  alert("Usuario creado exitosamente")
-                  this.router.navigate(['login']);
-                } catch {
-                  alert ("Error al crear usuarios")
+                      alert("Usuario creado exitosamente")
+                      this.router.navigate(['login']);
+                    } catch {
+                      alert ("Error al crear usuarios")
+                    }
+                  } else {
+                    alert ("Formato de Correo Incorrecto")
+                  }
+                } else {
+                  alert ("Formato de Telefono Incorrecto")
                 }
               } else {
-                alert ("Formato de Correo Incorrecto")
+                alert("Formato de Fecha Incorrecto")
               }
             } else {
-              alert ("Formato de Telefono Incorrecto")
+              alert("Las contraseñas no coinciden")
             }
           } else {
-            alert("Formato de Fecha Incorrecto")
+            alert ("La contraseña debe tener al menos 8 caracteres")
           }
         } else {
-          alert ("La contraseña debe tener al menos 8 caracteres")
+          alert ("Run Invalido")
         }
       } else {
-        alert ("Run Invalido")
+        alert ("El Run Indicado ya Posee Cuenta")
       }
-    } else {
-      alert ("El Run Indicado ya Posee Cuenta")
     }
   }
 
@@ -130,21 +139,6 @@ export class RegistrarPage implements OnInit {
         });
     });
   }  
-
-  selectData()
-  {
-    this.usuarioData=[];
-
-    this.db.executeSql('select * from usuario',[])
-    .then((result) => {
-      for(let i=0;i<result.rows.length;i++)
-      {
-        this.usuarioData.push({run:result.rows.item(i).run,
-        "password":result.rows.item(i).password});
-      }
-    })
-    .catch(e => alert(JSON.stringify(e)));
-  }
 
 }
 

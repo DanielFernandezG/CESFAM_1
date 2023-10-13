@@ -18,6 +18,9 @@
         <ion-input type="password" placeholder="Contraseña" [(ngModel)]="password"></ion-input>
       </ion-item>
       <ion-item>
+        <ion-input type="password" placeholder="Confirmar Contraseña" [(ngModel)]="confPassword"></ion-input>
+      </ion-item>
+      <ion-item>
         <ion-input placeholder="Nombre" [(ngModel)]="nombre"></ion-input>
       </ion-item>
       <ion-item>
@@ -46,13 +49,6 @@
         </ion-select>
       </ion-item>
       <ion-button size="small" (click)="insertData()" style="margin-bottom: 20px;">Registrar</ion-button>
-    </div>
-    <div style="border-top: solid 1px lightgray;">
-      <ion-button (click)="selectData()" style="margin-bottom: 20px;margin-top: 20px;">select Data</ion-button>
-      <div *ngFor="let b of usuarioData; let i = index">
-        <div>Usuario: {{b.run}}</div>
-        <div>Contraseña: {{b.password}}</div>
-      </div>
     </div>
   </div>
 </ion-content>
