@@ -9,10 +9,17 @@ import { AlertController } from '@ionic/angular';
   styleUrls: ['./home-secretaria.page.scss'],
 })
 export class HomeSecretariaPage {
-  db: SQLiteObject;
-  citasFiltradas: any[] = [];
-  selectedDate: string = ''; 
+  db: SQLiteObject; 
   citaEditada: any = null;
+  especialidad: string;
+  idEsp: number;
+  citaData: cita[];
+  esp: string;
+  est: string;
+  doc: string;
+  especialidades: especialidad[];
+  doctores: doctor[];
+  estados: estado[];
 
   constructor(
     private router: Router,
@@ -36,102 +43,114 @@ export class HomeSecretariaPage {
         .then((db: SQLiteObject) => {
           this.db = db;
           console.log('Conectado');
-          this.mostrarCitasDelDiaActual(); 
+          this.mostrarCita();
+          this.mostrarEspecialidades();
+          this.mostrarDoctores();
+          this.mostrarEstados();
         })
         .catch((e) => alert(JSON.stringify(e)));
     } catch (err: any) {
       console.log(err);
     }
   }
+  
+  mostrarCita() {
+    this.citaData = [];
 
-  async filtrarCitas() {
-    if (this.selectedDate !== '') {
-      try {
-        const result = await this.db.executeSql(
-          'SELECT c.ID_Cita, d.Nombre AS NombreDoctor, d.Apellido AS ApellidoDoctor, c.FechaCita, c.HoraCita ' +
-          'FROM CitaMedica c ' +
-          'INNER JOIN Doctor d ON c.ID_Doctor = d.ID_Doctor ' +
-          'WHERE c.FechaCita = ?',
-          [this.selectedDate]
-        );
-        if (result.rows.length > 0) {
-          this.citasFiltradas = [];
-          for (let i = 0; i < result.rows.length; i++) {
-            this.citasFiltradas.push(result.rows.item(i));
-          }
-        } else {
-          this.citasFiltradas = [];
-          console.log('No se encontraron citas para la fecha seleccionada.');
+    this.db
+      .executeSql(
+        "select * from citaMedica join Doctor on citaMedica.ID_Doctor=Doctor.ID_Doctor",
+        []
+      )
+      .then((result) => {
+        for (let i = 0; i < result.rows.length; i++) {
+          this.obtenerEspecialidad(result.rows.item(i).ID_Especialidad)
+            .then((especialidad: string) => {
+              this.especialidad = especialidad;
+              this.citaData.push({
+                id_cita: result.rows.item(i).ID_Cita,
+                nombre: result.rows.item(i).Nombre,
+                apellido: result.rows.item(i).Apellido,
+                FechaCita: result.rows.item(i).FechaCita,
+                HoraCita: result.rows.item(i).HoraCita,
+                estado: result.rows.item(i).EstadoCita,
+                esp: this.especialidad,
+              });
+              this.esp = "";
+              this.doc = "";
+              this.est = "";
+            })
+            .catch((error) => {
+              console.error("Error al obtener especialidad:", error);
+            });
         }
-      } catch (error) {
-        console.error('Error al filtrar las citas', error);
-      }
+      })
+      .catch((e) => alert(JSON.stringify(e)));
+  }
+
+  filtrar() {
+    this.citaData = [];
+    if (this.esp != "") {
+      this.obtenerIdEspecialidad(this.esp).then((idesp: number) => {
+        this.idEsp = idesp;
+        this.db
+          .executeSql(
+            "select * from citaMedica join Doctor on citaMedica.ID_Doctor=Doctor.ID_Doctor where EstadoCita=? or (Doctor.Nombre||' '||Doctor.Apellido=? or ID_Especialidad=?)",
+            [this.est, this.doc, this.idEsp]
+          )
+          .then((result) => {
+            for (let i = 0; i < result.rows.length; i++) {
+              this.obtenerEspecialidad(result.rows.item(i).ID_Especialidad)
+                .then((especialidad: string) => {
+                  this.especialidad = especialidad;
+                  this.citaData.push({
+                    id_cita: result.rows.item(i).ID_Cita,
+                    nombre: result.rows.item(i).Nombre,
+                    apellido: result.rows.item(i).Apellido,
+                    FechaCita: result.rows.item(i).FechaCita,
+                    HoraCita: result.rows.item(i).HoraCita,
+                    estado: result.rows.item(i).EstadoCita,
+                    esp: this.especialidad,
+                  });
+                })
+                .catch((error) => {
+                  console.error("Error al obtener especialidad:", error);
+                });
+            }
+          })
+          .catch((e) => alert(JSON.stringify(e)));
+      });
     } else {
-      this.citasFiltradas = [];
-      console.log('No se ha seleccionado una fecha.');
+      this.db
+          .executeSql(
+            "select * from citaMedica join Doctor on citaMedica.ID_Doctor=Doctor.ID_Doctor where EstadoCita=? or (Doctor.Nombre||' '||Doctor.Apellido=? or ID_Especialidad=?)",
+            [this.est, this.doc, this.idEsp]
+          )
+          .then((result) => {
+            for (let i = 0; i < result.rows.length; i++) {
+              this.obtenerEspecialidad(result.rows.item(i).ID_Especialidad)
+                .then((especialidad: string) => {
+                  this.especialidad = especialidad;
+                  this.citaData.push({
+                    id_cita: result.rows.item(i).ID_Cita,
+                    nombre: result.rows.item(i).Nombre,
+                    apellido: result.rows.item(i).Apellido,
+                    FechaCita: result.rows.item(i).FechaCita,
+                    HoraCita: result.rows.item(i).HoraCita,
+                    estado: result.rows.item(i).EstadoCita,
+                    esp: this.especialidad,
+                  });
+                })
+                .catch((error) => {
+                  console.error("Error al obtener especialidad:", error);
+                });
+            }
+          })
+          .catch((e) => alert(JSON.stringify(e)));
     }
   }
 
-  async filtrarCitasOcupadas() {
-    if (this.selectedDate !== '') {
-      try {
-        const result = await this.db.executeSql(
-          'SELECT c.ID_Cita, d.Nombre AS NombreDoctor, d.Apellido AS ApellidoDoctor, c.FechaCita, c.HoraCita ' +
-          'FROM CitaMedica c ' +
-          'INNER JOIN Doctor d ON c.ID_Doctor = d.ID_Doctor ' +
-          'WHERE c.FechaCita = ? AND c.EstadoCita = "Ocupada"',
-          [this.selectedDate]
-        );
-  
-        if (result.rows.length > 0) {
-          this.citasFiltradas = [];
-          for (let i = 0; i < result.rows.length; i++) {
-            this.citasFiltradas.push(result.rows.item(i));
-          }
-        } else {
-          this.citasFiltradas = [];
-          console.log('No se encontraron citas ocupadas para la fecha seleccionada.');
-        }
-      } catch (error) {
-        console.error('Error al filtrar las citas', error);
-      }
-    } else {
-      this.citasFiltradas = [];
-      console.log('No se ha seleccionado una fecha.');
-    }
-  }
-  
-  async filtrarCitasDisponibles() {
-    if (this.selectedDate !== '') {
-      try {
-        const result = await this.db.executeSql(
-          'SELECT c.ID_Cita, d.Nombre AS NombreDoctor, d.Apellido AS ApellidoDoctor, c.FechaCita, c.HoraCita ' +
-          'FROM CitaMedica c ' +
-          'INNER JOIN Doctor d ON c.ID_Doctor = d.ID_Doctor ' +
-          'WHERE c.FechaCita = ? AND c.EstadoCita = "Disponible"',
-          [this.selectedDate]
-        );
-  
-        if (result.rows.length > 0) {
-          this.citasFiltradas = [];
-          for (let i = 0; i < result.rows.length; i++) {
-            this.citasFiltradas.push(result.rows.item(i));
-          }
-        } else {
-          this.citasFiltradas = [];
-          console.log('No se encontraron citas disponibles para la fecha seleccionada.');
-        }
-      } catch (error) {
-        console.error('Error al filtrar las citas', error);
-      }
-    } else {
-      this.citasFiltradas = [];
-      console.log('No se ha seleccionado una fecha.');
-    }
-  }
-
-  
-
+  // corregir
   editarCita(cita: any) {
     this.citaEditada = {
       ID_Cita: cita.ID_Cita,
@@ -176,23 +195,61 @@ export class HomeSecretariaPage {
           [this.citaEditada.FechaCita, this.citaEditada.HoraCita, this.citaEditada.ID_Cita]
         );
         this.citaEditada = null; 
-        this.filtrarCitas(); 
+        this.mostrarCita(); 
       } catch (error) {
         console.error('Error al guardar los cambios en la cita', error);
       }
     }
   }
   
-  
+  async obtenerEspecialidad(idEsp: string): Promise<string> {
+    return new Promise<string>((resolve, reject) => {
+      this.db
+        .executeSql("SELECT * FROM especialidad WHERE ID_Especialidad=?", [
+          idEsp,
+        ])
+        .then((result) => {
+          if (result.rows.length > 0) {
+            const especialidad = result.rows.item(0).Nombre;
+            resolve(especialidad);
+          } else {
+            reject(new Error("Especialidad no encontrada"));
+          }
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  }
 
-  async eliminarCita(idCita: number) {
+  async obtenerIdEspecialidad(nombreEspecialidad: string): Promise<number> {
+    return new Promise<number>((resolve, reject) => {
+      this.db
+        .executeSql("SELECT ID_Especialidad FROM especialidad WHERE Nombre=?", [
+          nombreEspecialidad,
+        ])
+        .then((result) => {
+          if (result.rows.length > 0) {
+            const idEspecialidad = result.rows.item(0).ID_Especialidad;
+            resolve(idEspecialidad);
+          } else {
+            reject(new Error("Especialidad no encontrada"));
+          }
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  }
+
+  async eliminarCita(idCita: string) {
     
     const confirmacion = await this.mostrarConfirmacion();
     
     if (confirmacion) {
       try {
         await this.db.executeSql('DELETE FROM CitaMedica WHERE ID_Cita = ?', [idCita]);
-        this.filtrarCitas(); 
+        this.mostrarCita(); 
       } catch (error) {
         console.error('Error al eliminar la cita médica', error);
       }
@@ -226,20 +283,77 @@ export class HomeSecretariaPage {
     });
   }
 
-  mostrarCitasDelDiaActual() {
-    
-    const fechaActual = new Date();
-    const fechaFormatted = fechaActual.toISOString().slice(0, 10); 
-
-    this.selectedDate = fechaFormatted; 
-    this.filtrarCitas(); 
-  }
-
   cerrarSesion() {
     this.db
       .executeSql("UPDATE Usuario SET active=0 where active=1", [])
-      .then((result) => console.log("Sesion Cambiada"))
+      .then((result) => {
+        console.log("Sesion Cambiada");
+        this.router.navigate(["login"]);
+      })
       .catch((e) => console.log(JSON.stringify(e)));
-    this.router.navigate(["login"]);
   }
+
+  mostrarDoctores() {
+    this.doctores = [];
+
+    this.db.executeSql("select * from Doctor", []).then((result) => {
+      for (let i = 0; i < result.rows.length; i++) {
+        this.doctores.push({
+          id: result.rows.item(i).ID_Doctor,
+          nombre: result.rows.item(i).Nombre,
+          apellido: result.rows.item(i).Apellido,
+        });
+      }
+    });
+  }
+
+  mostrarEspecialidades() {
+    this.especialidades = [];
+
+    this.db.executeSql("select * from especialidad", []).then((result) => {
+      for (let i = 0; i < result.rows.length; i++) {
+        this.especialidades.push({
+          id: result.rows.item(i).ID_Especialidad,
+          descripcion: result.rows.item(i).Nombre,
+        });
+      }
+    });
+  }
+
+  mostrarEstados() {
+    this.estados = [];
+
+    this.db.executeSql("select DISTINCT(EstadoCita) AS Estado from CitaMedica ", []).then((result) => {
+      for (let i = 0; i < result.rows.length; i++) {
+        this.estados.push({
+          descripcion: result.rows.item(i).Estado,
+        });
+      }
+    });
+  }
+}
+
+class especialidad {
+  public id: string;
+  public descripcion: string;
+}
+
+class estado {
+  public descripcion: string;
+}
+
+class doctor {
+  public id: string;
+  public nombre: string;
+  public apellido: string;
+}
+
+class cita {
+  public id_cita: string;
+  public nombre: string;
+  public apellido: string;
+  public FechaCita: string;
+  public HoraCita: string;
+  public estado: string;
+  public esp: string;
 }
