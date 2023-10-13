@@ -29,19 +29,6 @@ const routes: Routes = [
     loadChildren: () => import('./Pages/eleccion-cita/eleccion-cita.module').then( m => m.EleccionCitaPageModule)
   },
   {
-    path: 'eleccion-fecha-hora',
-    loadChildren: () => import('./Pages/eleccion-fecha-hora/eleccion-fecha-hora.module').then( m => m.EleccionFechaHoraPageModule)
-  },
-  {
-    path: 'eleccion-profesional',
-    loadChildren: () => import('./Pages/eleccion-profesional/eleccion-profesional.module').then( m => m.EleccionProfesionalPageModule)
-  },
-
-  {
-    path: 'confirmacion-cita',
-    loadChildren: () => import('./Pages/confirmacion-cita/confirmacion-cita.module').then( m => m.ConfirmacionCitaPageModule)
-  },
-  {
     path: 'home-doctor',
     loadChildren: () => import('./Pages/home-doctor/home-doctor.module').then( m => m.HomeDoctorPageModule)
   },
@@ -56,9 +43,6 @@ const routes: Routes = [
   {
     path: 'recuperar',
     loadChildren: () => import('./Pages/recuperar/recuperar.module').then( m => m.RecuperarPageModule)
-  },  {
-    path: 'update-hora-medico',
-    loadChildren: () => import('./Pages/update-hora-medico/update-hora-medico.module').then( m => m.UpdateHoraMedicoPageModule)
   },
 
 
