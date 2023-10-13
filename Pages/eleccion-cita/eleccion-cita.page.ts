@@ -232,18 +232,7 @@ export class EleccionCitaPage implements OnInit {
       })
       .catch((e) => alert(JSON.stringify(e)));
   }
-  // fetchEspecialidades() {
-  //   this.db
-  //     .executeSql('SELECT Nombre FROM Especialidad', [])
-  //     .then(data => {
-  //       if (data.rows.length > 0) {
-  //         for (let i = 0; i < data.rows.length; i++) {
-  //           this.especialidades.push(data.rows.item(i).Nombre);
-  //         }
-  //       }
-  //     })
-  //     .catch(e => console.log('Error al ejecutar la consulta: ', e));
-  // }
+
 }
 class especialidad {
   public id: string;

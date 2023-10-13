@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { SQLite, SQLiteObject } from '@awesome-cordova-plugins/sqlite/ngx';
 import { AlertController } from '@ionic/angular';
@@ -16,7 +16,10 @@ export class HomeSecretariaPage {
   citaData: cita[];
   esp: string;
   est: string;
+  id: string;
   doc: string;
+  pac: string;
+  pacientes: paciente[];
   especialidades: especialidad[];
   doctores: doctor[];
   estados: estado[];
@@ -283,14 +286,28 @@ export class HomeSecretariaPage {
     });
   }
 
+  tomarHora(idCita: string, idPac:string) {
+   this.db
+     .executeSql(
+       "update citaMedica set ID_Paciente=?,EstadoCita='Ocupada' where ID_Cita=?",
+       [idPac,idCita]
+     )
+     .then((result) => {
+       this.mostrarCita();
+       alert("Hora Tomada");
+       this.router.navigate(["home-secretaria"]).then(() => {
+         // Recarga la página actual
+         window.location.reload();
+       });
+     });
+  }
+
   cerrarSesion() {
     this.db
       .executeSql("UPDATE Usuario SET active=0 where active=1", [])
-      .then((result) => {
-        console.log("Sesion Cambiada");
-        this.router.navigate(["login"]);
-      })
+      .then((result) => console.log("Sesion Cambiada"))
       .catch((e) => console.log(JSON.stringify(e)));
+    this.router.navigate(["login"]);
   }
 
   mostrarDoctores() {
@@ -331,6 +348,39 @@ export class HomeSecretariaPage {
       }
     });
   }
+
+  mostrarPacientes() {
+    this.pacientes = [];
+
+    this.db.executeSql("select * from paciente ", []).then((result) => {
+      for (let i = 0; i < result.rows.length; i++) {
+        this.pacientes.push({
+          id: result.rows.item(i).ID_Paciente,
+          nombre: result.rows.item(i).Nombre,
+          apellido: result.rows.item(i).Apellido,
+        });
+      }
+    });
+  }
+
+  confirmarToma() {
+    this.db.executeSql("select * from paciente where Nombre||' '||Apellido=?",[this.pac])
+    .then((result) => {
+      this.tomarHora(this.id,result.rows.item(0).ID_Paciente);
+    })
+  }
+
+  modalVisible = false;
+
+  abrirModal(id: string) {
+    this.id=id;
+    this.mostrarPacientes();
+    this.modalVisible = true;
+  }
+
+  cerrarModal() {
+    this.modalVisible = false;
+  }
 }
 
 class especialidad {
@@ -356,4 +406,10 @@ class cita {
   public HoraCita: string;
   public estado: string;
   public esp: string;
+}
+
+class paciente {
+  public id: string;
+  public nombre: string;
+  public apellido: string;
 }
