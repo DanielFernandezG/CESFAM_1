@@ -33,7 +33,17 @@ export class HomeSecretariaPage {
   }
 
   ngOnInit() {
-    
+  }
+
+  cerrarSesion() {
+    this.db
+      .executeSql("UPDATE Usuario SET active=0 where active=1", [])
+      .then((result) => console.log("Sesion Cambiada"))
+      .catch((e) => console.log(JSON.stringify(e)));
+    this.router.navigate(["login"]).then(() => {
+      // Recarga la página actual
+      window.location.reload();
+    });
   }
 
   async createOpenDatabase() {
@@ -156,7 +166,7 @@ export class HomeSecretariaPage {
   // corregir
   editarCita(cita: any) {
     this.citaEditada = {
-      ID_Cita: cita.ID_Cita,
+      ID_Cita: cita.id_cita,
       FechaCita: cita.FechaCita,
       HoraCita: cita.HoraCita,
     };
@@ -300,14 +310,6 @@ export class HomeSecretariaPage {
          window.location.reload();
        });
      });
-  }
-
-  cerrarSesion() {
-    this.db
-      .executeSql("UPDATE Usuario SET active=0 where active=1", [])
-      .then((result) => console.log("Sesion Cambiada"))
-      .catch((e) => console.log(JSON.stringify(e)));
-    this.router.navigate(["login"]);
   }
 
   mostrarDoctores() {
