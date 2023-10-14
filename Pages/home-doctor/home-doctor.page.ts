@@ -62,10 +62,7 @@ export class HomeDoctorPage implements OnInit {
       .executeSql("UPDATE Usuario SET active=0 where active=1", [])
       .then((result) => console.log("Sesión Cambiada"))
       .catch((e) => console.log(JSON.stringify(e)));
-    this.router.navigate(["login"]).then(() => {
-      // Recarga la página actual
-      window.location.reload();
-    });
+      window.location.href = "/login";
   }
 
   insertData() {

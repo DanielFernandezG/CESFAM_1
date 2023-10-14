@@ -43,9 +43,9 @@ export class HomePage implements OnInit {
   cerrarSesion() {
     this.db
       .executeSql("UPDATE Usuario SET active=0 where active=1", [])
-      .then((result) => console.log("Sesion Cambiada"))
+      .then((result) => console.log("Sesión Cambiada"))
       .catch((e) => console.log(JSON.stringify(e)));
-    this.router.navigate(["login"]);
+      window.location.href = "/login";
   }
 
   eleccionCita() {

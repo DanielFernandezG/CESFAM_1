@@ -39,7 +39,7 @@ export class HomeSecretariaPage {
       .executeSql("UPDATE Usuario SET active=0 where active=1", [])
       .then((result) => console.log("Sesión Cambiada"))
       .catch((e) => console.log(JSON.stringify(e)));
-    this.router.navigate([""]);
+      window.location.href = "/login";
   }
 
   async createOpenDatabase() {
