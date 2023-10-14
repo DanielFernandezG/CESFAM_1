@@ -38,7 +38,7 @@ export class DatosPruebaPage implements OnInit {
     try {
       let usu = `
     CREATE TABLE IF NOT EXISTS Usuario (
-      run VARCHAR(10) PRIMARY KEY NOT NULL,
+      run VARCHAR(12) PRIMARY KEY NOT NULL,
       password VARCHAR(12) NOT NULL,
       tipo VARCHAR(15) NOT NULL,
       active INTEGER(1) NOT NULL
@@ -55,11 +55,12 @@ export class DatosPruebaPage implements OnInit {
       Nombre VARCHAR(50) NOT NULL,
       Apellido VARCHAR(50) NOT NULL,
       Edad INTEGER NOT NULL,
-      FechaNacimiento DATE,
-      Direccion VARCHAR(100),
-      Telefono VARCHAR(20),
+      FechaNacimiento DATE NOT NULL,
+      Direccion VARCHAR(100) NOT NULL,
+      Telefono integer(9) NOT NULL,
       Correo VARCHAR(100) NOT NULL,
-      Genero VARCHAR(10)
+      Genero VARCHAR(10) NOT NULL,
+      FOREIGN KEY (Run) REFERENCES Usuario(run)
     );`;
       this.db
         .executeSql(pac)
@@ -81,12 +82,13 @@ export class DatosPruebaPage implements OnInit {
       Run VARCHAR(12) NOT NULL,
       Nombre VARCHAR(50) NOT NULL,
       Apellido VARCHAR(50) NOT NULL,
-      ID_Especialidad INTEGER,
+      ID_Especialidad INTEGER NOT NULL,
       CESFAM VARCHAR(100) NOT NULL,
       Estudios VARCHAR(300) NOT NULL,
       FechaNacimiento DATE NOT NULL,
-      Genero VARCHAR(10),
-      FOREIGN KEY (ID_Especialidad) REFERENCES Especialidad(ID_Especialidad)
+      Genero VARCHAR(10) NOT NULL,
+      FOREIGN KEY (ID_Especialidad) REFERENCES Especialidad(ID_Especialidad),
+      FOREIGN KEY (Run) REFERENCES Usuario(run)
     );`;
       this.db
         .executeSql(doc)
@@ -101,7 +103,8 @@ export class DatosPruebaPage implements OnInit {
       Apellido VARCHAR(50) NOT NULL,
       FechaNacimiento DATE NOT NULL,
       Correo VARCHAR(100) NOT NULL,
-      Genero VARCHAR(10)
+      Genero VARCHAR(10),
+      FOREIGN KEY (Run) REFERENCES Usuario(run)
     );`;
       this.db
         .executeSql(sec)
@@ -249,7 +252,7 @@ export class DatosPruebaPage implements OnInit {
       this.db.executeSql(usu);
 
       // Ingreso de Pacientes
-      let pac = `INSERT INTO Paciente (ID_Paciente,Run,Nombre,Apellido,Edad,FechaNacimiento,Direccion,Telefono,Correo,Genero) VALUES (1, '209052172', 'Julio', 'Baeza', 21, '25/10/2001', 'Apotheca Company', '984168125', 'j.baeza@duocuc.cl', 'Masculino'),(2, '218789234', 'Sean', 'Feasley', 43, '07/10/1980', 'PD-Rx Pharmaceuticals, Inc.', '948888409', 'sfeasley2@gnu.org', 'Femenino'),(3, '13210980k', 'Christie', 'MacGuiness', 51, '17/04/1972', 'Sandoz Inc', '986037732', 'cmacguiness3@washington.edu', 'Femenino'),(4, '209645971', 'Jose', 'Torres', 21, '06/02/2002', 'La Prairie, Inc.', '997993773', 'josi.torres@duocuc.cl', 'Masculino');`;
+      let pac = `INSERT INTO Paciente (ID_Paciente,Run,Nombre,Apellido,Edad,FechaNacimiento,Direccion,Telefono,Correo,Genero) VALUES (1, '209052172', 'Julio', 'Baeza', 21, '25/10/2001', 'Apotheca Company', 984168125, 'j.baeza@duocuc.cl', 'Masculino'),(2, '218789234', 'Sean', 'Feasley', 43, '07/10/1980', 'PD-Rx Pharmaceuticals, Inc.', 948888409, 'sfeasley2@gnu.org', 'Femenino'),(3, '13210980k', 'Christie', 'MacGuiness', 51, '17/04/1972', 'Sandoz Inc', 986037732, 'cmacguiness3@washington.edu', 'Femenino'),(4, '209645971', 'Jose', 'Torres', 21, '06/02/2002', 'La Prairie, Inc.', 997993773, 'josi.torres@duocuc.cl', 'Masculino');`;
       this.db.executeSql(pac);
 
       // Ingreso Especialidad
