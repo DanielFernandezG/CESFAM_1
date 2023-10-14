@@ -18,16 +18,27 @@
         <ion-label position="stacked">Ingresar Hora de Cita</ion-label>
         <ion-input [(ngModel)]="HoraCita" type="time"></ion-input>
       </ion-item>
-      <ion-button (click)="insertData()" class="ion-margin">Ingresar Hora</ion-button>
+      <ion-item>
+        <ion-button (click)="insertData()">Ingresar Hora</ion-button>
+      </ion-item>
     </div>
   </div>
 
   <ion-content [fullscreen]="true">
-    <div style="text-align: center;">
+    <ion-item class="full-width-item">
+      <ion-select placeholder="Estado" [(ngModel)]="est">
+        <ion-select-option *ngFor="let est of estados">{{ est.descripcion }}</ion-select-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-button (click)="selectDataOcupadas()">Filtrar</ion-button>
+      <ion-button (click)="selectData()">Borrar Filtros</ion-button>
+    </ion-item>
+    <!-- <div style="text-align: center;">
       <ion-button (click)="selectData()" class="ion-margin">Ver Todas Las Citas</ion-button>
       <ion-button (click)="selectDataOcupadas()" class="ion-margin">Ver Citas Ocupadas</ion-button>
       <ion-button (click)="selectDataDisponibles()" class="ion-margin">Ver Citas Disponibles</ion-button>
-    </div>
+    </div> -->
     <div class="table-container">
       <table>
         <thead>
@@ -35,6 +46,7 @@
             <th>ID Cita</th>
             <th>Fecha</th>
             <th>Hora</th>
+            <th>Estado</th>
             <th>Editar</th>
             <th>Eliminar</th>
           </tr>
@@ -44,6 +56,7 @@
             <td>{{ cita.ID_Cita }}</td>
             <td>{{ cita.FechaCita }}</td>
             <td>{{ cita.HoraCita }}</td>
+            <td>{{ cita.EstadoCita }}</td>
             <td>
               <ion-button color="primary" (click)="editarCita(cita)"></ion-button>
             </td>
@@ -68,3 +81,9 @@
     </div>
   </ion-content>
 </ion-content>
+
+<ion-footer class="ion-no-border">
+  <ion-toolbar color="primary">
+    <ion-title>Centro Medico Cesfam</ion-title>
+  </ion-toolbar>
+</ion-footer>

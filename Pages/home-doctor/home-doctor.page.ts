@@ -16,6 +16,8 @@ export class HomeDoctorPage implements OnInit {
   idDoctor: string;
   doctorData: doctor[];
   mostrarFormularioDeEdicion: boolean = false;
+  est: string;
+  estados: estado[];
   cita: any;
   citas: any[] = [];
   citaEditada: any = {
@@ -47,6 +49,7 @@ export class HomeDoctorPage implements OnInit {
           this.db = db;
           console.log("Conectado");
           this.selectData();
+          this.mostrarEstados();
         })
         .catch((e) => alert(JSON.stringify(e)));
     } catch (err: any) {
@@ -59,7 +62,10 @@ export class HomeDoctorPage implements OnInit {
       .executeSql("UPDATE Usuario SET active=0 where active=1", [])
       .then((result) => console.log("Sesión Cambiada"))
       .catch((e) => console.log(JSON.stringify(e)));
-    this.router.navigate(["login"]);
+    this.router.navigate(["login"]).then(() => {
+      // Recarga la página actual
+      window.location.reload();
+    });
   }
 
   insertData() {
@@ -246,6 +252,7 @@ export class HomeDoctorPage implements OnInit {
                       ID_Cita: result.rows.item(i).ID_Cita,
                       HoraCita: result.rows.item(i).HoraCita,
                       FechaCita: result.rows.item(i).FechaCita,
+                      EstadoCita: result.rows.item(i).EstadoCita
                     });
                   }
                 })
@@ -271,8 +278,8 @@ export class HomeDoctorPage implements OnInit {
             .then((result) => {
               this.db
                 .executeSql(
-                  'select * from CitaMedica where EstadoCita = "Ocupada" and ID_Doctor=?',
-                  [result.rows.item(0).ID_Doctor]
+                  'select * from CitaMedica where EstadoCita = ? and ID_Doctor=?',
+                  [this.est, result.rows.item(0).ID_Doctor]
                 )
                 .then((result) => {
                   for (let i = 0; i < result.rows.length; i++) {
@@ -280,6 +287,7 @@ export class HomeDoctorPage implements OnInit {
                       ID_Cita: result.rows.item(i).ID_Cita,
                       HoraCita: result.rows.item(i).HoraCita,
                       FechaCita: result.rows.item(i).FechaCita,
+                      EstadoCita: result.rows.item(i).EstadoCita,
                     });
                   }
                 });
@@ -291,38 +299,16 @@ export class HomeDoctorPage implements OnInit {
       .catch((e) => alert(JSON.stringify(e)));
   }
 
-  async selectDataDisponibles() {
-    this.doctorData = [];
+  mostrarEstados() {
+    this.estados = [];
 
-    this.db
-      .executeSql("SELECT * FROM usuario WHERE active = 1", [])
-      .then((result) => {
-        if (result.rows.item(0).run != "") {
-          this.db
-            .executeSql("SELECT * FROM Doctor WHERE Run = ?", [
-              result.rows.item(0).run,
-            ])
-            .then((result) => {
-              this.db
-                .executeSql(
-                  'select * from CitaMedica where EstadoCita = "Disponible" and ID_Doctor=?',
-                  [result.rows.item(0).ID_Doctor]
-                )
-                .then((result) => {
-                  for (let i = 0; i < result.rows.length; i++) {
-                    this.doctorData.push({
-                      ID_Cita: result.rows.item(i).ID_Cita,
-                      HoraCita: result.rows.item(i).HoraCita,
-                      FechaCita: result.rows.item(i).FechaCita,
-                    });
-                  }
-                });
-            });
-        } else {
-          this.router.navigate(["login"]);
-        }
-      })
-      .catch((e) => alert(JSON.stringify(e)));
+    this.db.executeSql("select DISTINCT(EstadoCita) AS Estado from CitaMedica ", []).then((result) => {
+      for (let i = 0; i < result.rows.length; i++) {
+        this.estados.push({
+          descripcion: result.rows.item(i).Estado,
+        });
+      }
+    });
   }
 }
 
@@ -330,4 +316,9 @@ class doctor {
   public ID_Cita: string;
   public HoraCita: string;
   public FechaCita: string;
+  public EstadoCita: string;
+}
+
+class estado {
+  public descripcion: string;
 }

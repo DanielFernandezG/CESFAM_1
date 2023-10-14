@@ -374,10 +374,15 @@ export class HomeSecretariaPage {
 
   modalVisible = false;
 
-  abrirModal(id: string) {
-    this.id=id;
-    this.mostrarPacientes();
-    this.modalVisible = true;
+  abrirModal(id: string, estado: string) {
+    if (estado == "Disponible") {
+      this.id = id;
+      this.mostrarPacientes();
+      this.modalVisible = true;
+    } else {
+      alert("La Cita no se Encuentra Disponible")
+      this.modalVisible = false;
+    }
   }
 
   cerrarModal() {

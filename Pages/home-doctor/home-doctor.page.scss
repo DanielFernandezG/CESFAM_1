@@ -3,6 +3,12 @@
   justify-content: center;
   align-items: center;
 }
+
+ion-footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
 /* Estilos para la tabla */
 table {
     width: 100%;
