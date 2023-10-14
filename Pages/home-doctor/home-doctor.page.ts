@@ -62,21 +62,18 @@ export class HomeDoctorPage implements OnInit {
       .executeSql("UPDATE Usuario SET active=0 where active=1", [])
       .then((result) => console.log("Sesión Cambiada"))
       .catch((e) => console.log(JSON.stringify(e)));
-      window.location.href = "/login";
+    window.location.href = "/login";
   }
 
   insertData() {
-    
     if (!this.FechaCita || !this.HoraCita) {
       alert("Por favor, ingrese una fecha y una hora válida.");
       return;
     }
 
-    
     const fechaActual = new Date();
     const fechaCita = new Date(this.FechaCita + "T" + this.HoraCita);
 
-    
     if (fechaCita <= fechaActual) {
       alert(
         "La fecha y hora de la cita deben ser posteriores a la fecha y hora actual."
@@ -84,63 +81,76 @@ export class HomeDoctorPage implements OnInit {
       return;
     }
 
-    
     this.db
-      .executeSql(
-        "SELECT * FROM CitaMedica WHERE FechaCita = ? AND HoraCita = ?",
-        [this.FechaCita, this.HoraCita]
-      )
+      .executeSql("SELECT * FROM usuario WHERE active = 1", [])
       .then((result) => {
-        if (result.rows.length > 0) {
-          alert("Ya existe una cita programada para la misma fecha y hora.");
-        } else {
-          
+        if (result.rows.item(0).run != "") {
           this.db
-            .executeSql("SELECT * FROM usuario WHERE active = 1", [])
+            .executeSql("SELECT * FROM Doctor WHERE Run = ?", [
+              result.rows.item(0).run,
+            ])
             .then((result) => {
-              if (result.rows.item(0).run != "") {
-                this.db
-                  .executeSql("SELECT * FROM Doctor WHERE Run = ?", [
-                    result.rows.item(0).run,
-                  ])
-                  .then((result) => {
-                    try {
-                      let cita: string =
-                        "INSERT INTO CitaMedica(ID_Doctor, FechaCita, HoraCita, EstadoCita) VALUES(" +
-                        result.rows.item(0).ID_Doctor +
-                        ',"' +
-                        this.FechaCita +
-                        '","' +
-                        this.HoraCita +
-                        '","Disponible");';
-                      this.db
-                        .executeSql(cita, [])
-                        .then(() => {
-                          this.selectData();
-                          alert("Datos insertados");
-                        })
-                        .catch((e) => alert(JSON.stringify(e)));
-                    } catch {
-                      alert("No se pudieron insertar los datos.");
-                    }
-                  });
-              } else {
-                this.router.navigate(["login"]);
-              }
-            })
-            .catch((e) => alert(JSON.stringify(e)));
+              this.db
+                .executeSql(
+                  "SELECT * FROM CitaMedica WHERE FechaCita = ? AND HoraCita = ? AND ID_Doctor=?",
+                  [this.FechaCita, this.HoraCita, result.rows.item(0).ID_Doctor]
+                )
+                .then((result) => {
+                  if (result.rows.length > 0) {
+                    alert(
+                      "Ya existe una cita programada para la misma fecha y hora."
+                    );
+                  } else {
+                    this.db
+                      .executeSql("SELECT * FROM usuario WHERE active = 1", [])
+                      .then((result) => {
+                        if (result.rows.item(0).run != "") {
+                          this.db
+                            .executeSql("SELECT * FROM Doctor WHERE Run = ?", [
+                              result.rows.item(0).run,
+                            ])
+                            .then((result) => {
+                              try {
+                                let cita: string =
+                                  "INSERT INTO CitaMedica(ID_Doctor, FechaCita, HoraCita, EstadoCita) VALUES(" +
+                                  result.rows.item(0).ID_Doctor +
+                                  ',"' +
+                                  this.FechaCita +
+                                  '","' +
+                                  this.HoraCita +
+                                  '","Disponible");';
+                                this.db
+                                  .executeSql(cita, [])
+                                  .then(() => {
+                                    this.selectData();
+                                    alert("Datos insertados");
+                                  })
+                                  .catch((e) => alert(JSON.stringify(e)));
+                              } catch {
+                                alert("No se pudieron insertar los datos.");
+                              }
+                            });
+                        } else {
+                          this.router.navigate(["login"]);
+                        }
+                      })
+                      .catch((e) => alert(JSON.stringify(e)));
+                  }
+                })
+                .catch((e) => alert(JSON.stringify(e)));
+            });
+        } else {
+          this.router.navigate(["login"]);
         }
       })
       .catch((e) => alert(JSON.stringify(e)));
   }
 
   async editarCita(cita: any) {
-    
     this.citaEditada.ID_Cita = cita.ID_Cita;
     this.citaEditada.FechaCita = cita.FechaCita;
     this.citaEditada.HoraCita = cita.HoraCita;
 
-    
     this.mostrarFormularioDeEdicion = true;
   }
 
@@ -149,49 +159,58 @@ export class HomeDoctorPage implements OnInit {
       alert("Por favor, complete tanto la fecha como la hora de la cita.");
       return;
     }
-  
+
     const fechaActual = new Date();
-    const fechaCita = new Date(this.citaEditada.FechaCita + "T" + this.citaEditada.HoraCita);
-  
+    const fechaCita = new Date(
+      this.citaEditada.FechaCita + "T" + this.citaEditada.HoraCita
+    );
+
     if (fechaCita <= fechaActual) {
-      alert("La fecha y hora de la cita deben ser posteriores a la fecha y hora actual.");
+      alert(
+        "La fecha y hora de la cita deben ser posteriores a la fecha y hora actual."
+      );
       return;
     }
-  
-    
+
     const result = await this.db.executeSql(
       "SELECT * FROM CitaMedica WHERE FechaCita = ? AND HoraCita = ? AND ID_Cita != ?",
-      [this.citaEditada.FechaCita, this.citaEditada.HoraCita, this.citaEditada.ID_Cita]
+      [
+        this.citaEditada.FechaCita,
+        this.citaEditada.HoraCita,
+        this.citaEditada.ID_Cita,
+      ]
     );
-  
+
     if (result.rows.length > 0) {
       alert("Ya existe una cita programada para la misma fecha y hora.");
       return;
     }
-  
-    
+
     try {
       await this.db.executeSql(
         "UPDATE CitaMedica SET FechaCita = ?, HoraCita = ? WHERE ID_Cita = ?",
-        [this.citaEditada.FechaCita, this.citaEditada.HoraCita, this.citaEditada.ID_Cita]
+        [
+          this.citaEditada.FechaCita,
+          this.citaEditada.HoraCita,
+          this.citaEditada.ID_Cita,
+        ]
       );
-  
-      
+
       this.citaEditada = {
         ID_Cita: 0,
         FechaCita: "",
         HoraCita: "",
       };
       this.mostrarFormularioDeEdicion = false;
-  
-      
+
       this.selectData();
     } catch (error) {
-      alert("Error al guardar los cambios en la cita. Por favor, inténtalo de nuevo.");
+      alert(
+        "Error al guardar los cambios en la cita. Por favor, inténtalo de nuevo."
+      );
       console.error(error);
     }
   }
-  
 
   async confirmacionDelete(idCita: string) {
     const alert = await this.alertController.create({
@@ -249,7 +268,7 @@ export class HomeDoctorPage implements OnInit {
                       ID_Cita: result.rows.item(i).ID_Cita,
                       HoraCita: result.rows.item(i).HoraCita,
                       FechaCita: result.rows.item(i).FechaCita,
-                      EstadoCita: result.rows.item(i).EstadoCita
+                      EstadoCita: result.rows.item(i).EstadoCita,
                     });
                   }
                 })
@@ -275,7 +294,7 @@ export class HomeDoctorPage implements OnInit {
             .then((result) => {
               this.db
                 .executeSql(
-                  'select * from CitaMedica where EstadoCita = ? and ID_Doctor=?',
+                  "select * from CitaMedica where EstadoCita = ? and ID_Doctor=?",
                   [this.est, result.rows.item(0).ID_Doctor]
                 )
                 .then((result) => {
@@ -299,13 +318,15 @@ export class HomeDoctorPage implements OnInit {
   mostrarEstados() {
     this.estados = [];
 
-    this.db.executeSql("select DISTINCT(EstadoCita) AS Estado from CitaMedica ", []).then((result) => {
-      for (let i = 0; i < result.rows.length; i++) {
-        this.estados.push({
-          descripcion: result.rows.item(i).Estado,
-        });
-      }
-    });
+    this.db
+      .executeSql("select DISTINCT(EstadoCita) AS Estado from CitaMedica ", [])
+      .then((result) => {
+        for (let i = 0; i < result.rows.length; i++) {
+          this.estados.push({
+            descripcion: result.rows.item(i).Estado,
+          });
+        }
+      });
   }
 }
 
