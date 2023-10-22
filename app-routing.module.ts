@@ -43,7 +43,11 @@ const routes: Routes = [
   {
     path: 'recuperar',
     loadChildren: () => import('./Pages/recuperar/recuperar.module').then( m => m.RecuperarPageModule)
+  },  {
+    path: 'ficha-medico',
+    loadChildren: () => import('./Pages/ficha-medico/ficha-medico.module').then( m => m.FichaMedicoPageModule)
   },
+
 
 
 

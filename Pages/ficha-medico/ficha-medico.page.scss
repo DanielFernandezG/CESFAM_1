@@ -1,0 +1,19 @@
+/* Estilos para la tabla */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px; /* Espacio entre la tabla y otros elementos */
+  }
+  
+  /* Estilos para las celdas de encabezado */
+  th {
+    text-align: left;
+    padding: 8px;
+    border-bottom: 2px solid #333; /* Línea inferior */
+  }
+  
+  /* Estilos para las celdas de datos */
+  td {
+    border: 1px solid #ddd;
+    padding: 8px;
+  }

@@ -22,6 +22,10 @@ export class HomePage implements OnInit {
     this.createOpenDatabase();
   }
 
+  medicos() {
+    this.router.navigateByUrl("/ficha-medico");
+  }
+
   createOpenDatabase() {
     try {
       this.sqlite

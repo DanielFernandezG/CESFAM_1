@@ -268,11 +268,11 @@ export class DatosPruebaPage implements OnInit {
       this.db.executeSql(sec);
 
       // Ingreso Cita Medica
-      let cita = `INSERT INTO CitaMedica (ID_Cita, ID_Doctor, FechaCita, HoraCita, EstadoCita) VALUES (1, 1, '2023-10-12', '10:00', 'Disponible'),(2, 1, '2023-10-12', '15:30', 'Disponible'),(3, 1, '2023-10-12', '11:45', 'Disponible'),(4, 1, '2023-10-13', '14:15', 'Disponible'),(5, 1, '2023-10-14', '09:30', 'Disponible'),(6, 1, '2023-10-15', '16:00', 'Disponible'),(7, 2, '2023-10-15', '16:00', 'Disponible'),(8, 2, '2023-10-15', '17:00', 'Disponible'),(9, 2, '2023-10-15', '18:00', 'Disponible'),(10, 2, '2023-10-15', '19:00', 'Disponible');`;
+      let cita = `INSERT INTO CitaMedica (ID_Cita, ID_Doctor, FechaCita, HoraCita, EstadoCita) VALUES (1, 1, '2023-10-16', '10:00', 'Disponible'),(2, 1, '2023-10-17', '15:30', 'Disponible'),(3, 1, '2023-10-18', '11:45', 'Disponible'),(4, 1, '2023-10-19', '14:15', 'Disponible'),(5, 1, '2023-10-20', '09:30', 'Disponible'),(6, 1, '2023-10-21', '16:00', 'Disponible'),(7, 2, '2023-10-22', '16:00', 'Disponible'),(8, 2, '2023-10-23', '17:00', 'Disponible'),(9, 2, '2023-10-24', '18:00', 'Disponible'),(10, 2, '2023-10-25', '19:00', 'Disponible');`;
       this.db.executeSql(cita);
 
       // Ingreso Cita Medica para Pacientes
-      let citapac = `INSERT INTO CitaMedica (ID_Cita, ID_Paciente, ID_Doctor, FechaCita, HoraCita, EstadoCita) VALUES (11, 4, 1, '2023-10-12', '14:00', 'Ocupada'),(12, 4, 2, '2023-10-12', '14:30', 'Ocupada'),(13, 4, 3, '2023-10-12', '10:00', 'Ocupada'),(14, 4, 4, '2023-10-12', '10:00', 'Ocupada');`;
+      let citapac = `INSERT INTO CitaMedica (ID_Cita, ID_Paciente, ID_Doctor, FechaCita, HoraCita, EstadoCita) VALUES (11, 4, 1, '2023-10-16', '14:00', 'Ocupada'),(12, 4, 2, '2023-10-17', '14:30', 'Ocupada'),(13, 4, 3, '2023-10-18', '10:00', 'Ocupada'),(14, 4, 4, '2023-10-19', '10:00', 'Ocupada');`;
       this.db.executeSql(citapac);
 
       // Ingreso Documento Medico
