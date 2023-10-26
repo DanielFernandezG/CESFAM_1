@@ -1,0 +1,19 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Medicación</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-item>
+    <ion-label position="stacked">Fecha de Toma</ion-label>
+    <ion-input type="date" [(ngModel)]="selectedDate"></ion-input>
+  </ion-item>
+  
+  <ion-item>
+    <ion-label position="stacked">Hora de Toma</ion-label>
+    <ion-input type="time" [(ngModel)]="selectedTime"></ion-input>
+  </ion-item>
+  
+  <ion-button expand="full" (click)="scheduleNotification()">Programar Notificación</ion-button>
+</ion-content>
