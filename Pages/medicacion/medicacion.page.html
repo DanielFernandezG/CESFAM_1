@@ -15,5 +15,11 @@
     <ion-input type="time" [(ngModel)]="selectedTime"></ion-input>
   </ion-item>
   
+  <ion-item class="full-width-item">
+    <ion-select placeholder="Medicamento" [(ngModel)]="med">
+      <ion-select-option *ngFor="let med of medicamentos">{{ med.descripcion }}</ion-select-option>
+    </ion-select>
+  </ion-item>
+  
   <ion-button expand="full" (click)="scheduleNotification()">Programar Notificación</ion-button>
 </ion-content>
