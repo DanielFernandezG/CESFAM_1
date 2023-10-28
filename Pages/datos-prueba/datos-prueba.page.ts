@@ -162,6 +162,7 @@ export class DatosPruebaPage implements OnInit {
       FechaInicio DATE,
       FechaFin DATE,
       HoraToma TIMESTAMP,
+      IntervaloToma INTEGER,
       EstadoToma VARCHAR(20),
       FOREIGN KEY (ID_Paciente) REFERENCES Paciente(ID_Paciente),
       FOREIGN KEY (ID_Medicamento) REFERENCES Medicamento(ID_Medicamento)

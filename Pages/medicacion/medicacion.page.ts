@@ -2,6 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { LocalNotifications, ScheduleOptions } from "@capacitor/local-notifications";
 import { SQLite, SQLiteObject } from "@awesome-cordova-plugins/sqlite/ngx";
 import { Router } from "@angular/router";
+
 @Component({
   selector: "app-medicacion",
   templateUrl: "./medicacion.page.html",
@@ -9,15 +10,14 @@ import { Router } from "@angular/router";
 })
 export class MedicacionPage implements OnInit {
   selectedDate: string;
+  selectedEndDate: string; // Agrega esta línea
   med: string;
   selectedTime: string;
+  notificationInterval: number; // Nuevo campo para el intervalo
   db: SQLiteObject;
   medicamentos: medicamento[];
 
-  constructor(
-    private sqlite: SQLite,
-    private router: Router
-    ) {
+  constructor(private sqlite: SQLite, private router: Router) {
     this.createOpenDatabase();
   }
 
@@ -42,43 +42,68 @@ export class MedicacionPage implements OnInit {
   }
 
   async scheduleNotification() {
-    if (!this.selectedDate || !this.selectedTime) {
-      alert("Por favor, seleccione una fecha y una hora.");
+    if (!this.selectedDate || !this.selectedTime || !this.notificationInterval) {
+      alert("Por favor, complete todos los campos.");
       return;
     }
-
-    const scheduledDateTime = new Date(
-      `${this.selectedDate}T${this.selectedTime}`
-    );
+  
+    const scheduledDateTime = new Date(`${this.selectedDate}T${this.selectedTime}`);
     const now = new Date();
     if (scheduledDateTime <= now) {
       alert("La fecha y hora deben ser posteriores a la hora actual.");
       return;
     }
-
+  
     const options: ScheduleOptions = {
-      notifications: [
-        {
-          id: 111,
-          title: "Recordatorio de medicación",
-          body: "Es hora de tomar su medicamento",
-          schedule: { at: scheduledDateTime },
-        },
-      ],
+      notifications: []
     };
-
+  
+    const numberOfNotifications = Math.floor(24 / this.notificationInterval); // Calcula el número de notificaciones en un día
+  
+    for (let i = 0; i < numberOfNotifications; i++) {
+      const currentDateTime = new Date(scheduledDateTime);
+      currentDateTime.setHours(scheduledDateTime.getHours() + i * this.notificationInterval);
+  
+      if (currentDateTime <= now) {
+        // No progresa notificaciones pasadas
+        continue;
+      }
+  
+      options.notifications.push({
+        id: i + 1,
+        title: "Recordatorio de medicación",
+        body: "Es hora de tomar su medicamento",
+        schedule: { at: currentDateTime },
+      });
+    }
+  
+    if (options.notifications.length === 0) {
+      alert("No hay notificaciones futuras programadas.");
+      return;
+    }
+  
     try {
       await LocalNotifications.schedule(options);
-      alert("Notificación programada con éxito.");
-
+      alert("Notificaciones programadas con éxito.");
+  
+      // Formatea la fecha de finalización en el formato deseado (YYYY-MM-DD)
+      const formattedEndDate = this.formatDate(new Date(this.selectedEndDate));
+  
       // Almacena los datos en la tabla de la base de datos
-      this.insertMedicationData(scheduledDateTime);
+      this.insertMedicationData(formattedEndDate);
     } catch (ex) {
-      alert("Error al programar la notificación: " + JSON.stringify(ex));
+      alert("Error al programar las notificaciones: " + JSON.stringify(ex));
     }
   }
+  
+  formatDate(date: Date): string {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  }
 
-  insertMedicationData(scheduledDateTime: Date) {
+  insertMedicationData(formattedEndDate: string) {
     this.obtenerIdMedicamento(this.med).then((idesp: string) => {
       this.db
         .executeSql("select * from usuario where active = 1", [])
@@ -91,17 +116,18 @@ export class MedicacionPage implements OnInit {
               .then((result) => {
                 // Define los datos para insertar en la tabla
                 const data = {
-                  ID_Paciente: result.rows.item(0).ID_Paciente, // ID del paciente (ajusta según la sesión)
-                  ID_Medicamento: idesp, // ID del medicamento (ajusta según elección del paciente)
+                  ID_Paciente: result.rows.item(0).ID_Paciente,
+                  ID_Medicamento: idesp,
                   FechaInicio: this.selectedDate,
-                  FechaFin: this.selectedDate,
+                  FechaFin: formattedEndDate, // Usamos la fecha formateada
                   HoraToma: this.selectedTime,
+                  IntervaloToma: this.notificationInterval,
                   EstadoToma: "Pendiente",
                 };
-
+  
                 // Inserta los datos en la tabla de la base de datos
                 this.db
-                  .executeSql("INSERT INTO RegistroMedicacion (ID_Paciente, ID_Medicamento, FechaInicio, FechaFin, HoraToma, EstadoToma) VALUES (?, ?, ?, ?, ?, ?)",[data.ID_Paciente,data.ID_Medicamento,data.FechaInicio,data.FechaFin,data.HoraToma,data.EstadoToma])
+                  .executeSql("INSERT INTO RegistroMedicacion (ID_Paciente, ID_Medicamento, FechaInicio, FechaFin, HoraToma, IntervaloToma, EstadoToma) VALUES (?, ?, ?, ?, ?, ?, ?)",[data.ID_Paciente,data.ID_Medicamento,data.FechaInicio,data.FechaFin,data.HoraToma,data.IntervaloToma,data.EstadoToma])
                   .then(() => {
                     console.log("Datos de medicación insertados en la base de datos.");
                   })
@@ -151,7 +177,6 @@ export class MedicacionPage implements OnInit {
         });
     });
   }
-  
 }
 
 class medicamento {

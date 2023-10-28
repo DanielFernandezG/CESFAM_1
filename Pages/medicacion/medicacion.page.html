@@ -6,20 +6,30 @@
 
 <ion-content [fullscreen]="true">
   <ion-item>
-    <ion-label position="stacked">Fecha de Toma</ion-label>
+    <ion-label position="stacked">Fecha de Inicio</ion-label>
     <ion-input type="date" [(ngModel)]="selectedDate"></ion-input>
   </ion-item>
-  
+
+  <ion-item>
+    <ion-label position="stacked">Fecha de Fin</ion-label>
+    <ion-input type="date" [(ngModel)]="selectedEndDate"></ion-input>
+  </ion-item>
+
   <ion-item>
     <ion-label position="stacked">Hora de Toma</ion-label>
     <ion-input type="time" [(ngModel)]="selectedTime"></ion-input>
   </ion-item>
-  
+
   <ion-item class="full-width-item">
     <ion-select placeholder="Medicamento" [(ngModel)]="med">
       <ion-select-option *ngFor="let med of medicamentos">{{ med.descripcion }}</ion-select-option>
     </ion-select>
   </ion-item>
-  
-  <ion-button expand="full" (click)="scheduleNotification()">Programar Notificación</ion-button>
+
+  <ion-item>
+    <ion-label position="stacked">Intervalo de Notificación (horas)</ion-label>
+    <ion-input type="number" [(ngModel)]="notificationInterval"></ion-input>
+  </ion-item>
+
+  <ion-button expand="full" (click)="scheduleNotification()">Programar Notificaciones</ion-button>
 </ion-content>
