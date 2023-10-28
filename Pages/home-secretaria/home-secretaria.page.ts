@@ -1,7 +1,9 @@
-import { Component, ViewChild } from "@angular/core";
+import { Component, ViewChild, ElementRef } from "@angular/core";
 import { Router } from "@angular/router";
 import { SQLite, SQLiteObject } from "@awesome-cordova-plugins/sqlite/ngx";
 import { AlertController } from "@ionic/angular";
+import * as XLSX from 'xlsx';
+import jsPDF from 'jspdf';
 
 @Component({
   selector: "app-home-secretaria",
@@ -9,6 +11,7 @@ import { AlertController } from "@ionic/angular";
   styleUrls: ["./home-secretaria.page.scss"],
 })
 export class HomeSecretariaPage {
+  @ViewChild('content') content!: ElementRef;
   db: SQLiteObject;
   citaEditada: any = null;
   especialidad: string;
@@ -396,6 +399,33 @@ export class HomeSecretariaPage {
 
   cerrarModal() {
     this.modalVisible = false;
+  }
+
+  name = 'CitasMedicas.xlsx';
+  exportToExcel(): void {
+    let element = document.getElementById('season-tble');
+    const worksheet: XLSX.WorkSheet = XLSX.utils.table_to_sheet(element);
+
+    const book: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(book, worksheet, 'Sheet1');
+
+    XLSX.writeFile(book, this.name);
+    alert('Excel Exportado');
+  }
+
+  generarPDF() {
+    const pdf = new jsPDF();
+    const content = this.content.nativeElement;
+  
+    pdf.html(content, {
+      callback: (pdf) => {
+        const blob = pdf.output('blob');
+        const url = URL.createObjectURL(blob);
+  
+        // Abrir la URL en el navegador predeterminado del dispositivo
+        window.open(url, '_system');
+      }
+    });
   }
 }
 
