@@ -163,27 +163,12 @@ export class DatosPruebaPage implements OnInit {
       FechaFin DATE,
       HoraToma TIMESTAMP,
       IntervaloToma INTEGER,
-      EstadoToma VARCHAR(20),
       FOREIGN KEY (ID_Paciente) REFERENCES Paciente(ID_Paciente),
       FOREIGN KEY (ID_Medicamento) REFERENCES Medicamento(ID_Medicamento)
     );`;
       this.db
         .executeSql(reg)
         .then((result) => console.log("table RegistroMedicacion created"))
-        .catch((e) => console.log(JSON.stringify(e)));
-
-      let noti = `
-    CREATE TABLE IF NOT EXISTS Notificacion (
-      ID_Notificacion INTEGER PRIMARY KEY,
-      ID_Paciente INTEGER,
-      MensajeNotificacion VARCHAR(255),
-      FechaNotificacion DATE,
-      HoraNotificacion TIME,
-      FOREIGN KEY (ID_Paciente) REFERENCES Paciente(ID_Paciente)
-    );`;
-      this.db
-        .executeSql(noti)
-        .then((result) => console.log("table Notificacion created"))
         .catch((e) => console.log(JSON.stringify(e)));
 
       alert("Tablas Creadas");
@@ -206,11 +191,6 @@ export class DatosPruebaPage implements OnInit {
     this.db
       .executeSql("drop table IF EXISTS RegistroMedicacion", [])
       .then((result) => console.log("Tabla RegistroMedicacion Borrada"))
-      .catch((e) => alert(JSON.stringify(e)));
-
-    this.db
-      .executeSql("drop table IF EXISTS Notificacion", [])
-      .then((result) => console.log("Tabla Notificacion Borrada"))
       .catch((e) => alert(JSON.stringify(e)));
 
     this.db
@@ -283,12 +263,8 @@ export class DatosPruebaPage implements OnInit {
       this.db.executeSql(med);
 
       // Ingreso Registro Medicacion
-      let regmed = `INSERT INTO RegistroMedicacion (ID_RegistroMedicacion, ID_Paciente, ID_Medicamento, FechaInicio, FechaFin, HoraToma, EstadoToma) VALUES (1, 1, 1, '2023-10-01', '2023-10-10', '2023-10-01 08:00:00', 'Tomado'),(2, 2, 2, '2023-10-02', '2023-10-12', '2023-10-02 14:30:00', 'Pendiente'),(3, 3, 3, '2023-10-03', '2023-10-13', '2023-10-03 10:45:00', 'Tomado'),(4, 4, 4, '2023-10-04', '2023-10-14', '2023-10-04 19:20:00', 'Pendiente');`;
+      let regmed = `INSERT INTO RegistroMedicacion (ID_RegistroMedicacion, ID_Paciente, ID_Medicamento, FechaInicio, FechaFin, HoraToma, IntervaloToma) VALUES (1, 1, 1, '2023-10-01', '2023-10-10', '08:00:00', 1),(2, 2, 2, '2023-10-02', '2023-10-12', '14:30:00', 1),(3, 3, 3, '2023-10-03', '2023-10-13', '10:45:00', 1),(4, 4, 4, '2023-10-04', '2023-10-14', '19:20:00', 1);`;
       this.db.executeSql(regmed);
-
-      // Ingreso Notificacion
-      let not = `INSERT INTO Notificacion (ID_Notificacion, ID_Paciente, MensajeNotificacion, FechaNotificacion, HoraNotificacion) VALUES (1, 1, 'Tome Medicamento', '07/10/2023','10:00:00'),(2, 2, 'Tome Medicamento', '07/10/2023','10:00:00'),(3, 3, 'Tome Medicamento', '07/10/2023','10:00:00'),(4, 4, 'Tome Medicamento', '07/10/2023','10:00:00');`;
-      this.db.executeSql(not);
 
       alert("Datos Insertados");
     } catch {
