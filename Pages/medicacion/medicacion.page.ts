@@ -216,6 +216,11 @@ export class MedicacionPage implements OnInit {
                       "Datos de medicación insertados en la base de datos."
                     );
                     this.mostrarInfo();
+                    this.selectedDate = "";
+                    this.selectedEndDate = "";
+                    this.selectedTime = "";
+                    this.med = "";
+                    this.notificationInterval = 0;
                   })
                   .catch((error) => {
                     console.error(
