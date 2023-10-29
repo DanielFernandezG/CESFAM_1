@@ -6,30 +6,61 @@
 
 <ion-content [fullscreen]="true">
   <ion-item>
-    <ion-label position="stacked">Fecha de Inicio</ion-label>
-    <ion-input type="date" [(ngModel)]="selectedDate"></ion-input>
+    <div #content class="table-container">
+      <table id="season-table">
+        <thead>
+          <tr>
+            <th>Medicamento</th>
+            <th>Fecha de Inicio</th>
+            <th>Hora de Inicio</th>
+            <th>Fecha de Termino</th>
+            <th>Intervalo de Horas</th>
+            <th>Eliminar</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let med of medicamentoData">
+            <td>{{ med.descripcion }}</td>
+            <td>{{ med.fechainicio }}</td>
+            <td>{{ med.hora }}</td>
+            <td>{{ med.fechatermino }}</td>
+            <td>{{ med.intervalo }}</td>
+            <td>
+              <ion-button color="danger" (click)="eliminarMed(med.id)"></ion-button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </ion-item>
+  <ion-button (click)="toggleContent()">Programar Notificacion</ion-button>
+  <div *ngIf="showContent">
+    <ion-item>
+      <ion-label position="stacked">Fecha de Inicio</ion-label>
+      <ion-input type="date" [(ngModel)]="selectedDate"></ion-input>
+    </ion-item>
 
-  <ion-item>
-    <ion-label position="stacked">Fecha de Fin</ion-label>
-    <ion-input type="date" [(ngModel)]="selectedEndDate"></ion-input>
-  </ion-item>
+    <ion-item>
+      <ion-label position="stacked">Fecha de Fin</ion-label>
+      <ion-input type="date" [(ngModel)]="selectedEndDate"></ion-input>
+    </ion-item>
 
-  <ion-item>
-    <ion-label position="stacked">Hora de Toma</ion-label>
-    <ion-input type="time" [(ngModel)]="selectedTime"></ion-input>
-  </ion-item>
+    <ion-item>
+      <ion-label position="stacked">Hora de Toma</ion-label>
+      <ion-input type="time" [(ngModel)]="selectedTime"></ion-input>
+    </ion-item>
 
-  <ion-item class="full-width-item">
-    <ion-select placeholder="Medicamento" [(ngModel)]="med">
-      <ion-select-option *ngFor="let med of medicamentos">{{ med.descripcion }}</ion-select-option>
-    </ion-select>
-  </ion-item>
+    <ion-item class="full-width-item">
+      <ion-select placeholder="Medicamento" [(ngModel)]="med">
+        <ion-select-option *ngFor="let med of medicamentos">{{ med.descripcion }}</ion-select-option>
+      </ion-select>
+    </ion-item>
 
-  <ion-item>
-    <ion-label position="stacked">Intervalo de Notificación (horas)</ion-label>
-    <ion-input type="number" [(ngModel)]="notificationInterval"></ion-input>
-  </ion-item>
+    <ion-item>
+      <ion-label position="stacked">Intervalo de Notificación (horas)</ion-label>
+      <ion-input type="number" [(ngModel)]="notificationInterval"></ion-input>
+    </ion-item>
 
-  <ion-button expand="full" (click)="scheduleNotification()">Programar Notificaciones</ion-button>
+    <ion-button expand="full" (click)="scheduleNotification()">Ingresar Notificacion</ion-button>
+  </div>
 </ion-content>
