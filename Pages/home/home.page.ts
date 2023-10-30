@@ -30,6 +30,10 @@ export class HomePage implements OnInit {
     this.router.navigateByUrl("/medicacion");
   }
 
+  uploadPdf() {
+    this.router.navigateByUrl("/pdf");
+  }
+
   createOpenDatabase() {
     try {
       this.sqlite
