@@ -1,0 +1,22 @@
+<table>
+  <thead>
+    <tr>
+      <th>ID Documento</th>
+      <th>ID Paciente</th>
+      <th>Tipo Documento</th>
+      <th>Nombre Documento</th>
+      <th>Contenido Documento</th>
+      <th>Fecha Creación</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let documento of documentosData">
+      <td>{{ documento.ID_Documento }}</td>
+      <td>{{ documento.ID_Paciente }}</td>
+      <td>{{ documento.TipoDocumento }}</td>
+      <td>{{ documento.NombreDocumento }}</td>
+      <td>{{ documento.ContenidoDocumento }}</td>
+      <td>{{ documento.FechaCreacion }}</td>
+    </tr>
+  </tbody>
+</table>

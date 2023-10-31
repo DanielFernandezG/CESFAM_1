@@ -34,6 +34,10 @@ export class HomePage implements OnInit {
     this.router.navigateByUrl("/pdf");
   }
 
+  verPdf() {
+    this.router.navigateByUrl("/ver");
+  }
+
   createOpenDatabase() {
     try {
       this.sqlite

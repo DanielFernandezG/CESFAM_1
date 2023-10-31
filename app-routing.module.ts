@@ -51,10 +51,16 @@ const routes: Routes = [
   {
     path: 'medicacion',
     loadChildren: () => import('./Pages/medicacion/medicacion.module').then( m => m.MedicacionPageModule)
-  },  {
+  },
+  {
     path: 'pdf',
     loadChildren: () => import('./Pages/pdf/pdf.module').then( m => m.PdfPageModule)
+  },  {
+    path: 'ver',
+    loadChildren: () => import('./Pages/ver/ver.module').then( m => m.VerPageModule)
   },
+
+
 
 
 

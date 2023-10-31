@@ -128,15 +128,16 @@ export class DatosPruebaPage implements OnInit {
         .catch((e) => console.log(JSON.stringify(e)));
 
       let docs = `
-    CREATE TABLE IF NOT EXISTS DocumentoMedico (
-      ID_Documento INTEGER PRIMARY KEY,
-      ID_Paciente INTEGER,
-      TipoDocumento VARCHAR(50),
-      NombreDocumento VARCHAR(100),
-      ContenidoDocumento BLOB,
-      FechaCreacion DATE,
-      FOREIGN KEY (ID_Paciente) REFERENCES Paciente(ID_Paciente)
-    );`;
+      CREATE TABLE IF NOT EXISTS DocumentoMedico (
+        ID_Documento INTEGER PRIMARY KEY,
+        ID_Paciente INTEGER,
+        TipoDocumento VARCHAR(50),
+        NombreDocumento VARCHAR(100),
+        ContenidoDocumento TEXT,
+        FechaCreacion DATE,
+        FOREIGN KEY (ID_Paciente) REFERENCES Paciente(ID_Paciente)
+      );
+      `;
       this.db
         .executeSql(docs)
         .then((result) => console.log("table DocumentoMedico created"))

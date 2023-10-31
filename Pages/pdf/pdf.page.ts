@@ -8,7 +8,7 @@ import { SQLite, SQLiteObject } from '@awesome-cordova-plugins/sqlite/ngx';
 })
 export class PdfPage {
   db: SQLiteObject;
-  imageUrl: string | ArrayBuffer | null;
+  pdfBase64: string | null;
 
   constructor(private sqlite: SQLite) {
     this.createOpenDatabase();
@@ -32,46 +32,38 @@ export class PdfPage {
     if (file) {
       const reader = new FileReader();
       reader.onload = (e) => {
-        this.imageUrl = e?.target?.result || null;
+        this.pdfBase64 = e?.target?.result as string;
       };
-      reader.readAsArrayBuffer(file);
+      reader.readAsDataURL(file);
     }
   }
   
-  
-
-
   uploadDocument() {
-    if (this.imageUrl) {
-      if (typeof this.imageUrl === 'string') {
-        console.log('Debes seleccionar un archivo válido.');
-        return;
-      }
-      const fileContent = this.imageUrl as ArrayBuffer;
-      this.saveDocumentToDatabase(fileContent);
-      this.imageUrl = null; // Establece imageUrl nuevamente en nulo
+    if (this.pdfBase64) {
+      this.saveDocumentToDatabase(this.pdfBase64);
+      this.pdfBase64 = null; // Establece pdfBase64 nuevamente en nulo
     } else {
       console.log('Ningún archivo seleccionado para subir.');
     }
   }
 
-  saveDocumentToDatabase(documentContent: ArrayBuffer) {
+  saveDocumentToDatabase(documentContent: string) {
     // Primero, obtén el ID del paciente activo
     this.db
       .executeSql("SELECT ID_Paciente FROM paciente WHERE run = (SELECT run FROM usuario WHERE active = 1)", [])
       .then((result) => {
         if (result.rows.length > 0) {
           const pacienteID = result.rows.item(0).ID_Paciente;
-  
+
           // Define los datos del documento
           const data = {
             ID_Paciente: pacienteID,
             TipoDocumento: 'PDF',
             NombreDocumento: 'Documento.pdf',
-            ContenidoDocumento: new Blob([new Uint8Array(documentContent)]),
+            ContenidoDocumento: documentContent, // Guarda el PDF en formato Base64 como una cadena
             FechaCreacion: new Date(),
           };
-  
+
           // Inserta el documento en la tabla DocumentoMedico
           this.db
             .executeSql(
@@ -92,5 +84,4 @@ export class PdfPage {
         console.error('Error al obtener el ID del paciente activo:', error);
       });
   }
-  
 }
