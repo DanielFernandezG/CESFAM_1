@@ -72,6 +72,7 @@ export class PdfPage {
             )
             .then(() => {
               console.log('Documento guardado en la base de datos.');
+              alert("Documento Medico Subido");
             })
             .catch((error) => {
               console.error('Error al insertar el documento en la base de datos:', error);
