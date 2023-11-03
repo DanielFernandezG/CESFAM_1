@@ -1,22 +1,16 @@
-<table>
-  <thead>
-    <tr>
-      <th>ID Documento</th>
-      <th>ID Paciente</th>
-      <th>Tipo Documento</th>
-      <th>Nombre Documento</th>
-      <th>Contenido Documento</th>
-      <th>Fecha Creación</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let documento of documentosData">
-      <td>{{ documento.ID_Documento }}</td>
-      <td>{{ documento.ID_Paciente }}</td>
-      <td>{{ documento.TipoDocumento }}</td>
-      <td>{{ documento.NombreDocumento }}</td>
-      <td>{{ documento.ContenidoDocumento }}</td>
-      <td>{{ documento.FechaCreacion }}</td>
-    </tr>
-  </tbody>
-</table>
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      Ver PDF
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-button (click)="fetchAndDisplayDocument()">Mostrar PDF</ion-button>
+
+  <!-- Utilizamos *ngIf para asegurarnos de que pdfBlobUrl esté definido antes de mostrar el componente -->
+  <div *ngIf="pdfBlobUrl">
+    <iframe [src]="pdfBlobUrl" width="100%" height="500"></iframe>
+  </div>
+</ion-content>

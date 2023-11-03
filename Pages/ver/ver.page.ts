@@ -1,20 +1,19 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { SQLite, SQLiteObject } from '@awesome-cordova-plugins/sqlite/ngx';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-ver',
   templateUrl: './ver.page.html',
   styleUrls: ['./ver.page.scss'],
 })
-export class VerPage implements OnInit {
+export class VerPage {
   db: SQLiteObject;
-  documentosData: any[] = [];
+  pdfBase64: string | null;
+  pdfBlobUrl: string | null; // Modificamos el tipo de pdfBlobUrl
 
-  constructor(private sqlite: SQLite) {}
-
-  ngOnInit() {
+  constructor(private sqlite: SQLite, private sanitizer: DomSanitizer) {
     this.createOpenDatabase();
-    this.selectDocumentos();
   }
 
   createOpenDatabase() {
@@ -30,26 +29,26 @@ export class VerPage implements OnInit {
       .catch((e) => console.error('Error al abrir la base de datos:', e));
   }
 
-  selectDocumentos() {
-    this.documentosData = [];
+  fetchAndDisplayDocument() {
+    // Supongamos que tienes una forma de obtener el ID del documento que deseas ver
+    const documentoID = 1; // Reemplaza esto con el ID correcto
 
-    this.db.executeSql('SELECT * FROM DocumentoMedico', []).then((result) => {
-      if (result.rows.length > 0) {
-        for (let i = 0; i < result.rows.length; i++) {
-          this.documentosData.push({
-            ID_Documento: result.rows.item(i).ID_Documento,
-            ID_Paciente: result.rows.item(i).ID_Paciente,
-            TipoDocumento: result.rows.item(i).TipoDocumento,
-            NombreDocumento: result.rows.item(i).NombreDocumento,
-            ContenidoDocumento: result.rows.item(i).ContenidoDocumento,
-            FechaCreacion: result.rows.item(i).FechaCreacion,
-          });
+    // Realiza una consulta para obtener el documento en Base64
+    this.db
+      .executeSql('SELECT ContenidoDocumento FROM DocumentoMedico WHERE ID_Documento = ?', [documentoID])
+      .then((result) => {
+        if (result.rows.length > 0) {
+          const documentBase64 = result.rows.item(0).ContenidoDocumento;
+          this.pdfBase64 = documentBase64;
+
+          // Convierte el Base64 a una URL segura para mostrar el PDF
+          this.pdfBlobUrl = this.sanitizer.bypassSecurityTrustResourceUrl('data:application/pdf;base64,' + documentBase64) as string; // Conversión explícita
+        } else {
+          console.error('No se encontró el documento en la base de datos.');
         }
-      } else {
-        console.error('No se encontraron documentos en la base de datos.');
-      }
-    }).catch((error) => {
-      console.error('Error al recuperar documentos de la base de datos:', error);
-    });
+      })
+      .catch((error) => {
+        console.error('Error al obtener el documento desde la base de datos:', error);
+      });
   }
 }
