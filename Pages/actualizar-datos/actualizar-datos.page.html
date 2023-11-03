@@ -9,18 +9,25 @@
 
 <ion-content [fullscreen]="true">
     <div style="border-bottom: solid 1px lightgray; margin-bottom: 20px;"></div>
-      <ion-input placeholder="Nombre" [(ngModel)]="nombre" [value]="nombre">Nombres</ion-input>
-      <ion-input placeholder="Apellido" [(ngModel)]="apellido" [value]="apellido">Apellidos</ion-input>
-      <ion-input placeholder="Direccion" [(ngModel)]="direccion" [value]="direccion">Direccion</ion-input>
-      <ion-input placeholder="Correo" [(ngModel)]="correo" [value]="correo">Correo</ion-input>
-      <ion-input placeholder="Telefono" [(ngModel)]="telefono" [value]="telefono">Telefono</ion-input>
+      <ion-input placeholder="Cambia tu Nombre" [(ngModel)]="nombre" [value]="nombre">Nombres</ion-input>
+      <ion-input placeholder="Cambia tu Apellido" [(ngModel)]="apellido" [value]="apellido">Apellidos</ion-input>
+      <ion-input placeholder="Cambia tu Direccion" [(ngModel)]="direccion" [value]="direccion">Direccion</ion-input>
+      <ion-input placeholder="Cambia tu Correo" [(ngModel)]="correo" [value]="correo">Correo</ion-input>
+      <ion-input placeholder="Cambia tu Telefono" [(ngModel)]="telefono" [value]="telefono">Telefono</ion-input>
     <div style="margin: 20px;">
       <ion-button size="small" (click)="updateData()" style="margin-bottom: 20px;">Actualizar Datos</ion-button>
     </div>
 </ion-content>
 
 <ion-footer class="ion-no-border">
-  <ion-toolbar color="primary">
-    <ion-title>Centro Medico Cesfam</ion-title>
-  </ion-toolbar>
+  <div class="red-section">
+    <ion-toolbar color="danger">
+      <ion-title>Tu Salud</ion-title>
+    </ion-toolbar>
+  </div>
+  <div class="blue-section">
+    <ion-toolbar color="secondary">
+      <ion-title>Nuestra Misión</ion-title>
+    </ion-toolbar>
+  </div>
 </ion-footer>
