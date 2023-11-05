@@ -2,8 +2,7 @@ import { Component, ViewChild, ElementRef } from "@angular/core";
 import { Router } from "@angular/router";
 import { SQLite, SQLiteObject } from "@awesome-cordova-plugins/sqlite/ngx";
 import { AlertController } from "@ionic/angular";
-import * as XLSX from 'xlsx';
-import jsPDF from 'jspdf';
+import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
 
 @Component({
   selector: "app-home-secretaria",
@@ -401,31 +400,34 @@ export class HomeSecretariaPage {
     this.modalVisible = false;
   }
 
-  name = 'CitasMedicas.xlsx';
-  exportToExcel(): void {
-    let element = document.getElementById('season-tble');
-    const worksheet: XLSX.WorkSheet = XLSX.utils.table_to_sheet(element);
+  async saveTableAsCSV(): Promise<void> {
+    const table = document.getElementById('season-tble')!;
+    const rows = table.querySelectorAll('tr');
 
-    const book: XLSX.WorkBook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(book, worksheet, 'Sheet1');
+    const csvRows: string[] = [];
 
-    XLSX.writeFile(book, this.name);
-    alert('Excel Exportado');
-  }
-
-  generarPDF() {
-    const pdf = new jsPDF();
-    const content = this.content.nativeElement;
-  
-    pdf.html(content, {
-      callback: (pdf) => {
-        const blob = pdf.output('blob');
-        const url = URL.createObjectURL(blob);
-  
-        // Abrir la URL en el navegador predeterminado del dispositivo
-        window.open(url, '_system');
-      }
+    rows.forEach((row) => {
+      const csvRow: string[] = [];
+      const cols = row.querySelectorAll('td, th');
+      cols.forEach((col) => {
+        csvRow.push(col.textContent || '');
+      });
+      csvRows.push(csvRow.join(','));
     });
+
+    const csvString = csvRows.join('\n');
+
+    try {
+      await Filesystem.writeFile({
+        path: 'Citas.csv',
+        data: csvString,
+        directory: Directory.Documents,
+        encoding: Encoding.UTF8,
+      });
+      alert('Tabla guardada como Citas.csv');
+    } catch (error) {
+      console.error('Error al guardar la tabla como CSV', error);
+    }
   }
 }
 
