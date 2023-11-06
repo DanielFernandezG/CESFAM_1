@@ -28,6 +28,13 @@
       </tbody>
     </table>
   </div>
+  <ion-button (click)="toggleContent()">Agregar Documento</ion-button>
+  <div *ngIf="showContent">
+    <ion-item>
+      <input type="file" (change)="onImageSelected($event)" accept="image/*" />
+    </ion-item>
+    <ion-button [disabled]="!imageBase64" expand="full" (click)="uploadImage()">Subir Documento</ion-button>
+  </div>
   <ion-modal [isOpen]="isModalOpen">
     <ng-template>
       <ion-header>
