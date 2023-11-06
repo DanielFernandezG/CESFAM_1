@@ -10,6 +10,7 @@ import { Router } from "@angular/router";
 })
 export class VerPage {
   db: SQLiteObject;
+  id: number;
   documents: SafeResourceUrl[] = []; // Arreglo para almacenar los documentos
   documentVisible: boolean[] = []; // Arreglo para rastrear la visibilidad de los documentos
   nombresDocumentos: string[] = []; // Arreglo para almacenar los nombres de los documentos
@@ -91,15 +92,16 @@ export class VerPage {
       .catch((e) => alert(JSON.stringify(e)));
   }
 
-  // toggleDocumento(index: number) {
-  //   // Cambia el estado de visibilidad del documento en el índice especificado.
-  //   this.documentVisible[index] = !this.documentVisible[index];
-  // }
-
   isModalOpen = false;
 
   setOpen(isOpen: boolean, index: number) {
     this.documentVisible[index] = !this.documentVisible[index];
     this.isModalOpen = isOpen;
+    this.id=index
+  }
+
+  setClose(isOpen: boolean) {
+    this.isModalOpen = isOpen;
+    this.documentVisible[this.id] = !this.documentVisible[this.id];
   }
 }
