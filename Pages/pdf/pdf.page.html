@@ -1,12 +1,12 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>
-      Subir Documento PDF
+      Subir Imagen
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
-  <input type="file" (change)="onFileSelected($event)" accept=".pdf" />
-  <button [disabled]="!pdfBase64" (click)="uploadDocument()">Subir Documento</button>
+  <input type="file" (change)="onImageSelected($event)" accept="image/*" />
+  <button [disabled]="!imageBase64" (click)="uploadImage()">Subir Imagen</button>
 </ion-content>

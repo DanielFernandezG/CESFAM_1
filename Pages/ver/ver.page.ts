@@ -9,8 +9,10 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 })
 export class VerPage {
   db: SQLiteObject;
-  pdfBase64: string | null;
-  pdfBlobUrl: string | null; // Modificamos el tipo de pdfBlobUrl
+  documents: SafeResourceUrl[] = []; // Arreglo para almacenar los documentos
+  documentVisible: boolean[] = []; // Arreglo para rastrear la visibilidad de los documentos
+  nombresDocumentos: string[] = []; // Arreglo para almacenar los nombres de los documentos
+  fechasCreacion: string[] = []; // Arreglo para almacenar las fechas de creación
 
   constructor(private sqlite: SQLite, private sanitizer: DomSanitizer) {
     this.createOpenDatabase();
@@ -25,30 +27,36 @@ export class VerPage {
       .then((db: SQLiteObject) => {
         this.db = db;
         console.log('Conectado a la base de datos');
+        this.fetchAndDisplayDocuments(); // Llama a la función para cargar los documentos
       })
       .catch((e) => console.error('Error al abrir la base de datos:', e));
   }
 
-  fetchAndDisplayDocument() {
-    // Supongamos que tienes una forma de obtener el ID del documento que deseas ver
-    const documentoID = 1; // Reemplaza esto con el ID correcto
+  fetchAndDisplayDocuments() {
+    this.db.executeSql('SELECT ContenidoDocumento, NombreDocumento, FechaCreacion FROM DocumentoMedico', []).then((result) => {
+      const documents = [];
+      const nombresDocumentos = [];
+      const fechasCreacion = [];
 
-    // Realiza una consulta para obtener el documento en Base64
-    this.db
-      .executeSql('SELECT ContenidoDocumento FROM DocumentoMedico WHERE ID_Documento = ?', [documentoID])
-      .then((result) => {
-        if (result.rows.length > 0) {
-          const documentBase64 = result.rows.item(0).ContenidoDocumento;
-          this.pdfBase64 = documentBase64;
+      for (let i = 0; i < result.rows.length; i++) {
+        const documentBase64 = result.rows.item(i).ContenidoDocumento;
+        documents.push(this.sanitizer.bypassSecurityTrustResourceUrl(documentBase64) as string);
+        nombresDocumentos.push(result.rows.item(i).NombreDocumento);
+        fechasCreacion.push(result.rows.item(i).FechaCreacion);
+      }
 
-          // Convierte el Base64 a una URL segura para mostrar el PDF
-          this.pdfBlobUrl = this.sanitizer.bypassSecurityTrustResourceUrl('data:application/pdf;base64,' + documentBase64) as string; // Conversión explícita
-        } else {
-          console.error('No se encontró el documento en la base de datos.');
-        }
-      })
-      .catch((error) => {
-        console.error('Error al obtener el documento desde la base de datos:', error);
-      });
+      // Inicializa las matrices de visibilidad y almacena la lista de documentos junto con los nombres y fechas.
+      this.documentVisible = new Array(documents.length).fill(false);
+      this.documents = documents;
+      this.nombresDocumentos = nombresDocumentos;
+      this.fechasCreacion = fechasCreacion;
+    }).catch((error) => {
+      console.error('Error al obtener los documentos desde la base de datos:', error);
+    });
+  }
+
+  toggleDocumento(index: number) {
+    // Cambia el estado de visibilidad del documento en el índice especificado.
+    this.documentVisible[index] = !this.documentVisible[index];
   }
 }

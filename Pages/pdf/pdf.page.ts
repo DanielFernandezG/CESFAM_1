@@ -2,13 +2,13 @@ import { Component } from '@angular/core';
 import { SQLite, SQLiteObject } from '@awesome-cordova-plugins/sqlite/ngx';
 
 @Component({
-  selector: 'app-pdf',
+  selector: 'app-pdf', 
   templateUrl: './pdf.page.html',
   styleUrls: ['./pdf.page.scss'],
 })
 export class PdfPage {
   db: SQLiteObject;
-  pdfBase64: string | null;
+  imageBase64: string | null; 
 
   constructor(private sqlite: SQLite) {
     this.createOpenDatabase();
@@ -27,55 +27,58 @@ export class PdfPage {
       .catch((e) => console.error('Error al abrir la base de datos:', e));
   }
 
-  onFileSelected(event: any) {
+  onImageSelected(event: any) { 
     const file = event?.target?.files[0];
     if (file) {
       const reader = new FileReader();
       reader.onload = (e) => {
-        this.pdfBase64 = e?.target?.result as string;
+        this.imageBase64 = e?.target?.result as string;
       };
       reader.readAsDataURL(file);
     }
   }
-  
-  uploadDocument() {
-    if (this.pdfBase64) {
-      this.saveDocumentToDatabase(this.pdfBase64);
-      this.pdfBase64 = null; // Establece pdfBase64 nuevamente en nulo
+
+  uploadImage() { 
+    if (this.imageBase64) {
+      this.saveImageToDatabase(this.imageBase64);
+      this.imageBase64 = null;
     } else {
-      console.log('Ningún archivo seleccionado para subir.');
+      console.log('Ninguna imagen seleccionada para subir.');
     }
   }
 
-  saveDocumentToDatabase(documentContent: string) {
+  saveImageToDatabase(imageContent: string) {
     // Primero, obtén el ID del paciente activo
     this.db
       .executeSql("SELECT ID_Paciente FROM paciente WHERE run = (SELECT run FROM usuario WHERE active = 1)", [])
       .then((result) => {
         if (result.rows.length > 0) {
           const pacienteID = result.rows.item(0).ID_Paciente;
-
-          // Define los datos del documento
+  
+          // Define los datos de la imagen
+          const currentDate = new Date();
+          const formattedDate = currentDate.toISOString().slice(0, 10); // Formato "YYYY-MM-DD"
+          
           const data = {
             ID_Paciente: pacienteID,
-            TipoDocumento: 'PDF',
-            NombreDocumento: 'Documento.pdf',
-            ContenidoDocumento: documentContent, // Guarda el PDF en formato Base64 como una cadena
-            FechaCreacion: new Date(),
+            TipoDocumento: 'Imagen',
+            NombreDocumento: 'Imagen.png', // Cambia el nombre del archivo de imagen
+            ContenidoDocumento: imageContent, // Guarda la imagen en formato Base64 como una cadena
+            FechaCreacion: formattedDate, // Fecha en formato "YYYY-MM-DD"
           };
-
-          // Inserta el documento en la tabla DocumentoMedico
+  
+          // Inserta la imagen en la tabla DocumentoMedico
           this.db
             .executeSql(
               'INSERT INTO DocumentoMedico (ID_Paciente, TipoDocumento, NombreDocumento, ContenidoDocumento, FechaCreacion) VALUES (?, ?, ?, ?, ?)',
               [data.ID_Paciente, data.TipoDocumento, data.NombreDocumento, data.ContenidoDocumento, data.FechaCreacion]
             )
             .then(() => {
-              console.log('Documento guardado en la base de datos.');
-              alert("Documento Medico Subido");
+              console.log('Imagen guardada en la base de datos.');
+              alert("Imagen Médica Subida");
             })
             .catch((error) => {
-              console.error('Error al insertar el documento en la base de datos:', error);
+              console.error('Error al insertar la imagen en la base de datos:', error);
             });
         } else {
           console.error('No se encontró un paciente activo en la base de datos.');
