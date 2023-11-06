@@ -1,9 +1,18 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button> <!-- Botón de retroceso -->
+    </ion-buttons>
+    <ion-title>Medicos Cesfam</ion-title>
+  </ion-toolbar>
+</ion-header>
+
 <ion-content>
   <div class="table-container">
     <table>
       <thead>
         <tr>
-          <th>Nombre del Documento</th>
+          <th>Documento</th>
           <th>Fecha de Creación</th>
           <th>Acción</th>
         </tr>
@@ -13,15 +22,40 @@
           <td>{{ nombresDocumentos[i] }}</td>
           <td>{{ fechasCreacion[i] }}</td>
           <td>
-            <button (click)="toggleDocumento(i)">Ver Documento</button>
+            <ion-button expand="block" (click)="setOpen(true,i)">Ver Documento</ion-button>
           </td>
         </tr>
       </tbody>
     </table>
   </div>
-  <ion-list>
-    <ion-item *ngFor="let document of documents; let i = index">
-      <iframe [src]="document" width="100%" height="1000" [hidden]="!documentVisible[i]"></iframe>
-    </ion-item>
-  </ion-list>
+  <ion-modal [isOpen]="isModalOpen">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>Ficha Medico</ion-title>
+          <ion-buttons slot="end">
+            <ion-button (click)="setOpen(false,0)">Cerrar</ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="ion-padding">
+        <ion-item *ngFor="let document of documents; let i = index">
+          <iframe [src]="document" width="100%" height="1000" [hidden]="!documentVisible[i]"></iframe>
+        </ion-item>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
 </ion-content>
+
+<ion-footer class="ion-no-border">
+  <div class="red-section">
+    <ion-toolbar color="danger">
+      <ion-title>Tu Salud</ion-title>
+    </ion-toolbar>
+  </div>
+  <div class="blue-section">
+    <ion-toolbar color="secondary">
+      <ion-title>Nuestra Misión</ion-title>
+    </ion-toolbar>
+  </div>
+</ion-footer>
