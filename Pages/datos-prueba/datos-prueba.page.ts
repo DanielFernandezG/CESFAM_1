@@ -257,15 +257,9 @@ export class DatosPruebaPage implements OnInit {
       let citapac = `INSERT INTO CitaMedica (ID_Cita, ID_Paciente, ID_Doctor, FechaCita, HoraCita, EstadoCita) VALUES (11, 4, 1, '2023-10-16', '14:00', 'Ocupada'),(12, 4, 2, '2023-10-17', '14:30', 'Ocupada'),(13, 4, 3, '2023-10-18', '10:00', 'Ocupada'),(14, 4, 4, '2023-10-19', '10:00', 'Ocupada');`;
       this.db.executeSql(citapac);
 
-      // Ingreso Documento Medico
-
       // Ingreso Medicamento
       let med = `INSERT INTO Medicamento (ID_Medicamento, NombreMedicamento, Descripcion, InstruccionesDosificacion) VALUES (1, 'Paracetamol', 'Medicamento para aliviar el dolor y reducir la fiebre.', 'Tomar 1 tableta cada 6 horas con un vaso de agua.'),(2, 'Ibuprofeno', 'Antiinflamatorio no esteroideo (AINE) para aliviar el dolor y reducir la inflamación.', 'Tomar 1 tableta cada 8 horas después de comer.'),(3, 'Amoxicilina', 'Antibiótico utilizado para tratar diversas infecciones bacterianas.', 'Tomar 1 cápsula cada 12 horas con alimentos.'),(4, 'Loratadina', 'Antihistamínico utilizado para aliviar los síntomas de las alergias.', 'Tomar 1 tableta diaria con o sin alimentos.');`;
       this.db.executeSql(med);
-
-      // Ingreso Registro Medicacion
-      let regmed = `INSERT INTO RegistroMedicacion (ID_RegistroMedicacion, ID_Paciente, ID_Medicamento, FechaInicio, FechaFin, HoraToma, IntervaloToma) VALUES (1, 1, 1, '2023-10-01', '2023-10-10', '08:00:00', 1),(2, 2, 2, '2023-10-02', '2023-10-12', '14:30:00', 1),(3, 3, 3, '2023-10-03', '2023-10-13', '10:45:00', 1),(4, 4, 4, '2023-10-04', '2023-10-14', '19:20:00', 1);`;
-      this.db.executeSql(regmed);
 
       alert("Datos Insertados");
     } catch {

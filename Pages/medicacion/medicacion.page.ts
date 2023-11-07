@@ -144,8 +144,8 @@ export class MedicacionPage implements OnInit {
 
       options.notifications.push({
         id: i + 1,
-        title: "Recordatorio de medicación",
-        body: "Es hora de tomar "+this.med,
+        title: this.med,
+        body: "Es hora de tomar su medicamento!!",
         schedule: { at: currentDateTime },
       });
     }
