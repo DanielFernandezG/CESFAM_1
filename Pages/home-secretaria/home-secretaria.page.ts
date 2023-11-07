@@ -2,7 +2,7 @@ import { Component, ViewChild, ElementRef } from "@angular/core";
 import { Router } from "@angular/router";
 import { SQLite, SQLiteObject } from "@awesome-cordova-plugins/sqlite/ngx";
 import { AlertController } from "@ionic/angular";
-import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
+import { Filesystem, Directory, Encoding } from "@capacitor/filesystem";
 
 @Component({
   selector: "app-home-secretaria",
@@ -10,7 +10,7 @@ import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
   styleUrls: ["./home-secretaria.page.scss"],
 })
 export class HomeSecretariaPage {
-  @ViewChild('content') content!: ElementRef;
+  @ViewChild("content") content!: ElementRef;
   db: SQLiteObject;
   citaEditada: any = null;
   especialidad: string;
@@ -41,7 +41,7 @@ export class HomeSecretariaPage {
       .executeSql("UPDATE Usuario SET active=0 where active=1", [])
       .then((result) => console.log("Sesión Cambiada"))
       .catch((e) => console.log(JSON.stringify(e)));
-      window.location.href = "/login";
+    window.location.href = "/login";
   }
 
   async createOpenDatabase() {
@@ -162,12 +162,16 @@ export class HomeSecretariaPage {
   }
 
   // corregir
-  editarCita(cita: any) {
-    this.citaEditada = {
-      ID_Cita: cita.id_cita,
-      FechaCita: cita.FechaCita,
-      HoraCita: cita.HoraCita,
-    };
+  editarCita(cita: any, estado: string) {
+    if (estado == "Disponible") {
+      this.citaEditada = {
+        ID_Cita: cita.id_cita,
+        FechaCita: cita.FechaCita,
+        HoraCita: cita.HoraCita,
+      };
+    } else {
+      alert("La Cita no se Encuentra Disponible");
+    }
   }
 
   async guardarCambios() {
@@ -260,18 +264,22 @@ export class HomeSecretariaPage {
     });
   }
 
-  async eliminarCita(idCita: string) {
-    const confirmacion = await this.mostrarConfirmacion();
+  async eliminarCita(idCita: string, estado: string) {
+    if (estado == "Disponible") {
+      const confirmacion = await this.mostrarConfirmacion();
 
-    if (confirmacion) {
-      try {
-        await this.db.executeSql("DELETE FROM CitaMedica WHERE ID_Cita = ?", [
-          idCita,
-        ]);
-        this.mostrarCita();
-      } catch (error) {
-        console.error("Error al eliminar la cita médica", error);
+      if (confirmacion) {
+        try {
+          await this.db.executeSql("DELETE FROM CitaMedica WHERE ID_Cita = ?", [
+            idCita,
+          ]);
+          this.mostrarCita();
+        } catch (error) {
+          console.error("Error al eliminar la cita médica", error);
+        }
       }
+    } else {
+      alert("La Cita no se Encuentra Disponible");
     }
   }
 
@@ -401,32 +409,32 @@ export class HomeSecretariaPage {
   }
 
   async saveTableAsCSV(): Promise<void> {
-    const table = document.getElementById('season-tble')!;
-    const rows = table.querySelectorAll('tr');
+    const table = document.getElementById("season-tble")!;
+    const rows = table.querySelectorAll("tr");
 
     const csvRows: string[] = [];
 
     rows.forEach((row) => {
       const csvRow: string[] = [];
-      const cols = row.querySelectorAll('td, th');
+      const cols = row.querySelectorAll("td, th");
       cols.forEach((col) => {
-        csvRow.push(col.textContent || '');
+        csvRow.push(col.textContent || "");
       });
-      csvRows.push(csvRow.join(','));
+      csvRows.push(csvRow.join(","));
     });
 
-    const csvString = csvRows.join('\n');
+    const csvString = csvRows.join("\n");
 
     try {
       await Filesystem.writeFile({
-        path: 'Citas.csv',
+        path: "Citas.csv",
         data: csvString,
         directory: Directory.Documents,
         encoding: Encoding.UTF8,
       });
-      alert('Tabla guardada como Citas.csv');
+      alert("Tabla guardada como Citas.csv");
     } catch (error) {
-      console.error('Error al guardar la tabla como CSV', error);
+      console.error("Error al guardar la tabla como CSV", error);
     }
   }
 }

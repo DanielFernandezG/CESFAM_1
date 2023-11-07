@@ -55,7 +55,15 @@ const routes: Routes = [
   {
     path: 'ver',
     loadChildren: () => import('./Pages/ver/ver.module').then( m => m.VerPageModule)
+  },  {
+    path: 'home-admin',
+    loadChildren: () => import('./Pages/home-admin/home-admin.module').then( m => m.HomeAdminPageModule)
   },
+  {
+    path: 'creacion-usuarios',
+    loadChildren: () => import('./Pages/creacion-usuarios/creacion-usuarios.module').then( m => m.CreacionUsuariosPageModule)
+  },
+
 
 
 

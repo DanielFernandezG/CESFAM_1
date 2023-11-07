@@ -36,7 +36,7 @@ export class LoginPage implements OnInit {
   iniciarSesion() {
     if (this.run == "Admin") {
       if (this.password == "Admin@123") {
-        this.router.navigate(["datos-prueba"]);
+        this.router.navigate(["home-admin"]);
       } else {
         alert("Contraseña Incorrecta");
       }

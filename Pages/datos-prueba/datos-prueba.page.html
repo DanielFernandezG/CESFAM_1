@@ -1,11 +1,12 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>Datos de Prueba</ion-title>
-    <ion-buttons slot="end">
-      <ion-button (click)="cerrarSesion()" size="small">Cerrar Sesión</ion-button>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button> <!-- Botón de retroceso -->
     </ion-buttons>
+    <ion-title>Datos de Prueba</ion-title>
   </ion-toolbar>
 </ion-header>
+
 
 <ion-content [fullscreen]="true">
   <ion-button (click)="createTables()" size="small">Crear Tablas</ion-button>

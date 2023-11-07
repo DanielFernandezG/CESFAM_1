@@ -1,0 +1,30 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Centro Médico Cesfam</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="cerrarSesion()" size="small">Cerrar Sesión</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+<ion-item>
+  <ion-button expand="full" (click)="baseDatos()">Manejo Base de Datos</ion-button>
+</ion-item>
+<ion-item>
+  <ion-button expand="full" (click)="usuarios()">Creacion Usuario</ion-button>
+</ion-item>
+</ion-content>
+
+<ion-footer class="ion-no-border">
+  <div class="red-section">
+    <ion-toolbar color="danger">
+      <ion-title>Tu Salud</ion-title>
+    </ion-toolbar>
+  </div>
+  <div class="blue-section">
+    <ion-toolbar color="secondary">
+      <ion-title>Nuestra Misión</ion-title>
+    </ion-toolbar>
+  </div>
+</ion-footer>
