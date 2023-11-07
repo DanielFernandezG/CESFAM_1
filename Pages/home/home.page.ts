@@ -30,10 +30,6 @@ export class HomePage implements OnInit {
     this.router.navigateByUrl("/medicacion");
   }
 
-  uploadPdf() {
-    this.router.navigateByUrl("/pdf");
-  }
-
   verPdf() {
     this.router.navigateByUrl("/ver");
   }

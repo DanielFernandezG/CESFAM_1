@@ -18,7 +18,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let document of documents; let i = index">
+        <tr *ngFor="let document of nombresDocumentos; let i = index">
           <td>{{ nombresDocumentos[i] }}</td>
           <td>{{ fechasCreacion[i] }}</td>
           <td>
@@ -47,7 +47,7 @@
       </ion-header>
       <ion-content class="ion-padding">
         <ion-item *ngFor="let document of documents; let i = index">
-          <iframe [src]="document" width="100%" height="1000" [hidden]="!documentVisible[i]"></iframe>
+          <iframe [src]="document" width="100%" height="1000"></iframe>
         </ion-item>
       </ion-content>
     </ng-template>

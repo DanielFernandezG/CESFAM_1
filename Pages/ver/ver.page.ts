@@ -12,10 +12,9 @@ export class VerPage {
   db: SQLiteObject;
   id: number;
   documents: SafeResourceUrl[] = []; // Arreglo para almacenar los documentos
-  documentVisible: boolean[] = []; // Arreglo para rastrear la visibilidad de los documentos
   nombresDocumentos: string[] = []; // Arreglo para almacenar los nombres de los documentos
   fechasCreacion: string[] = []; // Arreglo para almacenar las fechas de creación
-  imageBase64: string | null; 
+  imageBase64: string | null;
 
   constructor(
     private sqlite: SQLite,
@@ -51,31 +50,17 @@ export class VerPage {
             .then((result) => {
               this.db
                 .executeSql(
-                  "SELECT ContenidoDocumento, NombreDocumento, FechaCreacion FROM DocumentoMedico WHERE ID_Paciente=?",
+                  "SELECT NombreDocumento, FechaCreacion FROM DocumentoMedico WHERE ID_Paciente=?",
                   [result.rows.item(0).ID_Paciente]
                 )
                 .then((result) => {
-                  const documents = [];
                   const nombresDocumentos = [];
                   const fechasCreacion = [];
 
                   for (let i = 0; i < result.rows.length; i++) {
-                    const documentBase64 =
-                      result.rows.item(i).ContenidoDocumento;
-                    documents.push(
-                      this.sanitizer.bypassSecurityTrustResourceUrl(
-                        documentBase64
-                      ) as string
-                    );
                     nombresDocumentos.push(result.rows.item(i).NombreDocumento);
                     fechasCreacion.push(result.rows.item(i).FechaCreacion);
                   }
-
-                  // Inicializa las matrices de visibilidad y almacena la lista de documentos junto con los nombres y fechas.
-                  this.documentVisible = new Array(documents.length).fill(
-                    false
-                  );
-                  this.documents = documents;
                   this.nombresDocumentos = nombresDocumentos;
                   this.fechasCreacion = fechasCreacion;
                 })
@@ -96,14 +81,39 @@ export class VerPage {
   isModalOpen = false;
 
   setOpen(isOpen: boolean, index: number) {
-    this.documentVisible[index] = !this.documentVisible[index];
     this.isModalOpen = isOpen;
-    this.id=index
+    this.id = index+1;
+
+    this.db
+      .executeSql(
+        "SELECT ContenidoDocumento FROM DocumentoMedico WHERE ID_Documento=?",
+        [this.id]
+      )
+      .then((result) => {
+        const documents = [];
+
+        for (let i = 0; i < result.rows.length; i++) {
+          const documentBase64 = result.rows.item(i).ContenidoDocumento;
+          documents.push(
+            this.sanitizer.bypassSecurityTrustResourceUrl(
+              documentBase64
+            ) as string
+          );
+        }
+
+        // Inicializa las matrices de visibilidad y almacena la lista de documentos junto con los nombres y fechas.
+        this.documents = documents;
+      })
+      .catch((error) => {
+        console.error(
+          "Error al obtener los documentos desde la base de datos:",
+          error
+        );
+      });
   }
 
   setClose(isOpen: boolean) {
     this.isModalOpen = isOpen;
-    this.documentVisible[this.id] = !this.documentVisible[this.id];
   }
 
   toggleContent() {
@@ -111,7 +121,7 @@ export class VerPage {
   }
   showContent: boolean = false;
 
-  onImageSelected(event: any) { 
+  onImageSelected(event: any) {
     const file = event?.target?.files[0];
     if (file) {
       const reader = new FileReader();
@@ -122,56 +132,70 @@ export class VerPage {
     }
   }
 
-  uploadImage() { 
+  uploadImage() {
     if (this.imageBase64) {
       this.saveImageToDatabase(this.imageBase64);
       this.imageBase64 = null;
       this.fetchAndDisplayDocuments();
       this.toggleContent();
     } else {
-      console.log('Ninguna imagen seleccionada para subir.');
+      console.log("Ninguna imagen seleccionada para subir.");
     }
   }
 
   saveImageToDatabase(imageContent: string) {
     // Primero, obtén el ID del paciente activo
     this.db
-      .executeSql("SELECT ID_Paciente FROM paciente WHERE run = (SELECT run FROM usuario WHERE active = 1)", [])
+      .executeSql(
+        "SELECT ID_Paciente FROM paciente WHERE run = (SELECT run FROM usuario WHERE active = 1)",
+        []
+      )
       .then((result) => {
         if (result.rows.length > 0) {
           const pacienteID = result.rows.item(0).ID_Paciente;
-  
+
           // Define los datos de la imagen
           const currentDate = new Date();
           const formattedDate = currentDate.toISOString().slice(0, 10); // Formato "YYYY-MM-DD"
-          
+
           const data = {
             ID_Paciente: pacienteID,
-            TipoDocumento: 'Imagen',
-            NombreDocumento: 'Imagen.png', // Cambia el nombre del archivo de imagen
+            TipoDocumento: "Imagen",
+            NombreDocumento: "Imagen.png", // Cambia el nombre del archivo de imagen
             ContenidoDocumento: imageContent, // Guarda la imagen en formato Base64 como una cadena
             FechaCreacion: formattedDate, // Fecha en formato "YYYY-MM-DD"
           };
-  
+
           // Inserta la imagen en la tabla DocumentoMedico
           this.db
             .executeSql(
-              'INSERT INTO DocumentoMedico (ID_Paciente, TipoDocumento, NombreDocumento, ContenidoDocumento, FechaCreacion) VALUES (?, ?, ?, ?, ?)',
-              [data.ID_Paciente, data.TipoDocumento, data.NombreDocumento, data.ContenidoDocumento, data.FechaCreacion]
+              "INSERT INTO DocumentoMedico (ID_Paciente, TipoDocumento, NombreDocumento, ContenidoDocumento, FechaCreacion) VALUES (?, ?, ?, ?, ?)",
+              [
+                data.ID_Paciente,
+                data.TipoDocumento,
+                data.NombreDocumento,
+                data.ContenidoDocumento,
+                data.FechaCreacion,
+              ]
             )
             .then(() => {
-              console.log('Imagen guardada en la base de datos.');
+              console.log("Imagen guardada en la base de datos.");
               alert("Imagen Médica Subida");
             })
             .catch((error) => {
-              console.error('Error al insertar la imagen en la base de datos:', error);
+              console.error(
+                "Error al insertar la imagen en la base de datos:",
+                error
+              );
             });
         } else {
-          console.error('No se encontró un paciente activo en la base de datos.');
+          console.error(
+            "No se encontró un paciente activo en la base de datos."
+          );
         }
       })
       .catch((error) => {
-        console.error('Error al obtener el ID del paciente activo:', error);
+        console.error("Error al obtener el ID del paciente activo:", error);
       });
   }
 }
