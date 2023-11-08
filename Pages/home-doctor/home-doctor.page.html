@@ -9,21 +9,6 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <div id="container">
-    <div style="text-align: center;">
-      <ion-item>
-        <ion-label position="stacked">Ingresar Fecha de Cita</ion-label>
-        <ion-input [(ngModel)]="FechaCita" type="date"></ion-input>
-      </ion-item>
-      <ion-item>
-        <ion-label position="stacked">Ingresar Hora de Cita</ion-label>
-        <ion-input [(ngModel)]="HoraCita" type="time"></ion-input>
-      </ion-item>
-      <ion-item>
-        <ion-button (click)="insertData()">Ingresar Hora</ion-button>
-      </ion-item>
-    </div>
-  </div>
 
   <ion-content [fullscreen]="true">
     <ion-item class="full-width-item">
@@ -35,11 +20,6 @@
       <ion-button (click)="selectDataOcupadas()">Filtrar</ion-button>
       <ion-button (click)="selectData()">Borrar Filtros</ion-button>
     </ion-item>
-    <!-- <div style="text-align: center;">
-      <ion-button (click)="selectData()" class="ion-margin">Ver Todas Las Citas</ion-button>
-      <ion-button (click)="selectDataOcupadas()" class="ion-margin">Ver Citas Ocupadas</ion-button>
-      <ion-button (click)="selectDataDisponibles()" class="ion-margin">Ver Citas Disponibles</ion-button>
-    </div> -->
     <div class="table-container">
       <table>
         <thead>
@@ -67,6 +47,25 @@
           </tr>
         </tbody>
       </table>
+    </div>
+    <ion-item>
+      <ion-button color="primary" (click)="mostrarAgregar()">Agregar Hora</ion-button>
+    </ion-item>
+
+    <div  *ngIf="agregarHora" id="container">
+      <div style="text-align: center;">
+        <ion-item>
+          <ion-label position="stacked">Ingresar Fecha de Cita</ion-label>
+          <ion-input [(ngModel)]="FechaCita" type="date"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="stacked">Ingresar Hora de Cita</ion-label>
+          <ion-input [(ngModel)]="HoraCita" type="time"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-button (click)="insertData()">Ingresar Hora</ion-button>
+        </ion-item>
+      </div>
     </div>
 
     <div *ngIf="mostrarFormularioDeEdicion">

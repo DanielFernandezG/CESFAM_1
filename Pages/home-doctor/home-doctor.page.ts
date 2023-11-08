@@ -16,6 +16,7 @@ export class HomeDoctorPage implements OnInit {
   idDoctor: string;
   doctorData: doctor[];
   mostrarFormularioDeEdicion: boolean = false;
+  agregarHora: boolean = false;
   est: string;
   estados: estado[];
   cita: any;
@@ -151,8 +152,10 @@ export class HomeDoctorPage implements OnInit {
     this.citaEditada.FechaCita = cita.FechaCita;
     this.citaEditada.HoraCita = cita.HoraCita;
 
-    this.mostrarFormularioDeEdicion = true;
+    this.mostrarFormularioDeEdicion = !this.mostrarFormularioDeEdicion;
   }
+
+
 
   async guardarCambios() {
     if (!this.citaEditada.FechaCita || !this.citaEditada.HoraCita) {
@@ -249,6 +252,8 @@ export class HomeDoctorPage implements OnInit {
   selectData() {
     this.doctorData = [];
     const currentDate = new Date();
+    const dateTime = new Date(currentDate);
+    const fecha = dateTime.toISOString().split('T')[0];
 
     this.db
       .executeSql("SELECT * FROM usuario WHERE active = 1", [])
@@ -261,7 +266,7 @@ export class HomeDoctorPage implements OnInit {
             .then((result) => {
               this.db
                 .executeSql("select * from CitaMedica where ID_Doctor=? AND FechaCita >= ?", [
-                  result.rows.item(0).ID_Doctor, currentDate.toISOString()
+                  result.rows.item(0).ID_Doctor, fecha
                 ])
                 .then((result) => {
                   for (let i = 0; i < result.rows.length; i++) {
@@ -286,6 +291,8 @@ export class HomeDoctorPage implements OnInit {
     this.doctorData = [];
 
     const currentDate = new Date();
+    const dateTime = new Date(currentDate);
+    const fecha = dateTime.toISOString().split('T')[0];
 
     this.db
       .executeSql("SELECT * FROM usuario WHERE active = 1", [])
@@ -299,7 +306,7 @@ export class HomeDoctorPage implements OnInit {
               this.db
                 .executeSql(
                   "select * from CitaMedica where EstadoCita = ? and ID_Doctor=? AND FechaCita >= ?",
-                  [this.est, result.rows.item(0).ID_Doctor, currentDate.toISOString()]
+                  [this.est, result.rows.item(0).ID_Doctor, fecha]
                 )
                 .then((result) => {
                   for (let i = 0; i < result.rows.length; i++) {
@@ -331,6 +338,10 @@ export class HomeDoctorPage implements OnInit {
           });
         }
       });
+  }
+
+  mostrarAgregar(){
+    this.agregarHora = !this.agregarHora;
   }
 }
 

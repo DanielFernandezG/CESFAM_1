@@ -74,6 +74,9 @@ export class HomePage implements OnInit {
     this.citaData = [];
 
     const currentDate = new Date();
+    const dateTime = new Date(currentDate);
+    const fecha = dateTime.toISOString().split('T')[0];
+
 
     this.db
       .executeSql("select * from usuario where active = 1", [])
@@ -87,7 +90,7 @@ export class HomePage implements OnInit {
               this.db
                 .executeSql(
                   "select * from CitaMedica join Doctor on CitaMedica.ID_Doctor=Doctor.ID_Doctor where ID_Paciente=? AND FechaCita >=?",
-                  [result.rows.item(0).ID_Paciente, currentDate.toISOString()]
+                  [result.rows.item(0).ID_Paciente, fecha]
                 )
                 .then((result) => {
                   for (let i = 0; i < result.rows.length; i++) {
