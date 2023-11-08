@@ -1,0 +1,23 @@
+ion-footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+.red-section {
+    width: 50%;
+    float: left;
+    background-color: #ff5733;
+    /* Rojo */
+    color: white;
+    text-align: center;
+}
+
+.blue-section {
+    width: 50%;
+    float: left;
+    background-color: #00bfff;
+    /* Azul */
+    color: white;
+    text-align: center;
+}

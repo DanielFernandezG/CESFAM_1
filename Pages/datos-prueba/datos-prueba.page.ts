@@ -87,6 +87,7 @@ export class DatosPruebaPage implements OnInit {
       Estudios VARCHAR(300) NOT NULL,
       FechaNacimiento DATE NOT NULL,
       Genero VARCHAR(10) NOT NULL,
+      Correo VARCHAR(100),
       FOREIGN KEY (ID_Especialidad) REFERENCES Especialidad(ID_Especialidad),
       FOREIGN KEY (Run) REFERENCES Usuario(run)
     );`;

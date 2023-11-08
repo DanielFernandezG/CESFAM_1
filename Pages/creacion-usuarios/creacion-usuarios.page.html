@@ -1,16 +1,68 @@
-<ion-header [translucent]="true">
+<ion-header [translucent]="true"> 
   <ion-toolbar>
     <ion-buttons slot="start">
       <ion-back-button></ion-back-button> <!-- Botón de retroceso -->
     </ion-buttons>
-    <ion-title>Creacion Usuarios</ion-title>
+    <ion-title>Crea Tu Ficha Paciente</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">creacion-usuarios</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <!-- Login -->
+  <div>
+    <div style="border-bottom: solid 1px lightgray; margin-bottom: 20px;">
+    </div>
+    <ion-title>Complete estos datos para crear su cuenta</ion-title>
+    <div style="margin: 20px;">
+      <ion-item>
+        <ion-label position="floating">Run</ion-label>
+        <ion-input type="text" placeholder="Ingrese Su Rut" [(ngModel)]="run"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Contraseña</ion-label>
+        <ion-input type="password" placeholder="Ingrese Su Contraseña" [(ngModel)]="password"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Confirmar Contraseña</ion-label>
+        <ion-input type="password" placeholder="Confirmar Contraseña" [(ngModel)]="confPassword"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Nombre</ion-label>
+        <ion-input placeholder="Ingrese Su Nombre" [(ngModel)]="nombre"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Apellidos</ion-label>
+        <ion-input placeholder="Ingrese Sus Apellidos" [(ngModel)]="apellidos"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Fecha de Nacimiento</ion-label>
+        <ion-input placeholder="Ingrese su Fecha de Nacimiento (31/12/2000)" [(ngModel)]="fecha"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Correo</ion-label>
+        <ion-input placeholder="Ingrese su Correo" [(ngModel)]="correo"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-select placeholder="Género" [(ngModel)]="genero">
+          <ion-select-option value="masculino">Masculino</ion-select-option>
+          <ion-select-option value="femenino">Femenino</ion-select-option>
+          <ion-select-option value="prefiero no decirlo">Prefiero no Decirlo</ion-select-option>
+        </ion-select>
+      </ion-item>
+      <ion-button size="small" (click)="insertData()" style="margin-bottom: 20px;">Registrar</ion-button>
+    </div>
+  </div>
 </ion-content>
+
+<ion-footer class="ion-no-border">
+  <div class="red-section">
+    <ion-toolbar color="danger">
+      <ion-title>Tu Salud</ion-title>
+    </ion-toolbar>
+  </div>
+  <div class="blue-section">
+    <ion-toolbar color="secondary">
+      <ion-title>Nuestra Misión</ion-title>
+    </ion-toolbar>
+  </div>
+</ion-footer>
