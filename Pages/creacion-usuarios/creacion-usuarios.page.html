@@ -3,7 +3,7 @@
     <ion-buttons slot="start">
       <ion-back-button></ion-back-button> <!-- Botón de retroceso -->
     </ion-buttons>
-    <ion-title>Crea Tu Ficha Paciente</ion-title>
+    <ion-title>Crear Usuario</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -12,7 +12,7 @@
   <div>
     <div style="border-bottom: solid 1px lightgray; margin-bottom: 20px;">
     </div>
-    <ion-title>Complete estos datos para crear su cuenta</ion-title>
+    <ion-title>Complete estos datos para crear un Usuario</ion-title>
     <div style="margin: 20px;">
       <ion-item>
         <ion-label position="floating">Run</ion-label>
@@ -48,6 +48,25 @@
           <ion-select-option value="femenino">Femenino</ion-select-option>
           <ion-select-option value="prefiero no decirlo">Prefiero no Decirlo</ion-select-option>
         </ion-select>
+      </ion-item>
+      <ion-item>
+        <ion-select placeholder="Rol" [(ngModel)]="rol" (ionChange)="onRolChange()">
+          <ion-select-option value="doctor">Doctor</ion-select-option>
+          <ion-select-option value="secretaria">Secretaria</ion-select-option>
+        </ion-select>
+      </ion-item>
+      <ion-item *ngIf="isDoctor">
+        <ion-select placeholder="Especialidad" [(ngModel)]="esp">
+          <ion-select-option *ngFor="let e of especialidades">{{ e.descripcion }}</ion-select-option>
+        </ion-select>
+      </ion-item>
+      <ion-item *ngIf="isDoctor">
+        <ion-label position="floating">Cesfam</ion-label>
+        <ion-input placeholder="Ingrese Sucursal" [(ngModel)]="cesfam"></ion-input>
+      </ion-item>
+      <ion-item *ngIf="isDoctor">
+        <ion-label position="floating">Estudios</ion-label>
+        <ion-textarea placeholder="Ingrese Estrudios" [(ngModel)]="estudios"></ion-textarea>
       </ion-item>
       <ion-button size="small" (click)="insertData()" style="margin-bottom: 20px;">Registrar</ion-button>
     </div>
