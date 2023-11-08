@@ -255,7 +255,7 @@ export class DatosPruebaPage implements OnInit {
       this.db.executeSql(cita);
 
       // Ingreso Cita Medica para Pacientes
-      let citapac = ` INSERT INTO CitaMedica (ID_Cita, ID_Paciente, ID_Doctor, FechaCita, HoraCita, EstadoCita) VALUES (12, 4, 1, date('now', '+5 days'), '14:00', 'Ocupada'),(13, 4, 2, date('now', '+6 days'), '14:30', 'Ocupada'),(14, 4, 3, date('now', '+7 days'), '10:00', 'Ocupada'),(15, 4, 4, date('now', '+8 days'), '10:00', 'Ocupada'),(16, 4, 4, '2023-10-19', '10:00', 'Ocupada');`;
+      let citapac = ` INSERT INTO CitaMedica (ID_Cita, ID_Paciente, ID_Doctor, FechaCita, HoraCita, EstadoCita) VALUES (12, 4, 1, date('now', '+5 days'), '14:00', 'Ocupada'),(13, 4, 2, date('now', '+6 days'), '14:30', 'Ocupada'),(14, 4, 3, date('now', '+7 days'), '10:00', 'Ocupada'),(15, 4, 4, date('now', '+8 days'), '10:00', 'Ocupada'),(16, 4, 2, '2023-10-19', '10:00', 'Ocupada');`;
             this.db.executeSql(citapac);
 
       // Ingreso Medicamento

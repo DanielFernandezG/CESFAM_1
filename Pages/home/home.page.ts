@@ -71,6 +71,8 @@ export class HomePage implements OnInit {
   async mostrarCita() {
     this.citaData = [];
 
+    const currentDate = new Date();
+
     this.db
       .executeSql("select * from usuario where active = 1", [])
       .then((result) => {
@@ -82,8 +84,8 @@ export class HomePage implements OnInit {
             .then((result) => {
               this.db
                 .executeSql(
-                  "select * from CitaMedica join Doctor on CitaMedica.ID_Doctor=Doctor.ID_Doctor where ID_Paciente=?",
-                  [result.rows.item(0).ID_Paciente]
+                  "select * from CitaMedica join Doctor on CitaMedica.ID_Doctor=Doctor.ID_Doctor where ID_Paciente=? AND FechaCita >=?",
+                  [result.rows.item(0).ID_Paciente, currentDate.toISOString()]
                 )
                 .then((result) => {
                   for (let i = 0; i < result.rows.length; i++) {

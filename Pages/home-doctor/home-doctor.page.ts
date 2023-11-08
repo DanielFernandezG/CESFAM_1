@@ -248,6 +248,7 @@ export class HomeDoctorPage implements OnInit {
 
   selectData() {
     this.doctorData = [];
+    const currentDate = new Date();
 
     this.db
       .executeSql("SELECT * FROM usuario WHERE active = 1", [])
@@ -259,8 +260,8 @@ export class HomeDoctorPage implements OnInit {
             ])
             .then((result) => {
               this.db
-                .executeSql("select * from CitaMedica where ID_Doctor=?", [
-                  result.rows.item(0).ID_Doctor,
+                .executeSql("select * from CitaMedica where ID_Doctor=? AND FechaCita >= ?", [
+                  result.rows.item(0).ID_Doctor, currentDate.toISOString()
                 ])
                 .then((result) => {
                   for (let i = 0; i < result.rows.length; i++) {
@@ -283,6 +284,9 @@ export class HomeDoctorPage implements OnInit {
 
   async selectDataOcupadas() {
     this.doctorData = [];
+
+    const currentDate = new Date();
+
     this.db
       .executeSql("SELECT * FROM usuario WHERE active = 1", [])
       .then((result) => {
@@ -294,8 +298,8 @@ export class HomeDoctorPage implements OnInit {
             .then((result) => {
               this.db
                 .executeSql(
-                  "select * from CitaMedica where EstadoCita = ? and ID_Doctor=?",
-                  [this.est, result.rows.item(0).ID_Doctor]
+                  "select * from CitaMedica where EstadoCita = ? and ID_Doctor=? AND FechaCita >= ?",
+                  [this.est, result.rows.item(0).ID_Doctor, currentDate.toISOString()]
                 )
                 .then((result) => {
                   for (let i = 0; i < result.rows.length; i++) {
