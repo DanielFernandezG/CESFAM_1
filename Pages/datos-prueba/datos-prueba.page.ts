@@ -250,12 +250,12 @@ export class DatosPruebaPage implements OnInit {
       this.db.executeSql(sec);
 
       // Ingreso Cita Medica
-      let cita = `INSERT INTO CitaMedica (ID_Cita, ID_Doctor, FechaCita, HoraCita, EstadoCita) VALUES (1, 1, '2023-10-16', '10:00', 'Disponible'),(2, 1, '2023-10-17', '15:30', 'Disponible'),(3, 1, '2023-10-18', '11:45', 'Disponible'),(4, 1, '2023-10-19', '14:15', 'Disponible'),(5, 1, '2023-10-20', '09:30', 'Disponible'),(6, 1, '2023-10-21', '16:00', 'Disponible'),(7, 2, '2023-10-22', '16:00', 'Disponible'),(8, 2, '2023-10-23', '17:00', 'Disponible'),(9, 2, '2023-10-24', '18:00', 'Disponible'),(10, 2, '2023-10-25', '19:00', 'Disponible');`;
+      let cita = `INSERT INTO CitaMedica (ID_Cita, ID_Doctor, FechaCita, HoraCita, EstadoCita) VALUES (1, 1, date('now', '+5 days'), '10:00', 'Disponible'),(2, 1, date('now', '+6 days'), '15:30', 'Disponible'),(3, 1, date('now', '+7 days'), '11:45', 'Disponible'),(4, 1, date('now', '+8 days'), '14:15', 'Disponible'),(5, 1, date('now', '+9 days'), '09:30', 'Disponible'),(6, 1, date('now', '+10 days'), '16:00', 'Disponible'),(7, 2, date('now', '+11 days'), '16:00', 'Disponible'),(8, 2, date('now', '+12 days'), '17:00', 'Disponible'),(9, 2, date('now', '+13 days'), '18:00', 'Disponible'),(10, 2, date('now', '+14 days'), '19:00', 'Disponible'),(11, 2, '2023-10-19', '19:00', 'Disponible');`;
       this.db.executeSql(cita);
 
       // Ingreso Cita Medica para Pacientes
-      let citapac = `INSERT INTO CitaMedica (ID_Cita, ID_Paciente, ID_Doctor, FechaCita, HoraCita, EstadoCita) VALUES (11, 4, 1, '2023-10-16', '14:00', 'Ocupada'),(12, 4, 2, '2023-10-17', '14:30', 'Ocupada'),(13, 4, 3, '2023-10-18', '10:00', 'Ocupada'),(14, 4, 4, '2023-10-19', '10:00', 'Ocupada');`;
-      this.db.executeSql(citapac);
+      let citapac = ` INSERT INTO CitaMedica (ID_Cita, ID_Paciente, ID_Doctor, FechaCita, HoraCita, EstadoCita) VALUES (12, 4, 1, date('now', '+5 days'), '14:00', 'Ocupada'),(13, 4, 2, date('now', '+6 days'), '14:30', 'Ocupada'),(14, 4, 3, date('now', '+7 days'), '10:00', 'Ocupada'),(15, 4, 4, date('now', '+8 days'), '10:00', 'Ocupada'),(16, 4, 4, '2023-10-19', '10:00', 'Ocupada');`;
+            this.db.executeSql(citapac);
 
       // Ingreso Medicamento
       let med = `INSERT INTO Medicamento (ID_Medicamento, NombreMedicamento, Descripcion, InstruccionesDosificacion) VALUES (1, 'Paracetamol', 'Medicamento para aliviar el dolor y reducir la fiebre.', 'Tomar 1 tableta cada 6 horas con un vaso de agua.'),(2, 'Ibuprofeno', 'Antiinflamatorio no esteroideo (AINE) para aliviar el dolor y reducir la inflamación.', 'Tomar 1 tableta cada 8 horas después de comer.'),(3, 'Amoxicilina', 'Antibiótico utilizado para tratar diversas infecciones bacterianas.', 'Tomar 1 cápsula cada 12 horas con alimentos.'),(4, 'Loratadina', 'Antihistamínico utilizado para aliviar los síntomas de las alergias.', 'Tomar 1 tableta diaria con o sin alimentos.');`;
