@@ -1,6 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { SQLite, SQLiteObject } from "@awesome-cordova-plugins/sqlite/ngx";
 import { Router } from "@angular/router";
+import { AlertController } from "@ionic/angular";
 
 
 @Component({
@@ -16,6 +17,7 @@ export class HomePage implements OnInit {
   constructor(
     private sqlite: SQLite,
     private router: Router,
+    private alertController: AlertController
   ) {}
 
   ngOnInit() {
@@ -147,6 +149,28 @@ export class HomePage implements OnInit {
     } catch (error) {
       console.error("Error al eliminar la cita médica", error);
     }
+  }
+  async confirmacionCancelar(idCita: string) {
+    const alert = await this.alertController.create({
+      header: "Confirmación",
+      message: "¿Seguro que deseas cancelar esta cita médica?",
+      buttons: [
+        {
+          text: "Cancelar",
+          role: "cancel",
+          cssClass: "secondary",
+          handler: () => {},
+        },
+        {
+          text: "Eliminar",
+          handler: () => {
+            this.cancelarCita(idCita);
+          },
+        },
+      ],
+    });
+
+    await alert.present();
   }
 }
 
