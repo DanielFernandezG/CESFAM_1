@@ -68,10 +68,14 @@ export class HomeSecretariaPage {
   mostrarCita() {
     this.citaData = [];
 
+    const currentDate = new Date();
+    const dateTime = new Date(currentDate);
+    const fecha = dateTime.toISOString().split('T')[0];
+
     this.db
       .executeSql(
-        "select * from citaMedica join Doctor on citaMedica.ID_Doctor=Doctor.ID_Doctor",
-        []
+        "select * from citaMedica join Doctor on citaMedica.ID_Doctor=Doctor.ID_Doctor where CitaMedica.FechaCita >=?",
+        [fecha]
       )
       .then((result) => {
         for (let i = 0; i < result.rows.length; i++) {
