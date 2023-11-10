@@ -14,7 +14,10 @@ export class VerPage {
   documents: SafeResourceUrl[] = []; // Arreglo para almacenar los documentos
   nombresDocumentos: string[] = []; // Arreglo para almacenar los nombres de los documentos
   fechasCreacion: string[] = []; // Arreglo para almacenar las fechas de creación
+  TipoDocumento: string[] = []; // Arreglo para almacenar las fechas de creación
   imageBase64: string | null;
+  nombreArchivo: string;
+  nombreArchivoValido: boolean = false;
 
   constructor(
     private sqlite: SQLite,
@@ -38,6 +41,10 @@ export class VerPage {
       .catch((e) => console.error("Error al abrir la base de datos:", e));
   }
 
+  validarNombreArchivo() {
+    this.nombreArchivoValido = this.nombreArchivo.trim() !== "";
+  }
+
   fetchAndDisplayDocuments() {
     this.db
       .executeSql("select * from usuario where active = 1", [])
@@ -50,19 +57,22 @@ export class VerPage {
             .then((result) => {
               this.db
                 .executeSql(
-                  "SELECT NombreDocumento, FechaCreacion FROM DocumentoMedico WHERE ID_Paciente=?",
+                  "SELECT NombreDocumento, FechaCreacion, TipoDocumento FROM DocumentoMedico WHERE ID_Paciente=?",
                   [result.rows.item(0).ID_Paciente]
                 )
                 .then((result) => {
                   const nombresDocumentos = [];
                   const fechasCreacion = [];
+                  const TipoDocumento = [];
 
                   for (let i = 0; i < result.rows.length; i++) {
                     nombresDocumentos.push(result.rows.item(i).NombreDocumento);
                     fechasCreacion.push(result.rows.item(i).FechaCreacion);
+                    TipoDocumento.push(result.rows.item(i).TipoDocumento);
                   }
                   this.nombresDocumentos = nombresDocumentos;
                   this.fechasCreacion = fechasCreacion;
+                  this.TipoDocumento = TipoDocumento;
                 })
                 .catch((error) => {
                   console.error(
@@ -82,7 +92,7 @@ export class VerPage {
 
   setOpen(isOpen: boolean, index: number) {
     this.isModalOpen = isOpen;
-    this.id = index+1;
+    this.id = index + 1;
 
     this.db
       .executeSql(
@@ -133,13 +143,17 @@ export class VerPage {
   }
 
   uploadImage() {
-    if (this.imageBase64) {
-      this.saveImageToDatabase(this.imageBase64);
-      this.imageBase64 = null;
-      this.fetchAndDisplayDocuments();
-      this.toggleContent();
+    if (!this.nombreArchivoValido) {
+      alert("Por favor, ingrese el nombre del archivo.")
     } else {
-      console.log("Ninguna imagen seleccionada para subir.");
+      if (this.imageBase64) {
+        this.saveImageToDatabase(this.imageBase64);
+        this.imageBase64 = null;
+        this.fetchAndDisplayDocuments();
+        this.toggleContent();
+      } else {
+        console.log("Ninguna imagen seleccionada para subir.");
+      }
     }
   }
 
@@ -160,8 +174,8 @@ export class VerPage {
 
           const data = {
             ID_Paciente: pacienteID,
-            TipoDocumento: "Imagen",
-            NombreDocumento: "Imagen.png", // Cambia el nombre del archivo de imagen
+            TipoDocumento: "Pdf",
+            NombreDocumento: this.nombreArchivo, // Cambia el nombre del archivo de imagen
             ContenidoDocumento: imageContent, // Guarda la imagen en formato Base64 como una cadena
             FechaCreacion: formattedDate, // Fecha en formato "YYYY-MM-DD"
           };

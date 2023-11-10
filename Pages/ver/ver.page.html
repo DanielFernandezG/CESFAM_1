@@ -13,6 +13,7 @@
       <thead>
         <tr>
           <th>Documento</th>
+          <th>Formato</th>
           <th>Fecha de Creación</th>
           <th>Acción</th>
         </tr>
@@ -20,6 +21,7 @@
       <tbody>
         <tr *ngFor="let document of nombresDocumentos; let i = index">
           <td>{{ nombresDocumentos[i] }}</td>
+          <td>{{ TipoDocumento[i] }}</td>
           <td>{{ fechasCreacion[i] }}</td>
           <td>
             <ion-button expand="block" (click)="setOpen(true,i)">Ver Documento</ion-button>
@@ -30,6 +32,11 @@
   </div>
   <ion-button (click)="toggleContent()">Agregar Documento</ion-button>
   <div *ngIf="showContent">
+    <ion-item>
+      <ion-label position="floating">Nombre del Archivo</ion-label>
+      <ion-input type="text" [(ngModel)]="nombreArchivo" placeholder="Ingrese el Nombre del Archivo" (ngModelChange)="validarNombreArchivo()"></ion-input>
+    </ion-item>
+    <div *ngIf="!nombreArchivoValido" style="color: red; margin-top: 5px;">Por favor, ingrese el nombre del archivo.</div>
     <ion-item>
       <input type="file" (change)="onImageSelected($event)" accept="image/*" />
     </ion-item>
