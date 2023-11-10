@@ -36,6 +36,10 @@ export class HomePage implements OnInit {
     this.router.navigateByUrl("/ver");
   }
 
+  retiro() {
+    this.router.navigateByUrl("/retiro");
+  }
+
   createOpenDatabase() {
     try {
       this.sqlite

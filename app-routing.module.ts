@@ -63,6 +63,10 @@ const routes: Routes = [
     path: 'creacion-usuarios',
     loadChildren: () => import('./Pages/creacion-usuarios/creacion-usuarios.module').then( m => m.CreacionUsuariosPageModule)
   },
+  {
+    path: 'retiro',
+    loadChildren: () => import('./Pages/retiro/retiro.module').then( m => m.RetiroPageModule)
+  },
 
 
 

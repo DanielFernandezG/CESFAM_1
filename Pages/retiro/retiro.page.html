@@ -1,0 +1,70 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title class="title-left">
+      Medicacion
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-item class="ion-padding">
+    <div #content class="table-container">
+      <table id="season-table" class="full-width">
+        <thead>
+          <tr>
+            <th>Medicamento</th>
+            <th>Fecha Retiro</th>
+            <th>Hora Retiro</th>
+            <th>Eliminar</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let med of medicamentoData">
+            <td>{{ med.descripcion }}</td>
+            <td>{{ med.fechainicio }}</td>
+            <td>{{ med.hora }}</td>
+            <td>
+              <ion-button color="danger" (click)="eliminarMed(med.id)">Eliminar</ion-button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </ion-item>
+  <ion-button (click)="toggleContent()">Programar Notificacion</ion-button>
+  <div *ngIf="showContent">
+    <ion-item>
+      <ion-label position="stacked">Fecha de Retiro</ion-label>
+      <ion-input type="date" [(ngModel)]="selectedDate"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">Hora de Retiro</ion-label>
+      <ion-input type="time" [(ngModel)]="selectedTime"></ion-input>
+    </ion-item>
+
+    <ion-item class="full-width-item">
+      <ion-select placeholder="Medicamento" [(ngModel)]="med">
+        <ion-select-option *ngFor="let med of medicamentos">{{ med.descripcion }}</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-button expand="full" (click)="scheduleNotification()">Ingresar Notificacion</ion-button>
+  </div>
+</ion-content>
+
+<ion-footer class="ion-no-border">
+  <div class="red-section">
+    <ion-toolbar color="danger">
+      <ion-title>Tu Salud</ion-title>
+    </ion-toolbar>
+  </div>
+  <div class="blue-section">
+    <ion-toolbar color="secondary">
+      <ion-title>Nuestra Misión</ion-title>
+    </ion-toolbar>
+  </div>
+</ion-footer>

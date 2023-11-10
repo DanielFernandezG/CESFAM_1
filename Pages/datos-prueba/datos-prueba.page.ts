@@ -173,6 +173,21 @@ export class DatosPruebaPage implements OnInit {
         .then((result) => console.log("table RegistroMedicacion created"))
         .catch((e) => console.log(JSON.stringify(e)));
 
+      let rec = `
+    CREATE TABLE IF NOT EXISTS RecordatorioMedicacion (
+      ID_RecordatorioMedicacion INTEGER PRIMARY KEY,
+      ID_Paciente INTEGER,
+      ID_Medicamento INTEGER,
+      FechaRetiro DATE,
+      HoraRetiro TIMESTAMP,
+      FOREIGN KEY (ID_Paciente) REFERENCES Paciente(ID_Paciente),
+      FOREIGN KEY (ID_Medicamento) REFERENCES Medicamento(ID_Medicamento)
+    );`;
+      this.db
+        .executeSql(rec)
+        .then((result) => console.log("table RecordatorioMedicacion created"))
+        .catch((e) => console.log(JSON.stringify(e)));
+
       alert("Tablas Creadas");
     } catch {
       alert("Error al crear tablas");
@@ -223,6 +238,11 @@ export class DatosPruebaPage implements OnInit {
     this.db
       .executeSql("drop table IF EXISTS Usuario", [])
       .then((result) => console.log("Tabla Usuario Borrada"))
+      .catch((e) => alert(JSON.stringify(e)));
+
+    this.db
+      .executeSql("drop table IF EXISTS RecordatorioMedicacion", [])
+      .then((result) => console.log("Tabla RecordatorioMedicacion Borrada"))
       .catch((e) => alert(JSON.stringify(e)));
 
     alert("Tablas Borradas");
