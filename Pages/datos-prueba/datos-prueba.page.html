@@ -10,9 +10,18 @@
 
 
 <ion-content [fullscreen]="true">
-  <ion-button (click)="createTables()" size="small">Crear Tablas</ion-button>
-  <ion-button (click)="dropTables()" size="small">Borrar Tablas</ion-button>
-  <ion-button (click)="ingresarDatos()" size="small">Ingresar Datos</ion-button>
+  <br>
+  <div class="button-container">
+    <ion-button (click)="createTables()" expand="full">Crear Tablas</ion-button>
+  </div>
+  <br>
+  <div class="button-container">
+    <ion-button (click)="dropTables()" expand="full">Borrar Tablas</ion-button>
+  </div>
+  <br>
+  <div class="button-container">
+    <ion-button (click)="ingresarDatos()" expand="full">Ingresar Datos</ion-button>
+  </div>
 </ion-content>
 <ion-footer class="ion-no-border">
   <div class="red-section">
