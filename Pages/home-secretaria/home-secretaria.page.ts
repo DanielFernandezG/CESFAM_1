@@ -105,13 +105,18 @@ export class HomeSecretariaPage {
 
   filtrar() {
     this.citaData = [];
+
+    const currentDate = new Date();
+    const dateTime = new Date(currentDate);
+    const fecha = dateTime.toISOString().split('T')[0];
+
     if (this.esp != "") {
       this.obtenerIdEspecialidad(this.esp).then((idesp: number) => {
         this.idEsp = idesp;
         this.db
           .executeSql(
-            "select * from citaMedica join Doctor on citaMedica.ID_Doctor=Doctor.ID_Doctor where EstadoCita=? or (Doctor.Nombre||' '||Doctor.Apellido=? or ID_Especialidad=?)",
-            [this.est, this.doc, this.idEsp]
+            "select * from citaMedica join Doctor on citaMedica.ID_Doctor=Doctor.ID_Doctor where CitaMedica.FechaCita >=? and EstadoCita=? or (Doctor.Nombre||' '||Doctor.Apellido=? or ID_Especialidad=?)",
+            [fecha, this.est, this.doc, this.idEsp]
           )
           .then((result) => {
             for (let i = 0; i < result.rows.length; i++) {
@@ -138,8 +143,8 @@ export class HomeSecretariaPage {
     } else {
       this.db
         .executeSql(
-          "select * from citaMedica join Doctor on citaMedica.ID_Doctor=Doctor.ID_Doctor where EstadoCita=? or (Doctor.Nombre||' '||Doctor.Apellido=? or ID_Especialidad=?)",
-          [this.est, this.doc, this.idEsp]
+          "select * from citaMedica join Doctor on citaMedica.ID_Doctor=Doctor.ID_Doctor where CitaMedica.FechaCita >=? and EstadoCita=? or (Doctor.Nombre||' '||Doctor.Apellido=? or ID_Especialidad=?)",
+          [fecha, this.est, this.doc, this.idEsp]
         )
         .then((result) => {
           for (let i = 0; i < result.rows.length; i++) {
