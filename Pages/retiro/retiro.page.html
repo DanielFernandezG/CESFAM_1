@@ -11,33 +11,29 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-item class="ion-padding">
-    <div #content class="table-container">
-      <table id="season-table" class="full-width">
-        <thead>
-          <tr>
-            <th>Medicamento</th>
-            <th>Fecha Retiro</th>
-            <th>Hora Retiro</th>
-            <th>Eliminar</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let med of medicamentoData">
-            <td>{{ med.descripcion }}</td>
-            <td>{{ med.fechainicio }}</td>
-            <td>{{ med.hora }}</td>
-            <td>
-              <ion-button color="danger" (click)="eliminarMed(med.id)">Eliminar</ion-button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </ion-item>
-  <div class="button-container">
-  <ion-button (click)="toggleContent()" expand="full">Programar Notificacion</ion-button>
-</div>
+  <div #content class="table-container">
+    <table id="season-table" class="full-width">
+      <thead>
+        <tr>
+          <th>Medicamento</th>
+          <th>Fecha Retiro</th>
+          <th>Hora Retiro</th>
+          <th>Eliminar</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let med of medicamentoData">
+          <td>{{ med.descripcion }}</td>
+          <td>{{ med.fechainicio }}</td>
+          <td>{{ med.hora }}</td>
+          <td>
+            <ion-button color="danger" (click)="eliminarMed(med.id)">Eliminar</ion-button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <ion-button (click)="toggleContent()">Programar Notificacion</ion-button>
   <div *ngIf="showContent">
     <ion-item>
       <ion-label position="stacked">Fecha de Retiro</ion-label>
