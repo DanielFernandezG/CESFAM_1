@@ -10,14 +10,27 @@
 
 <ion-content [fullscreen]="true">
     <div style="border-bottom: solid 1px lightgray; margin-bottom: 20px;"></div>
-      <ion-input placeholder="Cambia tu Nombre" [(ngModel)]="nombre" [value]="nombre">Nombres</ion-input>
-      <ion-input placeholder="Cambia tu Apellido" [(ngModel)]="apellido" [value]="apellido">Apellidos</ion-input>
-      <ion-input placeholder="Cambia tu Direccion" [(ngModel)]="direccion" [value]="direccion">Direccion</ion-input>
-      <ion-input placeholder="Cambia tu Correo" [(ngModel)]="correo" [value]="correo">Correo</ion-input>
-      <ion-input placeholder="Cambia tu Telefono" [(ngModel)]="telefono" [value]="telefono">Telefono</ion-input>
+    <ion-title>Actualice Sus Datos Aqui</ion-title>
     <div style="margin: 20px;">
-      <ion-button size="small" (click)="updateData()" style="margin-bottom: 20px;">Actualizar Datos</ion-button>
+      <ion-item>
+      <ion-input placeholder="Cambia tu Nombre" [(ngModel)]="nombre" [value]="nombre">Nombres</ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-input placeholder="Cambia tu Apellido" [(ngModel)]="apellido" [value]="apellido">Apellidos</ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-input placeholder="Cambia tu Direccion" [(ngModel)]="direccion" [value]="direccion">Direccion</ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-input placeholder="Cambia tu Correo" [(ngModel)]="correo" [value]="correo">Correo</ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-input placeholder="Cambia tu Telefono" [(ngModel)]="telefono" [value]="telefono">Telefono</ion-input>
+    </ion-item>
+    <div style="margin: 20px;">
+      <ion-button  (click)="updateData()" expand="full">Actualizar Datos</ion-button>
     </div>
+  </div>
 </ion-content>
 
 <ion-footer class="ion-no-border">

@@ -1,0 +1,31 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap');
+
+  ion-button{
+    font-family: 'Roboto' , sans-serif;
+    font-weight: 300; 
+  }
+
+.red-section {
+    width: 50%;
+    float: left;
+    background-color: #ff5733; /* Rojo */
+    color: white;
+    text-align: center;
+  }
+  
+  .blue-section {
+    width: 50%;
+    float: left;
+    background-color: #00bfff; /* Azul */
+    color: white;
+    text-align: center;
+  }
+
+.button-container {
+  margin-left: 10px; /* Márgen izquierdo */
+  margin-right: 10px; /* Márgen derecho */
+}
+ion-button {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 300;
+}

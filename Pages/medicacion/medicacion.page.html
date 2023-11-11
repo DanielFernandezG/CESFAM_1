@@ -7,6 +7,7 @@
       Medicacion
     </ion-title>
   </ion-toolbar>
+  <link rel="stylesheet" href="medicacion.page.scss">
 </ion-header>
 
 <ion-content [fullscreen]="true">
@@ -38,7 +39,9 @@
       </table>
     </div>
   </ion-item>
-  <ion-button (click)="toggleContent()">Programar Notificacion</ion-button>
+  <div class="button-container">
+    <ion-button (click)="toggleContent()" expand="full">Programar Notificacion</ion-button>
+  </div>
   <div *ngIf="showContent">
     <ion-item>
       <ion-label position="stacked">Fecha de Inicio</ion-label>

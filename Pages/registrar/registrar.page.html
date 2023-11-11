@@ -5,9 +5,10 @@
     </ion-buttons>
     <ion-title>Crea Tu Ficha Paciente</ion-title>
   </ion-toolbar>
+  <link rel="stylesheet" href="registrar.page.scss">
 </ion-header>
 
-<ion-content [fullscreen]="true">
+<ion-content [fullscreen]="true" style="padding-bottom: 60px;">
   <!-- Login -->
   <div>
     <div style="border-bottom: solid 1px lightgray; margin-bottom: 20px;">
@@ -61,12 +62,14 @@
           <ion-select-option value="prefiero no decirlo">Prefiero no Decirlo</ion-select-option>
         </ion-select>
       </ion-item>
-      <ion-button size="small" (click)="insertData()" style="margin-bottom: 20px;">Registrar</ion-button>
+      <div class="button-container">
+        <ion-button (click)="insertData()" expand="full">Registrar</ion-button>
+      </div>
     </div>
   </div>
 </ion-content>
 
-<ion-footer class="ion-no-border">
+<ion-footer class="ion-no-border custom-footer">
   <div class="red-section">
     <ion-toolbar color="danger">
       <ion-title>Tu Salud</ion-title>

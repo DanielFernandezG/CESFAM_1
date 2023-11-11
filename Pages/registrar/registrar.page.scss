@@ -1,3 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap');
+
+  ion-button{
+    font-family: 'Roboto' , sans-serif;
+    font-weight: 300; 
+  }
+
 ion-footer {
     position: fixed;
     bottom: 0;
@@ -18,3 +25,33 @@ ion-footer {
     color: white;
     text-align: center;
   }
+  
+
+.button-container {
+  margin-left: 10px; /* Márgen izquierdo */
+  margin-right: 10px; /* Márgen derecho */
+}
+ion-button {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 300;
+}
+
+ion-footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+
+ion-content {
+  margin-bottom: 60px; /* Ajusta este valor según sea necesario */
+}
+
+ion-footer.custom-footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+
+.content-with-footer {
+  margin-bottom: 60px;
+}

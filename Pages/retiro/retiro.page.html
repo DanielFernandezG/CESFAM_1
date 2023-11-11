@@ -7,6 +7,7 @@
       Medicacion
     </ion-title>
   </ion-toolbar>
+  <link rel="stylesheet" href="retiro.page.scss">
 </ion-header>
 
 <ion-content [fullscreen]="true">
@@ -34,7 +35,9 @@
       </table>
     </div>
   </ion-item>
-  <ion-button (click)="toggleContent()">Programar Notificacion</ion-button>
+  <div class="button-container">
+  <ion-button (click)="toggleContent()" expand="full">Programar Notificacion</ion-button>
+</div>
   <div *ngIf="showContent">
     <ion-item>
       <ion-label position="stacked">Fecha de Retiro</ion-label>
@@ -56,7 +59,7 @@
   </div>
 </ion-content>
 
-<ion-footer class="ion-no-border">
+<ion-footer class="ion-no-border custom-footer">
   <div class="red-section">
     <ion-toolbar color="danger">
       <ion-title>Tu Salud</ion-title>
