@@ -157,7 +157,7 @@ export class MedicacionPage implements OnInit {
 
     try {
       await LocalNotifications.schedule(options);
-      alert("Notificaciones programadas con éxito.");
+      alert("Notificacion programada con éxito.");
 
       // Formatea la fecha de finalización en el formato deseado (YYYY-MM-DD)
       const formattedEndDate = this.formatDate(new Date(this.selectedEndDate));
@@ -166,7 +166,7 @@ export class MedicacionPage implements OnInit {
       this.insertMedicationData(formattedEndDate);
       this.toggleContent();
     } catch (ex) {
-      alert("Error al programar las notificaciones: " + JSON.stringify(ex));
+      alert("Error al programar la notificacion: " + JSON.stringify(ex));
     }
   }
 

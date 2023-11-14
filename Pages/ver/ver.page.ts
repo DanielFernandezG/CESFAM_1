@@ -152,7 +152,7 @@ export class VerPage {
         this.fetchAndDisplayDocuments();
         this.toggleContent();
       } else {
-        console.log("Ninguna imagen seleccionada para subir.");
+        console.log("Ningun documento seleccionado para subir.");
       }
     }
   }
@@ -193,12 +193,12 @@ export class VerPage {
               ]
             )
             .then(() => {
-              console.log("Imagen guardada en la base de datos.");
-              alert("Imagen Médica Subida");
+              console.log("Documento guardado en la base de datos.");
+              alert("Documenti Médico Subida");
             })
             .catch((error) => {
               console.error(
-                "Error al insertar la imagen en la base de datos:",
+                "Error al insertar el documento en la base de datos:",
                 error
               );
             });

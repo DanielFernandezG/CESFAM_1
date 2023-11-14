@@ -66,6 +66,7 @@ export class EleccionCitaPage implements OnInit {
               });
               this.esp = "";
               this.doc = "";
+              this.idEsp = 0;
             })
             .catch((error) => {
               console.error("Error al obtener especialidad:", error);
