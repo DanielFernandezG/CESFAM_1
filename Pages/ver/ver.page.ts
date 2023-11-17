@@ -194,7 +194,7 @@ export class VerPage {
             )
             .then(() => {
               console.log("Documento guardado en la base de datos.");
-              alert("Documenti Médico Subida");
+              alert("Documento Médico Subido");
             })
             .catch((error) => {
               console.error(
