@@ -193,7 +193,7 @@ export class MedicacionPage implements OnInit {
                   ID_Paciente: result.rows.item(0).ID_Paciente,
                   ID_Medicamento: idesp,
                   FechaInicio: this.selectedDate,
-                  FechaFin: formattedEndDate, // Usamos la fecha formateada
+                  FechaFin: this.selectedEndDate, // Usamos la fecha formateada
                   HoraToma: this.selectedTime,
                   IntervaloToma: this.notificationInterval
                 };
